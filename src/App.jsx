@@ -1,31 +1,23 @@
 import { useState } from "react";
-import "./App.css";
 
-function App() {
+export default function App() {
   const [account, setAccount] = useState(null);
-  const [error, setError] = useState(null);
 
   async function connectWallet() {
-    try {
-      if (!window.ethereum) {
-        setError("MetaMask não detectado");
-        return;
-      }
-
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      setAccount(accounts[0]);
-      setError(null);
-    } catch (err) {
-      console.error(err);
-      setError("Erro ao conectar carteira");
+    if (!window.ethereum) {
+      alert("MetaMask não detectado");
+      return;
     }
+
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    setAccount(accounts[0]);
   }
 
   return (
-    <div className="app">
+    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>GuardianChain</h1>
       <p>Prove que seu trabalho existia antes.</p>
 
@@ -34,10 +26,6 @@ function App() {
       ) : (
         <button onClick={connectWallet}>Registrar prova agora</button>
       )}
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
-
-export default App;
