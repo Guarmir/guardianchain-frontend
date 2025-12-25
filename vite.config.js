@@ -5,10 +5,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: false,
-    target: "es2018",
-    minify: "esbuild"
+    target: "es2019"
   },
-  esbuild: {
-    legalComments: "none"
+  define: {
+    "process.env": {}
   }
 });
