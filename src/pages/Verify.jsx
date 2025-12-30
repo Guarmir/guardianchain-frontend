@@ -1,80 +1,66 @@
-import { useParams } from "react-router-dom";
-import { ethers } from "ethers";
-import {
-  GUARDIANCHAIN_ADDRESS,
-  GUARDIANCHAIN_ABI
-} from "../contracts/GuardianChain";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { BrowserProvider, Contract } from "ethers";
+import guardianChainAbi from "../contracts/GuardianChain";
 
-function Verify() {
-  const { hash } = useParams();
+const CONTRACT_ADDRESS = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
+
+export default function Verify() {
+  const [hash, setHash] = useState("");
   const [result, setResult] = useState(null);
-  const [status, setStatus] = useState("Verificando...");
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchRecord() {
-      try {
-        const provider = new ethers.JsonRpcProvider(
-          "https://rpc.ankr.com/eth"
-        );
+  async function verify() {
+    try {
+      const provider = new BrowserProvider(window.ethereum);
+      const contract = new Contract(CONTRACT_ADDRESS, guardianChainAbi, provider);
 
-        const contract = new ethers.Contract(
-          GUARDIANCHAIN_ADDRESS,
-          GUARDIANCHAIN_ABI,
-          provider
-        );
+      const filter = contract.filters.ProofRegistered(null, hash);
+      const events = await contract.queryFilter(filter);
 
-        const data = await contract.verifyHash(hash);
-
-        setResult({
-          exists: data.exists,
-          creator: data.creator,
-          timestamp: data.timestamp,
-          recordType: data.recordType,
-        });
-
-        setStatus("");
-      } catch (err) {
-        console.error(err);
-        setStatus("Erro ao verificar");
+      if (events.length === 0) {
+        setResult(null);
+        setError("Nenhum registro encontrado para este hash.");
+        return;
       }
-    }
 
-    fetchRecord();
-  }, [hash]);
+      const event = events[0];
+
+      setResult({
+        author: event.args.author,
+        timestamp: new Date(Number(event.args.timestamp) * 1000).toLocaleString(),
+      });
+
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao consultar a blockchain.");
+    }
+  }
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "600px" }}>
-      <h1>Verificação GuardianChain</h1>
+    <div style={{ maxWidth: 600, margin: "4rem auto" }}>
+      <h1>Verificar Registro</h1>
 
-      <p><strong>Hash:</strong> {hash}</p>
+      <input
+        type="text"
+        placeholder="Cole o hash aqui"
+        value={hash}
+        onChange={(e) => setHash(e.target.value)}
+        style={{ width: "100%", padding: "8px" }}
+      />
 
-      {status && <p>{status}</p>}
+      <button onClick={verify} style={{ marginTop: 12 }}>
+        Verificar
+      </button>
 
       {result && (
-        <>
-          {result.exists ? (
-            <>
-              <p><strong>Status:</strong> ✅ Registrado</p>
-              <p><strong>Autor:</strong> {result.creator}</p>
-              <p>
-                <strong>Data:</strong>{" "}
-                {new Date(
-                  Number(result.timestamp) * 1000
-                ).toLocaleString()}
-              </p>
-              <p>
-                <strong>Tipo:</strong>{" "}
-                {result.recordType === 0 ? "Documento" : "Outro"}
-              </p>
-            </>
-          ) : (
-            <p>❌ Hash não registrado</p>
-          )}
-        </>
+        <div style={{ marginTop: 20 }}>
+          <p><strong>Autor:</strong> {result.author}</p>
+          <p><strong>Data:</strong> {result.timestamp}</p>
+        </div>
       )}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
-
-export default Verify;
