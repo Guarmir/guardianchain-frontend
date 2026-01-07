@@ -4,8 +4,6 @@ import { useSearchParams } from "react-router-dom";
 
 const CONTRACT_ADDRESS = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
 const RPC_URL = "https://polygon-mainnet.infura.io/v3/5fc1b4a9dc394977b762ae15f1e7726d";
-
-// Quantidade segura de blocos para buscar eventos
 const BLOCK_LOOKBACK = 200000;
 
 export default function Verify() {
@@ -22,13 +20,8 @@ export default function Verify() {
       setError("");
       setData(null);
 
-      if (!hash || hash.length !== 64) {
-        throw new Error("hash inválido");
-      }
-
       const provider = new JsonRpcProvider(RPC_URL);
 
-      // Assinatura do evento
       const eventTopic = ethers.id(
         "ProofRegistered(address,bytes32,uint256)"
       );
@@ -48,21 +41,24 @@ export default function Verify() {
       });
 
       if (!logs || logs.length === 0) {
-        throw new Error("registro não encontrado");
+        throw new Error("Registro não encontrado");
       }
 
-      // Usa o primeiro evento encontrado
       const log = logs[0];
 
-      const decoded = ethers.AbiCoder.defaultAbiCoder().decode(
-        ["address", "bytes32", "uint256"],
-        log.data
+      // 🔥 DECODIFICAÇÃO CORRETA
+      const author = ethers.getAddress(
+        "0x" + log.topics[1].slice(26)
+      );
+
+      const timestamp = Number(
+        ethers.toBigInt(log.data)
       );
 
       setData({
-        author: decoded[0],
+        author,
         hash,
-        date: new Date(Number(decoded[2]) * 1000).toLocaleString(),
+        date: new Date(timestamp * 1000).toLocaleString(),
         txHash: log.transactionHash,
       });
 
@@ -74,7 +70,6 @@ export default function Verify() {
     }
   }
 
-  // Verificação automática quando vem do upload
   useEffect(() => {
     if (hashFromUrl) {
       verifyProof(hashFromUrl);
@@ -89,7 +84,6 @@ export default function Verify() {
       </p>
 
       {loading && <p>Verificando registro na blockchain...</p>}
-
       {error && <p style={styles.error}>{error}</p>}
 
       {data && (
