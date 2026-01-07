@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { JsonRpcProvider, ethers } from "ethers";
 import { useSearchParams } from "react-router-dom";
+import jsPDF from "jspdf";
 
 const CONTRACT_ADDRESS = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
 const RPC_URL = "https://polygon-mainnet.infura.io/v3/5fc1b4a9dc394977b762ae15f1e7726d";
@@ -31,11 +32,7 @@ export default function Verify() {
 
       const logs = await provider.getLogs({
         address: CONTRACT_ADDRESS,
-        topics: [
-          eventTopic,
-          null,
-          "0x" + hash
-        ],
+        topics: [eventTopic, null, "0x" + hash],
         fromBlock,
         toBlock: latestBlock,
       });
@@ -46,14 +43,11 @@ export default function Verify() {
 
       const log = logs[0];
 
-      // 🔥 DECODIFICAÇÃO CORRETA
       const author = ethers.getAddress(
         "0x" + log.topics[1].slice(26)
       );
 
-      const timestamp = Number(
-        ethers.toBigInt(log.data)
-      );
+      const timestamp = Number(ethers.toBigInt(log.data));
 
       setData({
         author,
@@ -70,6 +64,53 @@ export default function Verify() {
     }
   }
 
+  function generatePDF() {
+    if (!data) return;
+
+    const pdf = new jsPDF();
+
+    pdf.setFont("Times", "Roman");
+
+    pdf.setFontSize(18);
+    pdf.text("CERTIFICADO DE REGISTRO DIGITAL", 105, 20, { align: "center" });
+
+    pdf.setFontSize(12);
+    pdf.text(
+      "Este documento certifica que o hash abaixo foi registrado em blockchain pública,",
+      20,
+      40
+    );
+    pdf.text(
+      "servindo como prova de existência, autoria e anterioridade temporal.",
+      20,
+      48
+    );
+
+    pdf.setFontSize(11);
+    pdf.text("Hash do arquivo:", 20, 70);
+    pdf.text(data.hash, 20, 78, { maxWidth: 170 });
+
+    pdf.text(`Autor: ${data.author}`, 20, 98);
+    pdf.text(`Data do registro: ${data.date}`, 20, 110);
+
+    pdf.text("Transação:", 20, 130);
+    pdf.text(data.txHash, 20, 138, { maxWidth: 170 });
+
+    pdf.setFontSize(10);
+    pdf.text(
+      "Este certificado foi gerado automaticamente pelo GuardianChain.",
+      20,
+      180
+    );
+    pdf.text(
+      "A veracidade pode ser confirmada publicamente na blockchain Polygon.",
+      20,
+      186
+    );
+
+    pdf.save("guardianchain-certificado.pdf");
+  }
+
   useEffect(() => {
     if (hashFromUrl) {
       verifyProof(hashFromUrl);
@@ -83,14 +124,14 @@ export default function Verify() {
         Documento de comprovação de existência digital registrado em blockchain.
       </p>
 
-      {loading && <p>Verificando registro na blockchain...</p>}
+      {loading && <p>Verificando registro...</p>}
       {error && <p style={styles.error}>{error}</p>}
 
       {data && (
         <div style={styles.card}>
           <h3>Registro Confirmado</h3>
 
-          <p><strong>Hash do Arquivo:</strong></p>
+          <p><strong>Hash:</strong></p>
           <p style={styles.mono}>{data.hash}</p>
 
           <p><strong>Autor:</strong> {data.author}</p>
@@ -104,6 +145,10 @@ export default function Verify() {
           >
             Ver transação no Polygonscan
           </a>
+
+          <button style={styles.pdfButton} onClick={generatePDF}>
+            📄 Baixar Certificado em PDF
+          </button>
         </div>
       )}
     </div>
@@ -139,10 +184,20 @@ const styles = {
     backgroundColor: "#fafafa",
   },
   link: {
-    display: "inline-block",
+    display: "block",
     marginTop: "12px",
     color: "#1e40af",
     fontWeight: "bold",
+  },
+  pdfButton: {
+    marginTop: "20px",
+    padding: "12px 20px",
+    fontSize: "15px",
+    backgroundColor: "#16a34a",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
   },
   mono: {
     fontFamily: "monospace",
