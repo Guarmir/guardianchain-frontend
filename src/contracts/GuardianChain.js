@@ -1,23 +1,23 @@
-const guardianChainAbi = [
-  {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "address", "name": "author", "type": "address" },
-      { "indexed": true, "internalType": "bytes32", "name": "proofHash", "type": "bytes32" },
-      { "indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256" }
-    ],
-    "name": "ProofRegistered",
-    "type": "event"
-  },
+export default [
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "proofHash", "type": "bytes32" }
+      { "internalType": "bytes32", "name": "hash", "type": "bytes32" }
     ],
     "name": "registerProof",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "hash", "type": "bytes32" }
+    ],
+    "name": "getProof",
+    "outputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
 ];
-
-export default guardianChainAbi;
