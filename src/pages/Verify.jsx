@@ -3,7 +3,7 @@ import { JsonRpcProvider, ethers } from "ethers";
 import { useSearchParams } from "react-router-dom";
 
 const CONTRACT_ADDRESS = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
-const RPC_URL = "https://polygon-rpc.com";
+const RPC_URL = "https://polygon-mainnet.infura.io/v3/5fc1b4a9dc394977b762ae15f1e7726d";
 
 // Quantidade segura de blocos para buscar eventos
 const BLOCK_LOOKBACK = 200000;
