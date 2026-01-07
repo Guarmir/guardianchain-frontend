@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { JsonRpcProvider, ethers } from "ethers";
 import { useSearchParams } from "react-router-dom";
 
-const CONTRACT = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
-const RPC = "https://polygon-rpc.com";
+const CONTRACT_ADDRESS = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
+const RPC_URL = "https://polygon-rpc.com";
+
+// Quantidade segura de blocos para buscar eventos
+const BLOCK_LOOKBACK = 200000;
 
 export default function Verify() {
   const [searchParams] = useSearchParams();
@@ -13,32 +16,42 @@ export default function Verify() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function verify(hash) {
+  async function verifyProof(hash) {
     try {
-      setError("");
       setLoading(true);
+      setError("");
+      setData(null);
 
-      const provider = new JsonRpcProvider(RPC);
+      if (!hash || hash.length !== 64) {
+        throw new Error("hash inválido");
+      }
 
-      const eventSignature = ethers.id(
+      const provider = new JsonRpcProvider(RPC_URL);
+
+      // Assinatura do evento
+      const eventTopic = ethers.id(
         "ProofRegistered(address,bytes32,uint256)"
       );
 
+      const latestBlock = await provider.getBlockNumber();
+      const fromBlock = Math.max(latestBlock - BLOCK_LOOKBACK, 0);
+
       const logs = await provider.getLogs({
-        address: CONTRACT,
+        address: CONTRACT_ADDRESS,
         topics: [
-          eventSignature,
+          eventTopic,
           null,
           "0x" + hash
         ],
-        fromBlock: 0,
-        toBlock: "latest",
+        fromBlock,
+        toBlock: latestBlock,
       });
 
-      if (logs.length === 0) {
-        throw new Error("not found");
+      if (!logs || logs.length === 0) {
+        throw new Error("registro não encontrado");
       }
 
+      // Usa o primeiro evento encontrado
       const log = logs[0];
 
       const decoded = ethers.AbiCoder.defaultAbiCoder().decode(
@@ -52,6 +65,7 @@ export default function Verify() {
         date: new Date(Number(decoded[2]) * 1000).toLocaleString(),
         txHash: log.transactionHash,
       });
+
     } catch (err) {
       console.error(err);
       setError("Registro não encontrado ou inválido.");
@@ -60,9 +74,10 @@ export default function Verify() {
     }
   }
 
+  // Verificação automática quando vem do upload
   useEffect(() => {
     if (hashFromUrl) {
-      verify(hashFromUrl);
+      verifyProof(hashFromUrl);
     }
   }, [hashFromUrl]);
 
@@ -73,14 +88,17 @@ export default function Verify() {
         Documento de comprovação de existência digital registrado em blockchain.
       </p>
 
-      {loading && <p>Verificando registro...</p>}
+      {loading && <p>Verificando registro na blockchain...</p>}
 
       {error && <p style={styles.error}>{error}</p>}
 
       {data && (
         <div style={styles.card}>
           <h3>Registro Confirmado</h3>
-          <p><strong>Hash:</strong> {data.hash}</p>
+
+          <p><strong>Hash do Arquivo:</strong></p>
+          <p style={styles.mono}>{data.hash}</p>
+
           <p><strong>Autor:</strong> {data.author}</p>
           <p><strong>Data:</strong> {data.date}</p>
 
@@ -131,5 +149,10 @@ const styles = {
     marginTop: "12px",
     color: "#1e40af",
     fontWeight: "bold",
+  },
+  mono: {
+    fontFamily: "monospace",
+    fontSize: "13px",
+    wordBreak: "break-all",
   },
 };
