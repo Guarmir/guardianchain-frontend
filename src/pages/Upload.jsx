@@ -1,37 +1,48 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+const BACKEND_URL = "https://guardianchain-backend.onrender.com";
 
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
 
-  const navigate = useNavigate();
-
-  // ⚠️ Função antiga desativada (registro direto)
-  /*
-  async function handleRegister() {
-    // desativado na ETAPA 1
-  }
-  */
-
-  // 🔜 Fluxo futuro: Pix / Cartão (Stripe)
-  function registrarComStripe() {
+  // 💳 PIX / CARTÃO (STRIPE)
+  async function registrarComStripe() {
     if (!file) {
       setMsg("Selecione um arquivo antes de continuar.");
       return;
     }
 
-    setMsg("Pagamento com Pix / Cartão será iniciado em breve.");
+    try {
+      setMsg("Redirecionando para pagamento...");
+
+      const res = await fetch(
+        `${BACKEND_URL}/create-checkout-session`,
+        { method: "POST" }
+      );
+
+      const data = await res.json();
+
+      if (!data.url) {
+        throw new Error("URL de pagamento não recebida");
+      }
+
+      window.location.href = data.url;
+
+    } catch (err) {
+      console.error(err);
+      setMsg("Erro ao iniciar pagamento.");
+    }
   }
 
-  // 🔜 Fluxo futuro: Cripto (MetaMask)
+  // 🔐 CRIPTO (FUTURO – MetaMask)
   function registrarComCripto() {
     if (!file) {
       setMsg("Selecione um arquivo antes de continuar.");
       return;
     }
 
-    setMsg("Pagamento com Cripto será iniciado em breve.");
+    setMsg("Pagamento com Cripto será ativado em breve.");
   }
 
   return (
