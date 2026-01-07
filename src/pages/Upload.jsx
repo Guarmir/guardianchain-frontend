@@ -1,54 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BACKEND_URL = "https://guardianchain-backend.onrender.com"; // ajuste se necessário
-
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  async function generateHash(file) {
-    const buffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  // ⚠️ Função antiga desativada (registro direto)
+  /*
+  async function handleRegister() {
+    // desativado na ETAPA 1
+  }
+  */
+
+  // 🔜 Fluxo futuro: Pix / Cartão (Stripe)
+  function registrarComStripe() {
+    if (!file) {
+      setMsg("Selecione um arquivo antes de continuar.");
+      return;
+    }
+
+    setMsg("Pagamento com Pix / Cartão será iniciado em breve.");
   }
 
-  async function handleRegister() {
-    try {
-      if (!file) {
-        setMsg("Selecione um arquivo.");
-        return;
-      }
-
-      setLoading(true);
-      setMsg("Gerando impressão digital do arquivo...");
-
-      const fileHash = await generateHash(file);
-
-      setMsg("Registrando prova na blockchain...");
-
-      const res = await fetch(`${BACKEND_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ proofHash: fileHash })
-      });
-
-      if (!res.ok) {
-        throw new Error("Erro ao registrar no backend");
-      }
-
-      navigate("/verify?hash=" + fileHash);
-
-    } catch (err) {
-      console.error(err);
-      setMsg("Erro ao registrar prova.");
-    } finally {
-      setLoading(false);
+  // 🔜 Fluxo futuro: Cripto (MetaMask)
+  function registrarComCripto() {
+    if (!file) {
+      setMsg("Selecione um arquivo antes de continuar.");
+      return;
     }
+
+    setMsg("Pagamento com Cripto será iniciado em breve.");
   }
 
   return (
@@ -56,8 +39,8 @@ export default function Upload() {
       <h1>Registrar Prova Digital</h1>
 
       <p style={styles.text}>
-        Seu arquivo <strong>não será enviado</strong>.  
-        Apenas uma impressão digital criptográfica será criada localmente.
+        Seu arquivo é processado de forma segura para gerar uma impressão
+        digital criptográfica. O conteúdo não é armazenado.
       </p>
 
       <input
@@ -71,13 +54,25 @@ export default function Upload() {
         </p>
       )}
 
-      <button
-        style={styles.button}
-        onClick={handleRegister}
-        disabled={loading}
-      >
-        {loading ? "Processando..." : "Registrar Prova"}
-      </button>
+      <div style={{ marginTop: "20px" }}>
+        <button
+          style={styles.button}
+          onClick={registrarComStripe}
+        >
+          Registrar com Pix / Cartão
+        </button>
+
+        <button
+          style={{
+            ...styles.button,
+            backgroundColor: "#065f46",
+            marginLeft: "10px",
+          }}
+          onClick={registrarComCripto}
+        >
+          Registrar pagando com Cripto
+        </button>
+      </div>
 
       {msg && <p style={styles.msg}>{msg}</p>}
     </div>
@@ -101,7 +96,7 @@ const styles = {
     fontSize: "14px",
   },
   button: {
-    marginTop: "20px",
+    marginTop: "10px",
     padding: "14px 24px",
     fontSize: "16px",
     backgroundColor: "#1e40af",
