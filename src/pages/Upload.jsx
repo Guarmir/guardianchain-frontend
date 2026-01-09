@@ -6,7 +6,6 @@ export default function Upload() {
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
 
-  // 💳 PIX / CARTÃO (STRIPE)
   async function registrarComStripe() {
     if (!file) {
       setMsg("Selecione um arquivo antes de continuar.");
@@ -14,7 +13,7 @@ export default function Upload() {
     }
 
     try {
-      setMsg("Redirecionando para pagamento...");
+      setMsg("Redirecting to payment...");
 
       const res = await fetch(
         `${BACKEND_URL}/create-checkout-session`,
@@ -24,34 +23,23 @@ export default function Upload() {
       const data = await res.json();
 
       if (!data.url) {
-        throw new Error("URL de pagamento não recebida");
+        throw new Error("Checkout URL not received");
       }
 
       window.location.href = data.url;
-
     } catch (err) {
       console.error(err);
-      setMsg("Erro ao iniciar pagamento.");
+      setMsg("Payment error.");
     }
-  }
-
-  // 🔐 CRIPTO (FUTURO – MetaMask)
-  function registrarComCripto() {
-    if (!file) {
-      setMsg("Selecione um arquivo antes de continuar.");
-      return;
-    }
-
-    setMsg("Pagamento com Cripto será ativado em breve.");
   }
 
   return (
     <div style={styles.container}>
-      <h1>Registrar Prova Digital</h1>
+      <h1>Register Digital Proof</h1>
 
       <p style={styles.text}>
-        Seu arquivo é processado de forma segura para gerar uma impressão
-        digital criptográfica. O conteúdo não é armazenado.
+        Your file is securely processed to generate a cryptographic fingerprint.
+        The content is not stored.
       </p>
 
       <input
@@ -61,29 +49,13 @@ export default function Upload() {
 
       {file && (
         <p style={styles.file}>
-          Arquivo selecionado: <strong>{file.name}</strong>
+          Selected file: <strong>{file.name}</strong>
         </p>
       )}
 
-      <div style={{ marginTop: "20px" }}>
-        <button
-          style={styles.button}
-          onClick={registrarComStripe}
-        >
-          Registrar com Pix / Cartão
-        </button>
-
-        <button
-          style={{
-            ...styles.button,
-            backgroundColor: "#065f46",
-            marginLeft: "10px",
-          }}
-          onClick={registrarComCripto}
-        >
-          Registrar pagando com Cripto
-        </button>
-      </div>
+      <button style={styles.button} onClick={registrarComStripe}>
+        Register for $3.00
+      </button>
 
       {msg && <p style={styles.msg}>{msg}</p>}
     </div>
@@ -96,28 +68,28 @@ const styles = {
     margin: "80px auto",
     padding: "24px",
     fontFamily: "Arial, sans-serif",
-    textAlign: "center",
+    textAlign: "center"
   },
   text: {
     marginBottom: "20px",
-    color: "#444",
+    color: "#444"
   },
   file: {
     marginTop: "10px",
-    fontSize: "14px",
+    fontSize: "14px"
   },
   button: {
-    marginTop: "10px",
+    marginTop: "20px",
     padding: "14px 24px",
     fontSize: "16px",
     backgroundColor: "#1e40af",
     color: "#fff",
     border: "none",
     borderRadius: "6px",
-    cursor: "pointer",
+    cursor: "pointer"
   },
   msg: {
     marginTop: "15px",
-    fontWeight: "bold",
-  },
+    fontWeight: "bold"
+  }
 };
