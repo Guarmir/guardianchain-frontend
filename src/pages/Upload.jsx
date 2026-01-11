@@ -6,31 +6,22 @@ export default function Upload() {
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
 
-  async function registrarComStripe() {
+  async function payWithStripe() {
     if (!file) {
-      setMsg("Selecione um arquivo antes de continuar.");
+      setMsg("Select a file first.");
       return;
     }
 
-    try {
-      setMsg("Redirecting to payment...");
+    const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
+      method: "POST"
+    });
 
-      const res = await fetch(
-        `${BACKEND_URL}/create-checkout-session`,
-        { method: "POST" }
-      );
+    const data = await res.json();
+    window.location.href = data.url;
+  }
 
-      const data = await res.json();
-
-      if (!data.url) {
-        throw new Error("Checkout URL not received");
-      }
-
-      window.location.href = data.url;
-    } catch (err) {
-      console.error(err);
-      setMsg("Payment error.");
-    }
+  function payWithCrypto() {
+    setMsg("Crypto payment will be enabled next (MetaMask).");
   }
 
   return (
@@ -42,54 +33,48 @@ export default function Upload() {
         The content is not stored.
       </p>
 
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
+      <input type="file" onChange={e => setFile(e.target.files[0])} />
 
-      {file && (
-        <p style={styles.file}>
-          Selected file: <strong>{file.name}</strong>
-        </p>
+      {file ? (
+        <p>Selected file: <b>{file.name}</b></p>
+      ) : (
+        <p>No file selected</p>
       )}
 
-      <button style={styles.button} onClick={registrarComStripe}>
-        Register for $3.00
+      <button onClick={payWithStripe} style={styles.button}>
+        Pay with Card / Pix – $3
       </button>
 
-      {msg && <p style={styles.msg}>{msg}</p>}
+      <button
+        onClick={payWithCrypto}
+        style={{ ...styles.button, background: "#065f46" }}
+      >
+        Pay with Crypto – $3
+      </button>
+
+      {msg && <p style={{ marginTop: 20 }}>{msg}</p>}
     </div>
   );
 }
 
 const styles = {
   container: {
-    maxWidth: "600px",
+    maxWidth: 600,
     margin: "80px auto",
-    padding: "24px",
-    fontFamily: "Arial, sans-serif",
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: "Arial, sans-serif"
   },
   text: {
-    marginBottom: "20px",
-    color: "#444"
-  },
-  file: {
-    marginTop: "10px",
-    fontSize: "14px"
+    marginBottom: 20
   },
   button: {
-    marginTop: "20px",
+    marginTop: 20,
     padding: "14px 24px",
-    fontSize: "16px",
-    backgroundColor: "#1e40af",
+    fontSize: 16,
     color: "#fff",
+    background: "#1e40af",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: 6,
     cursor: "pointer"
-  },
-  msg: {
-    marginTop: "15px",
-    fontWeight: "bold"
   }
 };
