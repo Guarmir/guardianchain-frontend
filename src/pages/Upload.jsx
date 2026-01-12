@@ -13,39 +13,93 @@ async function generateHash(file) {
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function payWithStripe() {
     if (!file) {
-      setMsg("Selecione um arquivo primeiro.");
+      setMsg("Please select a file first.");
       return;
     }
 
-    setMsg("Gerando hash do arquivo...");
-    const proofHash = await generateHash(file);
+    try {
+      setLoading(true);
+      setMsg("Generating file hash...");
 
-    setMsg("Iniciando pagamento...");
+      const proofHash = await generateHash(file);
 
-    const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ proofHash })
-    });
+      setMsg("Redirecting to secure payment...");
 
-    const data = await res.json();
-    window.location.href = data.url;
+      const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ proofHash })
+      });
+
+      const data = await res.json();
+      window.location.href = data.url;
+
+    } catch (err) {
+      console.error(err);
+      setMsg("Error starting payment. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: 80 }}>
+    <div style={styles.container}>
       <h1>Register Digital Proof</h1>
 
-      <input type="file" onChange={e => setFile(e.target.files[0])} />
+      <input
+        type="file"
+        onChange={(e) => setFile(e.target.files[0])}
+        style={{ marginBottom: 10 }}
+      />
 
-      <button onClick={payWithStripe} style={{ marginTop: 20 }}>
-        Pay & Register on Blockchain – $3
+      <p style={styles.status}>
+        {file ? (
+          <>Selected file: <b>{file.name}</b></>
+        ) : (
+          "No file selected"
+        )}
+      </p>
+
+      <button
+        onClick={payWithStripe}
+        style={styles.button}
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Pay & Register on Blockchain – $3"}
       </button>
 
-      {msg && <p>{msg}</p>}
+      {msg && <p style={styles.msg}>{msg}</p>}
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: 520,
+    margin: "80px auto",
+    textAlign: "center",
+    fontFamily: "Arial, sans-serif"
+  },
+  status: {
+    margin: "12px 0",
+    color: "#444"
+  },
+  button: {
+    marginTop: 16,
+    padding: "14px 22px",
+    fontSize: 16,
+    borderRadius: 6,
+    border: "none",
+    background: "#1e40af",
+    color: "#fff",
+    cursor: "pointer"
+  },
+  msg: {
+    marginTop: 16,
+    fontWeight: "bold"
+  }
+};
