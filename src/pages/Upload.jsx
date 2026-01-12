@@ -17,17 +17,17 @@ export default function Upload() {
 
   async function payWithStripe() {
     if (!file) {
-      setMsg("Please select a file first.");
+      setMsg("Selecione um arquivo primeiro.");
       return;
     }
 
     try {
       setLoading(true);
-      setMsg("Generating file hash...");
+      setMsg("Gerando hash do arquivo...");
 
       const proofHash = await generateHash(file);
 
-      setMsg("Redirecting to secure payment...");
+      setMsg("Redirecionando para pagamento seguro (Pix / Cartão)...");
 
       const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
         method: "POST",
@@ -40,10 +40,20 @@ export default function Upload() {
 
     } catch (err) {
       console.error(err);
-      setMsg("Error starting payment. Please try again.");
+      setMsg("Erro ao iniciar pagamento.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function payWithCrypto() {
+    if (!file) {
+      setMsg("Selecione um arquivo primeiro.");
+      return;
+    }
+
+    setMsg("Pagamento com Cripto será ativado em breve.");
+    // aqui entra MetaMask no próximo passo
   }
 
   return (
@@ -58,19 +68,29 @@ export default function Upload() {
 
       <p style={styles.status}>
         {file ? (
-          <>Selected file: <b>{file.name}</b></>
+          <>Arquivo selecionado: <b>{file.name}</b></>
         ) : (
-          "No file selected"
+          "Nenhum arquivo escolhido"
         )}
       </p>
 
-      <button
-        onClick={payWithStripe}
-        style={styles.button}
-        disabled={loading}
-      >
-        {loading ? "Processing..." : "Pay & Register on Blockchain – $3"}
-      </button>
+      <div style={styles.buttons}>
+        <button
+          onClick={payWithStripe}
+          style={styles.stripeButton}
+          disabled={loading}
+        >
+          {loading ? "Processando..." : "Pagar com Pix / Cartão – $3"}
+        </button>
+
+        <button
+          onClick={payWithCrypto}
+          style={styles.cryptoButton}
+          disabled={loading}
+        >
+          Pagar com Cripto – $3
+        </button>
+      </div>
 
       {msg && <p style={styles.msg}>{msg}</p>}
     </div>
@@ -88,13 +108,27 @@ const styles = {
     margin: "12px 0",
     color: "#444"
   },
-  button: {
-    marginTop: 16,
+  buttons: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
+    marginTop: 16
+  },
+  stripeButton: {
     padding: "14px 22px",
     fontSize: 16,
     borderRadius: 6,
     border: "none",
     background: "#1e40af",
+    color: "#fff",
+    cursor: "pointer"
+  },
+  cryptoButton: {
+    padding: "14px 22px",
+    fontSize: 16,
+    borderRadius: 6,
+    border: "none",
+    background: "#065f46",
     color: "#fff",
     cursor: "pointer"
   },
