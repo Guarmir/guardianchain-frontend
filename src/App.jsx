@@ -1,26 +1,23 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Upload from "./pages/Upload";
-import Register from "./pages/Register";
-import Verify from "./pages/Verify";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Success from "./pages/Success";
+import Verify from "./pages/Verify";
+import { setLanguage } from "./i18n";
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
+      <div style={{ position: "absolute", top: 20, right: 20 }}>
+        <button onClick={() => setLanguage("pt")}>PT</button>
+        <button onClick={() => setLanguage("en")}>EN</button>
+      </div>
+
       <Routes>
-        {/* Fluxo principal do cliente */}
-        <Route path="/" element={<Upload />} />
-
-        {/* Registro manual por hash (avançado) */}
-        <Route path="/register" element={<Register />} />
-
-        {/* Certificado + PDF */}
-        <Route path="/verify" element={<Verify />} />
-
-        {/* Pós-pagamento (opcional) */}
+        <Route path="/" element={<Navigate to="/success" />} />
         <Route path="/success" element={<Success />} />
+        <Route path="/verify/:hash" element={<Verify />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
+
+export default App;

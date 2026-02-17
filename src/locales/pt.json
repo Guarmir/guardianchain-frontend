@@ -1,0 +1,15 @@
+{
+  "headline": "Infraestrutura de Segurança Digital para Arquivos",
+  "subheadline": "Registre qualquer arquivo como prova digital verificável com carimbo de tempo e integridade garantida.",
+  "success_title": "Prova Registrada com Sucesso",
+  "success_subtitle": "Sua prova digital foi permanentemente registrada na rede Polygon.",
+  "download_certificate": "Baixar Certificado (PDF)",
+  "verify_proof": "Verificar Prova Online",
+  "view_transaction": "Ver Transação na Blockchain",
+  "certificate_title": "Certificado de Prova Digital GuardianChain",
+  "certificate_body": "Este documento certifica que uma prova digital foi permanentemente registrada e protegida na rede Polygon.",
+  "verification_url": "URL de Verificação",
+  "transaction_hash": "Hash da Transação",
+  "blockchain_network": "Rede Blockchain",
+  "timestamp": "Data de Registro (UTC)"
+}

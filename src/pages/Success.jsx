@@ -1,61 +1,61 @@
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import QRCode from "qrcode";
 import jsPDF from "jspdf";
 
 export default function Success() {
-  function downloadPDF() {
+  const hash = "0x123TEST"; // depois vamos puxar real
+
+  const generateAndSendPDF = async () => {
     const doc = new jsPDF();
 
+    const verificationUrl = `http://localhost:5173/verify/${hash}`;
+
+    const qrDataUrl = await QRCode.toDataURL(verificationUrl);
+
     doc.setFontSize(18);
-    doc.text("GuardianChain", 20, 20);
+    doc.text("GuardianChain Digital Proof Certificate", 20, 20);
 
     doc.setFontSize(12);
-    doc.text("Digital Proof Certificate", 20, 40);
+    doc.text("This document certifies that a digital proof has been registered on the Polygon blockchain.", 20, 40);
 
-    doc.text(
-      "This document certifies that a digital proof was successfully registered.",
-      20,
-      60
-    );
+    doc.text(`Transaction Hash: ${hash}`, 20, 60);
+    doc.text(`Verification URL: ${verificationUrl}`, 20, 70);
 
-    doc.text("Timestamp:", 20, 80);
-    doc.text(new Date().toISOString(), 20, 90);
+    doc.addImage(qrDataUrl, "PNG", 20, 90, 50, 50);
 
-    doc.text(
-      "Blockchain: Polygon\nImmutable cryptographic proof.",
-      20,
-      110
-    );
+    const pdfBlob = doc.output("blob");
 
-    doc.save("guardianchain-certificate.pdf");
-  }
+    const reader = new FileReader();
+    reader.readAsDataURL(pdfBlob);
+
+    reader.onloadend = async () => {
+      const base64data = reader.result.split(",")[1];
+
+      await fetch("/api/send-certificate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: "SEU_EMAIL_AQUI@gmail.com",
+          pdfBase64: base64data
+        })
+      });
+    };
+  };
+
+  useEffect(() => {
+    generateAndSendPDF();
+  }, []);
 
   return (
-    <div style={styles.container}>
-      <h1>✅ Payment Confirmed</h1>
-      <p>Your digital proof registration was successful.</p>
-
-      <button style={styles.button} onClick={downloadPDF}>
-        Download Certificate (PDF)
+    <div style={{ textAlign: "center", marginTop: "100px" }}>
+      <h1>Proof Successfully Registered</h1>
+      <p>Your digital proof has been permanently recorded.</p>
+      <button onClick={generateAndSendPDF}>
+        Download Certificate & Send Email
       </button>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "80px auto",
-    padding: "24px",
-    fontFamily: "Arial, sans-serif",
-    textAlign: "center"
-  },
-  button: {
-    marginTop: "30px",
-    padding: "14px 28px",
-    fontSize: "16px",
-    backgroundColor: "#16a34a",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer"
-  }
-};
