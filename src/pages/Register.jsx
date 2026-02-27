@@ -1,114 +1,109 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-import { useNavigate } from "react-router-dom";
-
-const CONTRACT_ADDRESS = "0xef89BC5D33D6E65C47131a0331CcAF7e780Dc985";
-const RPC_URL = "https://polygon-rpc.com";
 
 export default function Register() {
-  const [hash, setHash] = useState("");
-  const [msg, setMsg] = useState("");
+  const [fileHash, setFileHash] = useState("");
+  const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-  async function register() {
-    try {
-      setMsg("");
-      setLoading(true);
+    setFileName(file.name);
 
-      if (!hash || hash.length < 10) {
-        setMsg("Informe um hash válido.");
-        setLoading(false);
-        return;
-      }
+    const arrayBuffer = await file.arrayBuffer();
+    const hash = ethers.keccak256(new Uint8Array(arrayBuffer));
 
-      const provider = new ethers.JsonRpcProvider(RPC_URL);
+    setFileHash(hash.replace("0x", ""));
+  };
 
-      const privateKey = import.meta.env.VITE_GUARDIANCHAIN_PRIVATE_KEY;
-      const wallet = new ethers.Wallet(privateKey, provider);
+  const handleCheckout = async () => {
+    if (!fileHash) return;
 
-      const abi = [
-        {
-          inputs: [
-            { internalType: "bytes32", name: "proofHash", type: "bytes32" }
-          ],
-          name: "registerProof",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function"
-        }
-      ];
+    setLoading(true);
 
-      const contract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        abi,
-        wallet
-      );
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ hash: fileHash }),
+    });
 
-      const tx = await contract.registerProof("0x" + hash);
-      await tx.wait();
+    const data = await response.json();
 
-      setMsg("Registro realizado com sucesso!");
-
-      // 🔴 REDIRECT AUTOMÁTICO PARA VERIFY
-      navigate("/verify?hash=" + hash);
-
-    } catch (err) {
-      console.error(err);
-      setMsg("Erro ao registrar.");
-    } finally {
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Erro ao iniciar pagamento.");
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <div style={styles.container}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        fontFamily: "Arial, sans-serif",
+        textAlign: "center",
+        padding: "20px",
+      }}
+    >
       <h1>Registrar Prova</h1>
 
       <input
-        style={styles.input}
-        placeholder="Cole aqui o hash do arquivo"
-        value={hash}
-        onChange={(e) => setHash(e.target.value)}
+        type="file"
+        onChange={handleFileChange}
+        style={{ marginBottom: "20px" }}
       />
 
-      <button style={styles.button} onClick={register} disabled={loading}>
-        {loading ? "Registrando..." : "Registrar"}
-      </button>
+      {fileName && (
+        <p>
+          Arquivo selecionado: <strong>{fileName}</strong>
+        </p>
+      )}
 
-      {msg && <p style={styles.msg}>{msg}</p>}
+      {fileHash && (
+        <>
+          <p style={{ marginTop: "10px" }}>
+            Hash gerado automaticamente:
+          </p>
+
+          <textarea
+            value={fileHash}
+            readOnly
+            rows="3"
+            style={{
+              width: "400px",
+              marginTop: "10px",
+              padding: "10px",
+            }}
+          />
+
+          <button
+            onClick={handleCheckout}
+            disabled={loading}
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            {loading ? "Redirecionando..." : "Prosseguir para pagamento"}
+          </button>
+        </>
+      )}
+
+      <p style={{ marginTop: "30px", opacity: 0.6 }}>
+        O conteúdo não é enviado para o servidor.
+        Apenas o hash criptográfico é utilizado.
+      </p>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "80px auto",
-    padding: "24px",
-    fontFamily: "Arial, sans-serif",
-    textAlign: "center",
-  },
-  input: {
-    width: "100%",
-    padding: "14px",
-    fontSize: "16px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    marginTop: "15px",
-    padding: "14px 24px",
-    fontSize: "16px",
-    backgroundColor: "#1e40af",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-  msg: {
-    marginTop: "15px",
-    fontWeight: "bold",
-  },
-};
