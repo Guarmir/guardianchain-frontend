@@ -31,8 +31,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.BASE_URL}/success`,
-      cancel_url: `${process.env.BASE_URL}/`,
+      success_url: `${process.env.BASE_URL}/#/success`,
+      cancel_url: `${process.env.BASE_URL}/#/`,
       metadata: { hash },
     });
 
