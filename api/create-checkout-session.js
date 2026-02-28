@@ -1,6 +1,8 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16",
+});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -24,21 +26,19 @@ export default async function handler(req, res) {
             product_data: {
               name: "GuardianChain Certificate Registration",
             },
-            unit_amount: 200, // $2.00
+            unit_amount: 200,
           },
           quantity: 1,
         },
       ],
       success_url: `${process.env.BASE_URL}/#/success`,
       cancel_url: `${process.env.BASE_URL}/#/`,
-      metadata: {
-        hash,
-      },
+      metadata: { hash },
     });
 
-    res.status(200).json({ id: session.id });
+    return res.status(200).json({ url: session.url });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Stripe error:", error);
+    return res.status(500).json({ error: error.message });
   }
 }

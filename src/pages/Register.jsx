@@ -32,6 +32,7 @@ export default function Register() {
     });
 
     const data = await response.json();
+    console.log("Stripe response:", data);
 
     if (data.url) {
       window.location.href = data.url;
