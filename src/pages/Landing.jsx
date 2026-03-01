@@ -5,13 +5,13 @@ function Landing() {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #0D47A1, #1968D8, #2F80ED)",
-        color: "white",
-        fontFamily: "Arial, sans-serif"
+        background: "linear-gradient(135deg, #0D47A1, #1968D8)",
+        fontFamily: "Arial, sans-serif",
+        color: "white"
       }}
     >
-      {/* HEADER FIXO */}
-      <div
+      {/* HEADER */}
+      <header
         style={{
           position: "fixed",
           top: 0,
@@ -20,10 +20,10 @@ function Landing() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "25px 60px",
+          padding: "20px 60px",
           boxSizing: "border-box",
-          backdropFilter: "blur(6px)",
-          background: "rgba(13, 71, 161, 0.35)",
+          background: "rgba(0,0,0,0.15)",
+          backdropFilter: "blur(8px)",
           zIndex: 1000
         }}
       >
@@ -32,54 +32,52 @@ function Landing() {
           src="/logo.png"
           alt="GuardianChain"
           style={{
-            height: "75px",
+            height: "55px",
             objectFit: "contain"
           }}
         />
 
-        {/* BOTÕES IDIOMA */}
+        {/* IDIOMA */}
         <div>
           <button
             style={{
-              padding: "6px 12px",
-              borderRadius: "6px",
+              padding: "6px 14px",
+              borderRadius: "20px",
               border: "none",
-              cursor: "pointer",
-              fontWeight: "600"
+              fontWeight: "600",
+              cursor: "pointer"
             }}
           >
             PT
           </button>
+
           <button
             style={{
               marginLeft: "10px",
-              padding: "6px 12px",
-              borderRadius: "6px",
+              padding: "6px 14px",
+              borderRadius: "20px",
               border: "none",
-              cursor: "pointer",
-              fontWeight: "600"
+              fontWeight: "600",
+              cursor: "pointer"
             }}
           >
             EN
           </button>
         </div>
-      </div>
+      </header>
 
       {/* HERO */}
-      <div
+      <section
         style={{
-          paddingTop: "200px",
+          paddingTop: "180px",
           textAlign: "center",
+          maxWidth: "900px",
+          margin: "0 auto",
           paddingLeft: "20px",
           paddingRight: "20px"
         }}
       >
-        <h1
-          style={{
-            fontSize: "2.8rem",
-            fontWeight: "700"
-          }}
-        >
+        <h1 style={{ fontSize: "3rem", fontWeight: "700" }}>
           Cartório Digital On-Chain
         </h1>
 
@@ -87,9 +85,7 @@ function Landing() {
           style={{
             marginTop: "1rem",
             fontWeight: "400",
-            maxWidth: "750px",
-            marginLeft: "auto",
-            marginRight: "auto"
+            fontSize: "1.4rem"
           }}
         >
           Prova pública e permanente de autoria e anterioridade.
@@ -97,48 +93,38 @@ function Landing() {
 
         <p
           style={{
-            maxWidth: "800px",
-            margin: "2rem auto",
-            lineHeight: "1.7",
-            fontSize: "1.05rem"
-          }}
-        >
-          GuardianChain registra o hash criptográfico do seu arquivo na
-          blockchain Polygon, criando uma evidência pública, imutável
-          e verificável sem expor o conteúdo original.
-        </p>
-
-        {/* BENEFÍCIOS */}
-        <ul
-          style={{
-            listStyle: "none",
-            padding: 0,
-            maxWidth: "600px",
-            margin: "2rem auto",
-            lineHeight: "1.9",
+            marginTop: "2rem",
+            lineHeight: "1.8",
             fontSize: "1.1rem"
           }}
         >
-          <li>🔒 Conteúdo permanece privado</li>
-          <li>⛓️ Registro permanente em blockchain</li>
-          <li>🌐 Verificação pública via link ou QR Code</li>
-          <li>🕒 Prova criptográfica de precedência</li>
-        </ul>
+          GuardianChain registra o hash criptográfico do seu arquivo na
+          blockchain Polygon, criando uma evidência pública, imutável e
+          verificável sem expor o conteúdo original.
+        </p>
 
-        {/* CARD DE PREÇO */}
+        {/* BENEFÍCIOS */}
+        <div style={{ marginTop: "2.5rem", lineHeight: "2" }}>
+          <div>🔒 Conteúdo permanece privado</div>
+          <div>⛓ Registro permanente em blockchain</div>
+          <div>🌐 Verificação pública via link ou QR Code</div>
+          <div>🕒 Prova criptográfica de precedência</div>
+        </div>
+
+        {/* CARD PREÇO */}
         <div
           style={{
-            marginTop: "3.5rem",
-            padding: "3rem",
-            backgroundColor: "white",
-            borderRadius: "22px",
-            display: "inline-block",
-            boxShadow: "0 25px 60px rgba(0,0,0,0.25)",
+            marginTop: "4rem",
+            background: "white",
             color: "#404854",
-            minWidth: "320px"
+            padding: "3rem",
+            borderRadius: "20px",
+            boxShadow: "0 20px 50px rgba(0,0,0,0.25)",
+            display: "inline-block",
+            minWidth: "340px"
           }}
         >
-          <div style={{ fontSize: "0.95rem", color: "#CBD1D6" }}>
+          <div style={{ fontSize: "0.9rem", color: "#999" }}>
             Registro individual
           </div>
 
@@ -147,7 +133,6 @@ function Landing() {
               style={{
                 textDecoration: "line-through",
                 marginRight: "12px",
-                fontSize: "1.4rem",
                 color: "#999"
               }}
             >
@@ -156,7 +141,7 @@ function Landing() {
 
             <span
               style={{
-                fontSize: "3rem",
+                fontSize: "2.8rem",
                 fontWeight: "700",
                 color: "#0D47A1"
               }}
@@ -165,7 +150,7 @@ function Landing() {
             </span>
           </div>
 
-          <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
+          <div style={{ marginTop: "6px", fontSize: "0.9rem" }}>
             Valor atual por registro
           </div>
 
@@ -173,43 +158,22 @@ function Landing() {
             <button
               style={{
                 marginTop: "2rem",
-                padding: "1rem 2.5rem",
-                fontSize: "1rem",
-                backgroundColor: "#1968D8",
+                width: "100%",
+                padding: "1rem",
+                background: "#1968D8",
                 color: "white",
                 border: "none",
                 borderRadius: "12px",
-                cursor: "pointer",
+                fontSize: "1rem",
                 fontWeight: "600",
-                width: "100%"
+                cursor: "pointer"
               }}
             >
               Registrar prova agora
             </button>
           </Link>
         </div>
-
-        {/* FOOTER */}
-        <div
-          style={{
-            marginTop: "4rem",
-            fontSize: "0.95rem"
-          }}
-        >
-          <Link to="/about" style={{ color: "white", marginRight: "20px" }}>
-            Sobre
-          </Link>
-          <Link to="/terms" style={{ color: "white", marginRight: "20px" }}>
-            Termos
-          </Link>
-          <Link to="/privacy" style={{ color: "white", marginRight: "20px" }}>
-            Privacidade
-          </Link>
-          <Link to="/refund-policy" style={{ color: "white" }}>
-            Política de Reembolso
-          </Link>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }
