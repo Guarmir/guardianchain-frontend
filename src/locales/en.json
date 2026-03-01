@@ -1,15 +1,23 @@
 {
-  "headline": "Digital Security Infrastructure for Files",
-  "subheadline": "Register any file as a verifiable digital proof with timestamp and guaranteed integrity.",
-  "success_title": "Proof Successfully Registered",
-  "success_subtitle": "Your digital proof has been permanently recorded on the Polygon blockchain network.",
-  "download_certificate": "Download Certificate (PDF)",
-  "verify_proof": "Verify Proof Online",
-  "view_transaction": "View Blockchain Transaction",
-  "certificate_title": "GuardianChain Digital Proof Certificate",
-  "certificate_body": "This document certifies that a digital proof has been permanently recorded and secured on the Polygon blockchain network.",
-  "verification_url": "Verification URL",
-  "transaction_hash": "Transaction Hash",
-  "blockchain_network": "Blockchain Network",
-  "timestamp": "Registration Timestamp (UTC)"
+  "hero": {
+    "title": "On-Chain Digital Notary",
+    "subtitle": "Public and permanent proof of authorship and precedence.",
+    "description": "GuardianChain records the cryptographic hash of your file on the Polygon blockchain, creating a public, immutable, and verifiable evidence without exposing the original content."
+  },
+  "features": {
+    "private": "Content remains private",
+    "blockchain": "Permanent blockchain record",
+    "verification": "Public verification via link or QR Code",
+    "proof": "Cryptographic proof of precedence"
+  },
+  "pricing": {
+    "label": "Individual registration",
+    "current": "Current price per registration",
+    "cta": "Register proof now"
+  },
+  "footer": {
+    "about": "About",
+    "terms": "Terms",
+    "privacy": "Privacy"
+  }
 }

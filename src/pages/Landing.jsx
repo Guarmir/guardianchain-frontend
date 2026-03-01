@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Landing() {
+  const { t, i18n } = useTranslation();
+
   return (
     <div
       style={{
@@ -27,7 +30,6 @@ function Landing() {
           zIndex: 1000
         }}
       >
-        {/* LOGO */}
         <img
           src="/logo.png"
           alt="GuardianChain"
@@ -37,9 +39,9 @@ function Landing() {
           }}
         />
 
-        {/* IDIOMA */}
         <div>
           <button
+            onClick={() => i18n.changeLanguage("pt")}
             style={{
               padding: "6px 14px",
               borderRadius: "20px",
@@ -52,6 +54,7 @@ function Landing() {
           </button>
 
           <button
+            onClick={() => i18n.changeLanguage("en")}
             style={{
               marginLeft: "10px",
               padding: "6px 14px",
@@ -78,7 +81,7 @@ function Landing() {
         }}
       >
         <h1 style={{ fontSize: "3rem", fontWeight: "700" }}>
-          Cartório Digital On-Chain
+          {t("hero.title")}
         </h1>
 
         <h2
@@ -88,7 +91,7 @@ function Landing() {
             fontSize: "1.4rem"
           }}
         >
-          Prova pública e permanente de autoria e anterioridade.
+          {t("hero.subtitle")}
         </h2>
 
         <p
@@ -98,20 +101,17 @@ function Landing() {
             fontSize: "1.1rem"
           }}
         >
-          GuardianChain registra o hash criptográfico do seu arquivo na
-          blockchain Polygon, criando uma evidência pública, imutável e
-          verificável sem expor o conteúdo original.
+          {t("hero.description")}
         </p>
 
-        {/* BENEFÍCIOS */}
         <div style={{ marginTop: "2.5rem", lineHeight: "2" }}>
-          <div>🔒 Conteúdo permanece privado</div>
-          <div>⛓ Registro permanente em blockchain</div>
-          <div>🌐 Verificação pública via link ou QR Code</div>
-          <div>🕒 Prova criptográfica de precedência</div>
+          <div>🔒 {t("features.private")}</div>
+          <div>⛓ {t("features.blockchain")}</div>
+          <div>🌐 {t("features.verification")}</div>
+          <div>🕒 {t("features.proof")}</div>
         </div>
 
-        {/* CARD PREÇO */}
+        {/* PREÇO */}
         <div
           style={{
             marginTop: "4rem",
@@ -125,7 +125,7 @@ function Landing() {
           }}
         >
           <div style={{ fontSize: "0.9rem", color: "#999" }}>
-            Registro individual
+            {t("pricing.label")}
           </div>
 
           <div style={{ marginTop: "1rem" }}>
@@ -151,7 +151,7 @@ function Landing() {
           </div>
 
           <div style={{ marginTop: "6px", fontSize: "0.9rem" }}>
-            Valor atual por registro
+            {t("pricing.current")}
           </div>
 
           <Link to="/register">
@@ -169,8 +169,21 @@ function Landing() {
                 cursor: "pointer"
               }}
             >
-              Registrar prova agora
+              {t("pricing.cta")}
             </button>
+          </Link>
+        </div>
+
+        {/* FOOTER LINKS */}
+        <div style={{ marginTop: "4rem" }}>
+          <Link to="/about" style={{ color: "white", marginRight: "20px" }}>
+            {t("footer.about")}
+          </Link>
+          <Link to="/terms" style={{ color: "white", marginRight: "20px" }}>
+            {t("footer.terms")}
+          </Link>
+          <Link to="/privacy" style={{ color: "white" }}>
+            {t("footer.privacy")}
           </Link>
         </div>
       </section>
