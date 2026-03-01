@@ -6,10 +6,11 @@ function Landing() {
       style={{
         minHeight: "100vh",
         background: "linear-gradient(135deg, #0D47A1, #1968D8, #2F80ED)",
-        color: "white"
+        color: "white",
+        fontFamily: "Arial, sans-serif"
       }}
     >
-      {/* HEADER */}
+      {/* HEADER FIXO */}
       <div
         style={{
           position: "fixed",
@@ -19,34 +20,66 @@ function Landing() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "20px 40px",
-          boxSizing: "border-box"
+          padding: "25px 60px",
+          boxSizing: "border-box",
+          backdropFilter: "blur(6px)",
+          background: "rgba(13, 71, 161, 0.35)",
+          zIndex: 1000
         }}
       >
-        {/* LOGO LEFT */}
+        {/* LOGO */}
         <img
           src="/logo.png"
           alt="GuardianChain"
-          style={{ height: "45px" }}
+          style={{
+            height: "75px",
+            objectFit: "contain"
+          }}
         />
 
-        {/* LANGUAGE */}
+        {/* BOTÕES IDIOMA */}
         <div>
-          <button>PT</button>
-          <button style={{ marginLeft: "10px" }}>EN</button>
+          <button
+            style={{
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "600"
+            }}
+          >
+            PT
+          </button>
+          <button
+            style={{
+              marginLeft: "10px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "600"
+            }}
+          >
+            EN
+          </button>
         </div>
       </div>
 
       {/* HERO */}
       <div
         style={{
-          paddingTop: "140px",
+          paddingTop: "200px",
           textAlign: "center",
           paddingLeft: "20px",
           paddingRight: "20px"
         }}
       >
-        <h1 style={{ fontSize: "2.7rem", fontWeight: "700" }}>
+        <h1
+          style={{
+            fontSize: "2.8rem",
+            fontWeight: "700"
+          }}
+        >
           Cartório Digital On-Chain
         </h1>
 
@@ -54,7 +87,7 @@ function Landing() {
           style={{
             marginTop: "1rem",
             fontWeight: "400",
-            maxWidth: "700px",
+            maxWidth: "750px",
             marginLeft: "auto",
             marginRight: "auto"
           }}
@@ -64,9 +97,10 @@ function Landing() {
 
         <p
           style={{
-            maxWidth: "750px",
+            maxWidth: "800px",
             margin: "2rem auto",
-            lineHeight: "1.6"
+            lineHeight: "1.7",
+            fontSize: "1.05rem"
           }}
         >
           GuardianChain registra o hash criptográfico do seu arquivo na
@@ -74,14 +108,15 @@ function Landing() {
           e verificável sem expor o conteúdo original.
         </p>
 
+        {/* BENEFÍCIOS */}
         <ul
           style={{
             listStyle: "none",
             padding: 0,
             maxWidth: "600px",
             margin: "2rem auto",
-            lineHeight: "1.8",
-            fontSize: "1.05rem"
+            lineHeight: "1.9",
+            fontSize: "1.1rem"
           }}
         >
           <li>🔒 Conteúdo permanece privado</li>
@@ -90,29 +125,29 @@ function Landing() {
           <li>🕒 Prova criptográfica de precedência</li>
         </ul>
 
-        {/* CARD PREÇO */}
+        {/* CARD DE PREÇO */}
         <div
           style={{
-            marginTop: "3rem",
-            padding: "2.5rem",
+            marginTop: "3.5rem",
+            padding: "3rem",
             backgroundColor: "white",
-            borderRadius: "20px",
+            borderRadius: "22px",
             display: "inline-block",
-            boxShadow: "0 20px 50px rgba(0,0,0,0.2)",
+            boxShadow: "0 25px 60px rgba(0,0,0,0.25)",
             color: "#404854",
-            minWidth: "300px"
+            minWidth: "320px"
           }}
         >
-          <div style={{ fontSize: "0.9rem", color: "#CBD1D6" }}>
+          <div style={{ fontSize: "0.95rem", color: "#CBD1D6" }}>
             Registro individual
           </div>
 
-          <div style={{ marginTop: "0.8rem" }}>
+          <div style={{ marginTop: "1rem" }}>
             <span
               style={{
                 textDecoration: "line-through",
-                marginRight: "10px",
-                fontSize: "1.3rem",
+                marginRight: "12px",
+                fontSize: "1.4rem",
                 color: "#999"
               }}
             >
@@ -121,7 +156,7 @@ function Landing() {
 
             <span
               style={{
-                fontSize: "2.8rem",
+                fontSize: "3rem",
                 fontWeight: "700",
                 color: "#0D47A1"
               }}
@@ -130,14 +165,14 @@ function Landing() {
             </span>
           </div>
 
-          <div style={{ fontSize: "0.85rem", marginTop: "8px" }}>
+          <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
             Valor atual por registro
           </div>
 
           <Link to="/register">
             <button
               style={{
-                marginTop: "1.8rem",
+                marginTop: "2rem",
                 padding: "1rem 2.5rem",
                 fontSize: "1rem",
                 backgroundColor: "#1968D8",
@@ -151,6 +186,27 @@ function Landing() {
             >
               Registrar prova agora
             </button>
+          </Link>
+        </div>
+
+        {/* FOOTER */}
+        <div
+          style={{
+            marginTop: "4rem",
+            fontSize: "0.95rem"
+          }}
+        >
+          <Link to="/about" style={{ color: "white", marginRight: "20px" }}>
+            Sobre
+          </Link>
+          <Link to="/terms" style={{ color: "white", marginRight: "20px" }}>
+            Termos
+          </Link>
+          <Link to="/privacy" style={{ color: "white", marginRight: "20px" }}>
+            Privacidade
+          </Link>
+          <Link to="/refund-policy" style={{ color: "white" }}>
+            Política de Reembolso
           </Link>
         </div>
       </div>
