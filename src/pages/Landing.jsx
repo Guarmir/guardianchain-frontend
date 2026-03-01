@@ -4,70 +4,125 @@ function Landing() {
   return (
     <div
       style={{
-        padding: "3rem",
-        maxWidth: "720px",
-        margin: "0 auto",
-        textAlign: "center",
+        backgroundColor: "#F2F3F5",
+        minHeight: "100vh",
+        padding: "3rem 1rem",
+        textAlign: "center"
       }}
     >
-      <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>
-        GuardianChain
+      <img
+        src="/logo.png"
+        alt="GuardianChain Logo"
+        style={{ height: "70px", marginBottom: "1.5rem" }}
+      />
+
+      <div
+        style={{
+          display: "inline-block",
+          padding: "6px 16px",
+          backgroundColor: "#E6F0FF",
+          color: "#0D47A1",
+          borderRadius: "20px",
+          fontSize: "0.8rem",
+          fontWeight: "600",
+          marginBottom: "1.5rem"
+        }}
+      >
+        Registro imutável validado em blockchain
+      </div>
+
+      <h1 style={{ fontSize: "2.5rem", color: "#404854" }}>
+        Cartório Digital On-Chain
       </h1>
 
-      <h2 style={{ fontWeight: "500", marginBottom: "1.5rem" }}>
-        Prove que sua criação existia antes.
+      <h2 style={{ marginTop: "1rem", fontWeight: "400", color: "#404854" }}>
+        Prova pública e permanente de autoria e anterioridade.
       </h2>
 
-      <p style={{ marginBottom: "1.5rem", lineHeight: "1.6" }}>
-        GuardianChain é um cartório digital on-chain que registra o hash do seu
-        arquivo na blockchain Polygon, criando uma evidência pública,
-        imutável e verificável de autoria e data.
+      <p style={{ maxWidth: "700px", margin: "1.5rem auto", color: "#404854" }}>
+        GuardianChain registra o hash criptográfico do seu arquivo na
+        blockchain Polygon, criando uma evidência pública, imutável
+        e verificável sem expor o conteúdo original.
       </p>
 
-      <ul style={{ textAlign: "left", display: "inline-block", marginBottom: "1.5rem" }}>
-        <li>🔒 Seu conteúdo nunca é exposto</li>
+      <ul style={{
+        listStyle: "none",
+        padding: 0,
+        maxWidth: "500px",
+        margin: "2rem auto",
+        color: "#404854"
+      }}>
+        <li>🔒 Conteúdo permanece privado</li>
         <li>⛓️ Registro permanente em blockchain</li>
         <li>🌐 Verificação pública via link ou QR Code</li>
         <li>🕒 Prova criptográfica de precedência</li>
       </ul>
 
-      {/* Preço */}
-      <p style={{ marginTop: "1rem", fontSize: "1.1rem" }}>
-        <span
-          style={{
-            textDecoration: "line-through",
-            marginRight: "8px",
-            color: "#777",
-          }}
-        >
-          US$10.00
-        </span>
-        <strong style={{ fontSize: "1.4rem" }}>US$7.00</strong>
-        <span
-          style={{
-            marginLeft: "6px",
-            fontSize: "0.9rem",
-            color: "#555",
-          }}
-        >
-          (valor atual por registro)
-        </span>
-      </p>
+      {/* PREÇO */}
+      <div
+        style={{
+          marginTop: "2rem",
+          padding: "2rem",
+          backgroundColor: "#FFFFFF",
+          borderRadius: "16px",
+          display: "inline-block",
+          boxShadow: "0 8px 25px rgba(0,0,0,0.08)"
+        }}
+      >
+        <div style={{ fontSize: "0.9rem", color: "#CBD1D6" }}>
+          Registro individual
+        </div>
 
-      <Link to="/register">
-        <button
-          style={{
-            marginTop: "1.5rem",
-            padding: "0.8rem 1.8rem",
-            fontSize: "1rem",
-            cursor: "pointer",
-          }}
-        >
-          Registrar prova agora
-        </button>
-      </Link>
+        <div style={{ marginTop: "0.5rem" }}>
+          <span
+            style={{
+              textDecoration: "line-through",
+              marginRight: "10px",
+              fontSize: "1.2rem",
+              color: "#999"
+            }}
+          >
+            US$12.00
+          </span>
 
-      <div style={{ marginTop: "3rem", fontSize: "0.85rem" }}>
+          <span
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "700",
+              color: "#0D47A1"
+            }}
+          >
+            US$9.00
+          </span>
+        </div>
+
+        <div style={{ fontSize: "0.85rem", color: "#404854", marginTop: "6px" }}>
+          Valor atual por registro
+        </div>
+      </div>
+
+      <div>
+        <Link to="/register">
+          <button
+            style={{
+              marginTop: "2rem",
+              padding: "1rem 2.5rem",
+              fontSize: "1rem",
+              backgroundColor: "#1968D8",
+              color: "white",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              fontWeight: "600"
+            }}
+          >
+            Registrar prova agora
+          </button>
+        </Link>
+      </div>
+
+      <div style={{ marginTop: "3rem", fontSize: "0.85rem", color: "#404854" }}>
+        <Link to="/about">Sobre</Link> |{" "}
         <Link to="/terms">Termos</Link> |{" "}
         <Link to="/privacy">Privacidade</Link> |{" "}
         <Link to="/refund-policy">Política de Reembolso</Link>

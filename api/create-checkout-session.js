@@ -26,7 +26,7 @@ export default async function handler(req, res) {
             product_data: {
               name: "GuardianChain Certificate Registration",
             },
-            unit_amount: 200, // $2.00
+            unit_amount: 900,
           },
           quantity: 1,
         },
