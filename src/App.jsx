@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Success from "./pages/Success";
@@ -7,14 +9,15 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import RefundPolicy from "./pages/RefundPolicy";
 import About from "./pages/About";
-import { setLanguage } from "./i18n";
 
 function App() {
+  const { i18n } = useTranslation();
+
   return (
     <Router>
       <div style={{ position: "absolute", top: 20, right: 20 }}>
-        <button onClick={() => setLanguage("pt")}>PT</button>
-        <button onClick={() => setLanguage("en")}>EN</button>
+        <button onClick={() => i18n.changeLanguage("pt")}>PT</button>
+        <button onClick={() => i18n.changeLanguage("en")}>EN</button>
       </div>
 
       <Routes>

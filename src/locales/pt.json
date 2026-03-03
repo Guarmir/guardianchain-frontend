@@ -1,11 +1,11 @@
 {
   "hero": {
-    "title": "Cartório Digital On-Chain",
+    "title": "Registro Digital On-Chain",
     "subtitle": "Prova pública e permanente de autoria e anterioridade.",
-    "description": "GuardianChain registra o hash criptográfico do seu arquivo na blockchain Polygon, criando uma evidência pública, imutável e verificável sem expor o conteúdo original."
+    "description": "A GuardianChain registra o hash criptográfico do seu arquivo na blockchain Polygon, criando uma prova pública, imutável e verificável de forma independente, sem expor o conteúdo original."
   },
   "features": {
-    "private": "Conteúdo permanece privado",
+    "private": "Seu conteúdo permanece totalmente privado",
     "blockchain": "Registro permanente em blockchain",
     "verification": "Verificação pública via link ou QR Code",
     "proof": "Prova criptográfica de precedência"

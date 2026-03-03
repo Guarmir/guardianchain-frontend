@@ -1,30 +1,23 @@
 import React from "react";
-import { t } from "../i18n";
+import { useTranslation } from "react-i18next";
 
 export default function Terms() {
+  const { t } = useTranslation();
+
   return (
-    <div style={{ maxWidth: "900px", margin: "60px auto", padding: "20px", lineHeight: "1.6" }}>
+    <div style={{ padding: "40px", maxWidth: "900px", margin: "0 auto" }}>
       <h1>{t("terms.title")}</h1>
-      <p><strong>{t("terms.updated")}</strong></p>
 
-      <h2>{t("terms.aboutTitle")}</h2>
-      <p>{t("terms.aboutText1")}</p>
-      <p>{t("terms.aboutText2")}</p>
+      <p>{t("terms.intro")}</p>
 
-      <h2>{t("terms.eligibilityTitle")}</h2>
-      <p>{t("terms.eligibilityText")}</p>
+      <h2>{t("terms.section1_title")}</h2>
+      <p>{t("terms.section1_text")}</p>
 
-      <h2>{t("terms.natureTitle")}</h2>
-      <p>{t("terms.natureText")}</p>
+      <h2>{t("terms.section2_title")}</h2>
+      <p>{t("terms.section2_text")}</p>
 
-      <h2>{t("terms.paymentTitle")}</h2>
-      <p>{t("terms.paymentText")}</p>
-
-      <h2>{t("terms.contactTitle")}</h2>
-      <p>
-        suporte@guardianchain.online<br />
-        contato@guardianchain.online
-      </p>
+      <h2>{t("terms.section3_title")}</h2>
+      <p>{t("terms.section3_text")}</p>
     </div>
   );
 }

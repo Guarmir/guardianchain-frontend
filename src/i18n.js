@@ -1,22 +1,32 @@
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+
 import en from "./locales/en.json";
 import pt from "./locales/pt.json";
 
-const translations = { en, pt };
+const resources = {
+  en: {
+    translation: en
+  },
+  pt: {
+    translation: pt
+  }
+};
 
-export function getDefaultLanguage() {
-  const savedLang = localStorage.getItem("guardianchain_lang");
-  if (savedLang) return savedLang;
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: localStorage.getItem("guardianchain_lang") || "pt",
+    fallbackLng: "pt",
+    interpolation: {
+      escapeValue: false
+    }
+  });
 
-  const browserLang = navigator.language || navigator.userLanguage;
-  return browserLang.startsWith("pt") ? "pt" : "en";
-}
+// salva idioma ao trocar
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("guardianchain_lang", lng);
+});
 
-export function setLanguage(lang) {
-  localStorage.setItem("guardianchain_lang", lang);
-  window.location.reload();
-}
-
-export function t(key) {
-  const lang = getDefaultLanguage();
-  return translations[lang][key] || key;
-}
+export default i18n;

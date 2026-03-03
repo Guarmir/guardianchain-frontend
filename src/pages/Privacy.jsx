@@ -1,28 +1,23 @@
 import React from "react";
-import { t } from "../i18n";
+import { useTranslation } from "react-i18next";
 
 export default function Privacy() {
+  const { t } = useTranslation();
+
   return (
-    <div style={{ maxWidth: "900px", margin: "60px auto", padding: "20px", lineHeight: "1.6" }}>
+    <div style={{ padding: "40px", maxWidth: "900px", margin: "0 auto" }}>
       <h1>{t("privacy.title")}</h1>
-      <p><strong>{t("privacy.updated")}</strong></p>
 
-      <h2>{t("privacy.dataTitle")}</h2>
-      <p>{t("privacy.dataText")}</p>
+      <p>{t("privacy.intro")}</p>
 
-      <ul>
-        <li>{t("privacy.email")}</li>
-        <li>{t("privacy.logs")}</li>
-        <li>{t("privacy.hash")}</li>
-      </ul>
+      <h2>{t("privacy.section1_title")}</h2>
+      <p>{t("privacy.section1_text")}</p>
 
-      <p>{t("privacy.noStore")}</p>
+      <h2>{t("privacy.section2_title")}</h2>
+      <p>{t("privacy.section2_text")}</p>
 
-      <h2>{t("privacy.purposeTitle")}</h2>
-      <p>{t("privacy.purposeText")}</p>
-
-      <h2>{t("privacy.contactTitle")}</h2>
-      <p>suporte@guardianchain.online</p>
+      <h2>{t("privacy.section3_title")}</h2>
+      <p>{t("privacy.section3_text")}</p>
     </div>
   );
 }

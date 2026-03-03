@@ -1,14 +1,22 @@
 import React from "react";
-import { t } from "../i18n";
+import { useTranslation } from "react-i18next";
 
 export default function RefundPolicy() {
-  return (
-    <div style={{ maxWidth: "900px", margin: "60px auto", padding: "20px", lineHeight: "1.6" }}>
-      <h1>{t("refund.title")}</h1>
-      <p><strong>{t("refund.updated")}</strong></p>
+  const { t } = useTranslation();
 
-      <p>{t("refund.text1")}</p>
-      <p>{t("refund.text2")}</p>
+  return (
+    <div style={{ padding: "40px", maxWidth: "900px", margin: "0 auto" }}>
+      <h1>{t("refund.title")}</h1>
+      <p>{t("refund.intro")}</p>
+
+      <h2>{t("refund.section1_title")}</h2>
+      <p>{t("refund.section1_text")}</p>
+
+      <h2>{t("refund.section2_title")}</h2>
+      <p>{t("refund.section2_text")}</p>
+
+      <h2>{t("refund.section3_title")}</h2>
+      <p>{t("refund.section3_text")}</p>
     </div>
   );
 }
