@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function Landing() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -10,7 +10,7 @@ function Landing() {
         minHeight: "100vh",
         background: "linear-gradient(135deg, #0D47A1, #1968D8)",
         fontFamily: "Arial, sans-serif",
-        color: "white"
+        color: "white",
       }}
     >
       {/* HEADER */}
@@ -27,46 +27,20 @@ function Landing() {
           boxSizing: "border-box",
           background: "rgba(0,0,0,0.15)",
           backdropFilter: "blur(8px)",
-          zIndex: 1000
+          zIndex: 1000,
         }}
       >
+        {/* LOGO COM CONTRASTE */}
         <img
           src="/logo.png"
           alt="GuardianChain"
           style={{
-            height: "55px",
-            objectFit: "contain"
+            height: "50px",
+            background: "white",
+            padding: "6px 12px",
+            borderRadius: "8px",
           }}
         />
-
-        <div>
-          <button
-            onClick={() => i18n.changeLanguage("pt")}
-            style={{
-              padding: "6px 14px",
-              borderRadius: "20px",
-              border: "none",
-              fontWeight: "600",
-              cursor: "pointer"
-            }}
-          >
-            PT
-          </button>
-
-          <button
-            onClick={() => i18n.changeLanguage("en")}
-            style={{
-              marginLeft: "10px",
-              padding: "6px 14px",
-              borderRadius: "20px",
-              border: "none",
-              fontWeight: "600",
-              cursor: "pointer"
-            }}
-          >
-            EN
-          </button>
-        </div>
       </header>
 
       {/* HERO */}
@@ -77,7 +51,7 @@ function Landing() {
           maxWidth: "900px",
           margin: "0 auto",
           paddingLeft: "20px",
-          paddingRight: "20px"
+          paddingRight: "20px",
         }}
       >
         <h1 style={{ fontSize: "3rem", fontWeight: "700" }}>
@@ -88,7 +62,7 @@ function Landing() {
           style={{
             marginTop: "1rem",
             fontWeight: "400",
-            fontSize: "1.4rem"
+            fontSize: "1.4rem",
           }}
         >
           {t("hero.subtitle")}
@@ -98,7 +72,7 @@ function Landing() {
           style={{
             marginTop: "2rem",
             lineHeight: "1.8",
-            fontSize: "1.1rem"
+            fontSize: "1.1rem",
           }}
         >
           {t("hero.description")}
@@ -111,7 +85,7 @@ function Landing() {
           <div>🕒 {t("features.proof")}</div>
         </div>
 
-        {/* PREÇO */}
+        {/* PRICING CARD */}
         <div
           style={{
             marginTop: "4rem",
@@ -121,7 +95,7 @@ function Landing() {
             borderRadius: "20px",
             boxShadow: "0 20px 50px rgba(0,0,0,0.25)",
             display: "inline-block",
-            minWidth: "340px"
+            minWidth: "340px",
           }}
         >
           <div style={{ fontSize: "0.9rem", color: "#999" }}>
@@ -133,7 +107,7 @@ function Landing() {
               style={{
                 textDecoration: "line-through",
                 marginRight: "12px",
-                color: "#999"
+                color: "#999",
               }}
             >
               US$12.00
@@ -143,7 +117,7 @@ function Landing() {
               style={{
                 fontSize: "2.8rem",
                 fontWeight: "700",
-                color: "#0D47A1"
+                color: "#0D47A1",
               }}
             >
               US$9.00
@@ -166,7 +140,7 @@ function Landing() {
                 borderRadius: "12px",
                 fontSize: "1rem",
                 fontWeight: "600",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               {t("pricing.cta")}
@@ -175,7 +149,7 @@ function Landing() {
         </div>
 
         {/* FOOTER LINKS */}
-        <div style={{ marginTop: "4rem" }}>
+        <div style={{ marginTop: "4rem", marginBottom: "3rem" }}>
           <Link to="/about" style={{ color: "white", marginRight: "20px" }}>
             {t("footer.about")}
           </Link>

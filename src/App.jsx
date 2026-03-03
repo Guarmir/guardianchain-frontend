@@ -15,9 +15,16 @@ function App() {
 
   return (
     <Router>
-      <div style={{ position: "absolute", top: 20, right: 20 }}>
-        <button onClick={() => i18n.changeLanguage("pt")}>PT</button>
-        <button onClick={() => i18n.changeLanguage("en")}>EN</button>
+      <div style={{ position: "absolute", top: 20, right: 20, zIndex: 2000 }}>
+        <button
+          onClick={() => i18n.changeLanguage("pt")}
+          style={{ marginRight: "10px" }}
+        >
+          PT
+        </button>
+        <button onClick={() => i18n.changeLanguage("en")}>
+          EN
+        </button>
       </div>
 
       <Routes>

@@ -5,12 +5,8 @@ import en from "./locales/en.json";
 import pt from "./locales/pt.json";
 
 const resources = {
-  en: {
-    translation: en
-  },
-  pt: {
-    translation: pt
-  }
+  en: { translation: en },
+  pt: { translation: pt },
 };
 
 i18n
@@ -20,8 +16,8 @@ i18n
     lng: localStorage.getItem("guardianchain_lang") || "pt",
     fallbackLng: "pt",
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
 
 // salva idioma ao trocar
