@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function Landing() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div
@@ -21,6 +21,7 @@ function Landing() {
           left: 0,
           width: "100%",
           display: "flex",
+          justifyContent: "space-between",
           alignItems: "center",
           padding: "20px 60px",
           boxSizing: "border-box",
@@ -29,34 +30,63 @@ function Landing() {
           zIndex: 1000
         }}
       >
+        {/* LOGO */}
         <img
           src="/logo.png"
           alt="GuardianChain"
           style={{
-            height: "110px",
-            objectFit: "contain"
+            height: "70px"
           }}
         />
+
+        {/* IDIOMA */}
+        <div>
+          <button
+            onClick={() => i18n.changeLanguage("pt")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              border: "none",
+              marginRight: "10px",
+              cursor: "pointer"
+            }}
+          >
+            PT
+          </button>
+
+          <button
+            onClick={() => i18n.changeLanguage("en")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              border: "none",
+              cursor: "pointer"
+            }}
+          >
+            EN
+          </button>
+        </div>
       </header>
 
       {/* HERO */}
       <section
         style={{
-          paddingTop: "200px",
+          paddingTop: "180px",
           textAlign: "center",
           maxWidth: "900px",
           margin: "0 auto",
-          padding: "0 20px"
+          paddingLeft: "20px",
+          paddingRight: "20px"
         }}
       >
-        <h1 style={{ fontSize: "3rem", fontWeight: 700 }}>
+        <h1 style={{ fontSize: "3rem", fontWeight: "700" }}>
           {t("hero.title")}
         </h1>
 
         <h2
           style={{
             marginTop: "1rem",
-            fontWeight: 400,
+            fontWeight: "400",
             fontSize: "1.4rem"
           }}
         >
@@ -74,13 +104,7 @@ function Landing() {
         </p>
 
         {/* FEATURES */}
-        <div
-          style={{
-            marginTop: "2.5rem",
-            lineHeight: "2",
-            fontSize: "1.1rem"
-          }}
-        >
+        <div style={{ marginTop: "2.5rem", lineHeight: "2" }}>
           <div>🔒 {t("features.private")}</div>
           <div>⛓ {t("features.blockchain")}</div>
           <div>🌐 {t("features.verification")}</div>
@@ -151,7 +175,7 @@ function Landing() {
         </div>
 
         {/* FOOTER */}
-        <div style={{ marginTop: "4rem", marginBottom: "3rem" }}>
+        <div style={{ marginTop: "4rem" }}>
           <Link to="/about" style={{ color: "white", marginRight: "20px" }}>
             {t("footer.about")}
           </Link>
