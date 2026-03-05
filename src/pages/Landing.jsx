@@ -8,9 +8,9 @@ function Landing() {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #0D47A1, #1968D8)",
+        background: "linear-gradient(135deg,#0D47A1,#1968D8)",
         fontFamily: "Arial, sans-serif",
-        color: "white",
+        color: "white"
       }}
     >
       {/* HEADER */}
@@ -26,18 +26,15 @@ function Landing() {
           boxSizing: "border-box",
           background: "rgba(0,0,0,0.15)",
           backdropFilter: "blur(8px)",
-          zIndex: 1000,
+          zIndex: 1000
         }}
       >
         <img
           src="/logo.png"
           alt="GuardianChain"
           style={{
-            height: "80px",
-            background: "white",
-            padding: "10px 18px",
-            borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            height: "110px",
+            objectFit: "contain"
           }}
         />
       </header>
@@ -49,19 +46,18 @@ function Landing() {
           textAlign: "center",
           maxWidth: "900px",
           margin: "0 auto",
-          paddingLeft: "20px",
-          paddingRight: "20px",
+          padding: "0 20px"
         }}
       >
-        <h1 style={{ fontSize: "3rem", fontWeight: "700" }}>
+        <h1 style={{ fontSize: "3rem", fontWeight: 700 }}>
           {t("hero.title")}
         </h1>
 
         <h2
           style={{
             marginTop: "1rem",
-            fontWeight: "400",
-            fontSize: "1.4rem",
+            fontWeight: 400,
+            fontSize: "1.4rem"
           }}
         >
           {t("hero.subtitle")}
@@ -71,14 +67,20 @@ function Landing() {
           style={{
             marginTop: "2rem",
             lineHeight: "1.8",
-            fontSize: "1.1rem",
+            fontSize: "1.1rem"
           }}
         >
           {t("hero.description")}
         </p>
 
         {/* FEATURES */}
-        <div style={{ marginTop: "2.5rem", lineHeight: "2" }}>
+        <div
+          style={{
+            marginTop: "2.5rem",
+            lineHeight: "2",
+            fontSize: "1.1rem"
+          }}
+        >
           <div>🔒 {t("features.private")}</div>
           <div>⛓ {t("features.blockchain")}</div>
           <div>🌐 {t("features.verification")}</div>
@@ -95,7 +97,7 @@ function Landing() {
             borderRadius: "20px",
             boxShadow: "0 20px 50px rgba(0,0,0,0.25)",
             display: "inline-block",
-            minWidth: "340px",
+            minWidth: "340px"
           }}
         >
           <div style={{ fontSize: "0.9rem", color: "#999" }}>
@@ -107,7 +109,7 @@ function Landing() {
               style={{
                 textDecoration: "line-through",
                 marginRight: "12px",
-                color: "#999",
+                color: "#999"
               }}
             >
               US$12.00
@@ -117,7 +119,7 @@ function Landing() {
               style={{
                 fontSize: "2.8rem",
                 fontWeight: "700",
-                color: "#0D47A1",
+                color: "#0D47A1"
               }}
             >
               US$9.00
@@ -140,7 +142,7 @@ function Landing() {
                 borderRadius: "12px",
                 fontSize: "1rem",
                 fontWeight: "600",
-                cursor: "pointer",
+                cursor: "pointer"
               }}
             >
               {t("pricing.cta")}
