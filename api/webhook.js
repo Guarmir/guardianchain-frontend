@@ -1,4 +1,7 @@
 import Stripe from "stripe";
+import nodemailer from "nodemailer";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const config = {
   api: {
@@ -6,13 +9,7 @@ export const config = {
   }
 };
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
-
-  if (req.method !== "POST") {
-    return res.status(405).send("Method Not Allowed");
-  }
 
   const sig = req.headers["stripe-signature"];
 
@@ -20,12 +17,13 @@ export default async function handler(req, res) {
 
   try {
 
-    const buf = await new Promise((resolve, reject) => {
-      const chunks = [];
-      req.on("data", chunk => chunks.push(chunk));
-      req.on("end", () => resolve(Buffer.concat(chunks)));
-      req.on("error", reject);
-    });
+    const chunks = [];
+
+    for await (const chunk of req) {
+      chunks.push(chunk);
+    }
+
+    const buf = Buffer.concat(chunks);
 
     event = stripe.webhooks.constructEvent(
       buf,
@@ -44,13 +42,52 @@ export default async function handler(req, res) {
 
     const session = event.data.object;
 
+    const email = session.customer_details.email;
+
     const hash = session.metadata.hash;
 
-    console.log("Payment successful. Hash:", hash);
+    console.log("Pagamento confirmado");
+    console.log("Email:", email);
+    console.log("Hash:", hash);
 
-    // Aqui chamaremos o envio do certificado
+    try {
+
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: false,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      });
+
+      await transporter.sendMail({
+
+        from: `"GuardianChain" <${process.env.SMTP_USER}>`,
+
+        to: email,
+
+        subject: "GuardianChain - Certificado de Registro",
+
+        html: `
+        <h2>Registro realizado com sucesso</h2>
+        <p>Seu arquivo foi registrado na blockchain.</p>
+        <p><b>Hash:</b></p>
+        <p>${hash}</p>
+        <p>Guarde este hash como prova de autoria.</p>
+        `
+      });
+
+      console.log("Email enviado com sucesso");
+
+    } catch (error) {
+
+      console.error("Erro ao enviar email:", error);
+
+    }
+
   }
 
-  res.status(200).json({ received: true });
-
+  res.json({ received: true });
 }
