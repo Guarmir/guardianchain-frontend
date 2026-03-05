@@ -1,5 +1,7 @@
 import Stripe from "stripe";
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
@@ -8,22 +10,29 @@ export default async function handler(req, res) {
 
   try {
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
     const { hash } = req.body;
+
+    if (!hash) {
+      return res.status(400).json({ error: "Hash não informado" });
+    }
 
     const session = await stripe.checkout.sessions.create({
 
+      mode: "payment",
+
       payment_method_types: ["card"],
 
-      mode: "payment",
+      billing_address_collection: "auto",
+
+      customer_creation: "always",
 
       line_items: [
         {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "GuardianChain Proof Registration"
+              name: "GuardianChain Digital Proof Registration",
+              description: "On-chain proof of authorship and precedence"
             },
             unit_amount: 900
           },
@@ -31,23 +40,24 @@ export default async function handler(req, res) {
         }
       ],
 
-      success_url: `${req.headers.origin}/success?hash=${hash}`,
-      cancel_url: `${req.headers.origin}`,
-
       metadata: {
         hash: hash
-      }
+      },
+
+      success_url: `${req.headers.origin}/success?hash=${hash}`,
+
+      cancel_url: `${req.headers.origin}`
 
     });
 
-    res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
 
   } catch (error) {
 
     console.error("Stripe error:", error);
 
-    res.status(500).json({
-      error: error.message
+    return res.status(500).json({
+      error: "Erro ao criar sessão de pagamento"
     });
 
   }
