@@ -21,7 +21,6 @@ function Landing() {
           left: 0,
           width: "100%",
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
           padding: "20px 60px",
           boxSizing: "border-box",
@@ -30,15 +29,15 @@ function Landing() {
           zIndex: 1000,
         }}
       >
-        {/* LOGO COM CONTRASTE */}
         <img
           src="/logo.png"
           alt="GuardianChain"
           style={{
-            height: "50px",
+            height: "80px",
             background: "white",
-            padding: "6px 12px",
-            borderRadius: "8px",
+            padding: "10px 18px",
+            borderRadius: "12px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
           }}
         />
       </header>
@@ -46,7 +45,7 @@ function Landing() {
       {/* HERO */}
       <section
         style={{
-          paddingTop: "180px",
+          paddingTop: "200px",
           textAlign: "center",
           maxWidth: "900px",
           margin: "0 auto",
@@ -78,6 +77,7 @@ function Landing() {
           {t("hero.description")}
         </p>
 
+        {/* FEATURES */}
         <div style={{ marginTop: "2.5rem", lineHeight: "2" }}>
           <div>🔒 {t("features.private")}</div>
           <div>⛓ {t("features.blockchain")}</div>
@@ -85,7 +85,7 @@ function Landing() {
           <div>🕒 {t("features.proof")}</div>
         </div>
 
-        {/* PRICING CARD */}
+        {/* PRICING */}
         <div
           style={{
             marginTop: "4rem",
@@ -148,14 +148,16 @@ function Landing() {
           </Link>
         </div>
 
-        {/* FOOTER LINKS */}
+        {/* FOOTER */}
         <div style={{ marginTop: "4rem", marginBottom: "3rem" }}>
           <Link to="/about" style={{ color: "white", marginRight: "20px" }}>
             {t("footer.about")}
           </Link>
+
           <Link to="/terms" style={{ color: "white", marginRight: "20px" }}>
             {t("footer.terms")}
           </Link>
+
           <Link to="/privacy" style={{ color: "white" }}>
             {t("footer.privacy")}
           </Link>

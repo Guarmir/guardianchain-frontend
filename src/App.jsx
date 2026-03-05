@@ -13,18 +13,21 @@ import About from "./pages/About";
 function App() {
   const { i18n } = useTranslation();
 
+  const changeLang = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("guardianchain_lang", lang);
+  };
+
   return (
     <Router>
       <div style={{ position: "absolute", top: 20, right: 20, zIndex: 2000 }}>
         <button
-          onClick={() => i18n.changeLanguage("pt")}
+          onClick={() => changeLang("pt")}
           style={{ marginRight: "10px" }}
         >
           PT
         </button>
-        <button onClick={() => i18n.changeLanguage("en")}>
-          EN
-        </button>
+        <button onClick={() => changeLang("en")}>EN</button>
       </div>
 
       <Routes>
