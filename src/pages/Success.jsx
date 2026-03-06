@@ -15,6 +15,13 @@ export default function Success() {
     navigate("/");
   }
 
+  function handleDownload() {
+
+    if (!hash) return;
+
+    window.open(`/api/generate-certificate?hash=${hash}`, "_blank");
+  }
+
   return (
     <div
       style={{
@@ -55,16 +62,29 @@ export default function Success() {
       )}
 
       <p style={{ marginTop: "30px", opacity: 0.7 }}>
-        O certificado foi enviado para o seu e-mail.
+        O certificado também foi enviado para o seu e-mail.
       </p>
 
       <div
         style={{
           display: "flex",
           gap: "15px",
-          marginTop: "40px"
+          marginTop: "40px",
+          flexWrap: "wrap",
+          justifyContent: "center"
         }}
       >
+
+        <button
+          onClick={handleDownload}
+          style={{
+            padding: "12px 20px",
+            fontSize: "16px",
+            cursor: "pointer"
+          }}
+        >
+          Baixar certificado
+        </button>
 
         <button
           onClick={handleNewRegister}
