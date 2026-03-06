@@ -42,19 +42,27 @@ export default async function handler(req, res) {
 
     const session = event.data.object;
 
-    const email = session.customer_details.email;
+    const hash = session.metadata?.hash;
 
-    const hash = session.metadata.hash;
+    const email =
+      session.customer_details?.email ||
+      session.customer_email ||
+      session.customer?.email;
 
     console.log("Pagamento confirmado");
     console.log("Email:", email);
     console.log("Hash:", hash);
 
+    if (!email) {
+      console.error("Email não encontrado na sessão");
+      return res.status(200).json({ received: true });
+    }
+
     try {
 
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
+        port: Number(process.env.SMTP_PORT),
         secure: false,
         auth: {
           user: process.env.SMTP_USER,
@@ -63,19 +71,14 @@ export default async function handler(req, res) {
       });
 
       await transporter.sendMail({
-
         from: `"GuardianChain" <${process.env.SMTP_USER}>`,
-
         to: email,
-
         subject: "GuardianChain - Certificado de Registro",
-
         html: `
         <h2>Registro realizado com sucesso</h2>
         <p>Seu arquivo foi registrado na blockchain.</p>
         <p><b>Hash:</b></p>
         <p>${hash}</p>
-        <p>Guarde este hash como prova de autoria.</p>
         `
       });
 
@@ -89,5 +92,5 @@ export default async function handler(req, res) {
 
   }
 
-  res.json({ received: true });
+  res.status(200).json({ received: true });
 }
