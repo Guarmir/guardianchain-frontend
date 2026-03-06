@@ -1,51 +1,70 @@
 import { useState } from "react";
 import { ethers } from "ethers";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
+
+  const { i18n } = useTranslation();
+
   const [fileHash, setFileHash] = useState("");
   const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleFileChange = async (event) => {
+  async function handleFileChange(event) {
+
     const file = event.target.files[0];
     if (!file) return;
 
     setFileName(file.name);
 
     const arrayBuffer = await file.arrayBuffer();
+
     const hash = ethers.keccak256(new Uint8Array(arrayBuffer));
 
     setFileHash(hash.replace("0x", ""));
-  };
+  }
 
-  const handleCheckout = async () => {
+  async function handleCheckout() {
+
     if (!fileHash) return;
 
     setLoading(true);
 
-    const response = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    body: JSON.stringify({
-      hash: fileHash,
-      lang: i18n.language
-    }),
-    });
+    try {
 
-    const data = await response.json();
-    console.log("Stripe response:", data);
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          hash: fileHash,
+          lang: i18n.language
+        })
+      });
 
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert("Erro ao iniciar pagamento.");
+      const data = await response.json();
+
+      console.log("Stripe response:", data);
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Erro ao iniciar pagamento.");
+        setLoading(false);
+      }
+
+    } catch (error) {
+
+      console.error("Erro:", error);
+      alert("Erro ao conectar com servidor.");
       setLoading(false);
+
     }
-  };
+  }
 
   return (
+
     <div
       style={{
         minHeight: "100vh",
@@ -55,9 +74,10 @@ export default function Register() {
         alignItems: "center",
         fontFamily: "Arial, sans-serif",
         textAlign: "center",
-        padding: "20px",
+        padding: "20px"
       }}
     >
+
       <h1>Registrar Prova</h1>
 
       <input
@@ -85,7 +105,7 @@ export default function Register() {
             style={{
               width: "400px",
               marginTop: "10px",
-              padding: "10px",
+              padding: "10px"
             }}
           />
 
@@ -96,7 +116,7 @@ export default function Register() {
               marginTop: "20px",
               padding: "10px 20px",
               fontSize: "16px",
-              cursor: "pointer",
+              cursor: "pointer"
             }}
           >
             {loading ? "Redirecionando..." : "Prosseguir para pagamento"}
@@ -108,6 +128,8 @@ export default function Register() {
         O conteúdo não é enviado para o servidor.
         Apenas o hash criptográfico é utilizado.
       </p>
+
     </div>
+
   );
 }
