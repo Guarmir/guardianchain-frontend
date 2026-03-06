@@ -1,24 +1,15 @@
 {
-  "hero": {
+  "landing": {
     "title": "Registro Digital On-Chain",
     "subtitle": "Prova pública e permanente de autoria e anterioridade.",
-    "description": "A GuardianChain registra o hash criptográfico do seu arquivo na blockchain Polygon, criando uma prova pública, imutável e verificável de forma independente sem expor o conteúdo original."
-  },
-
-  "features": {
+    "description": "A GuardianChain registra o hash criptográfico do seu arquivo na blockchain Polygon, criando uma prova pública, imutável e verificável sem expor o conteúdo original.",
     "private": "Seu conteúdo permanece totalmente privado",
     "blockchain": "Registro permanente na blockchain",
-    "verification": "Verificação pública via link ou QR Code",
-    "proof": "Prova criptográfica de precedência"
-  },
-
-  "pricing": {
-    "label": "Registro individual",
-    "current": "Valor atual por registro",
-    "cta": "Registrar prova agora"
-  },
-
-  "footer": {
+    "verify": "Verificação pública via link ou QR Code",
+    "proof": "Prova criptográfica de precedência",
+    "individual": "Registro individual",
+    "price": "Valor atual por registro",
+    "button": "Registrar prova agora",
     "about": "Sobre",
     "terms": "Termos",
     "privacy": "Privacidade"

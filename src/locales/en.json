@@ -1,24 +1,15 @@
 {
-  "hero": {
+  "landing": {
     "title": "On-Chain Digital Registry",
     "subtitle": "Public and permanent proof of authorship and precedence.",
-    "description": "GuardianChain records the cryptographic hash of your file on the Polygon blockchain, creating a public, immutable and independently verifiable proof without exposing the original content."
-  },
-
-  "features": {
+    "description": "GuardianChain records the cryptographic hash of your file on the Polygon blockchain, creating a public, immutable and independently verifiable proof without exposing the original content.",
     "private": "Your content remains fully private",
     "blockchain": "Permanent on-chain record",
-    "verification": "Public verification via link or QR Code",
-    "proof": "Cryptographic proof of precedence"
-  },
-
-  "pricing": {
-    "label": "Individual registration",
-    "current": "Current price per registration",
-    "cta": "Register proof now"
-  },
-
-  "footer": {
+    "verify": "Public verification via link or QR Code",
+    "proof": "Cryptographic proof of precedence",
+    "individual": "Individual registration",
+    "price": "Current price per registration",
+    "button": "Register proof now",
     "about": "About",
     "terms": "Terms",
     "privacy": "Privacy"
