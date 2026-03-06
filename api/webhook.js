@@ -33,52 +33,67 @@ export default async function handler(req, res) {
 
   } catch (err) {
 
-    console.error("Webhook signature error:", err.message);
+    console.error("Erro na assinatura do webhook:", err.message);
 
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // EVENTO DE PAGAMENTO CONFIRMADO
   if (event.type === "checkout.session.completed") {
 
     const session = event.data.object;
 
-    const hash = session.metadata?.hash;
-
     const email =
       session.customer_details?.email ||
       session.customer_email ||
-      session.customer?.email;
+      null;
+
+    const hash = session.metadata?.hash || null;
 
     console.log("Pagamento confirmado");
     console.log("Email:", email);
     console.log("Hash:", hash);
 
     if (!email) {
-      console.error("Email não encontrado na sessão");
+      console.error("Email não encontrado.");
       return res.status(200).json({ received: true });
     }
 
     try {
 
       const transporter = nodemailer.createTransport({
+
         host: process.env.SMTP_HOST,
+
         port: Number(process.env.SMTP_PORT),
-        secure: false,
+
+        secure: true,
+
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS
         }
+
       });
 
       await transporter.sendMail({
+
         from: `"GuardianChain" <${process.env.SMTP_USER}>`,
+
         to: email,
+
         subject: "GuardianChain - Certificado de Registro",
+
         html: `
         <h2>Registro realizado com sucesso</h2>
+
         <p>Seu arquivo foi registrado na blockchain.</p>
-        <p><b>Hash:</b></p>
+
+        <p><strong>Hash do arquivo:</strong></p>
+
         <p>${hash}</p>
+
+        <p>Guarde este hash como prova de autoria.</p>
         `
       });
 
@@ -93,4 +108,5 @@ export default async function handler(req, res) {
   }
 
   res.status(200).json({ received: true });
+
 }
