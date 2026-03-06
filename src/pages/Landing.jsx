@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Landing() {
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
 
@@ -31,7 +33,7 @@ export default function Landing() {
         />
       </div>
 
-      {/* TÍTULO */}
+      {/* TITULO */}
 
       <h1
         style={{
@@ -40,7 +42,7 @@ export default function Landing() {
           textAlign: "center"
         }}
       >
-        Registro Digital On-Chain
+        {t("landing.title")}
       </h1>
 
       <p
@@ -50,7 +52,7 @@ export default function Landing() {
           textAlign: "center"
         }}
       >
-        Prova pública e permanente de autoria e anterioridade.
+        {t("landing.subtitle")}
       </p>
 
       <p
@@ -61,12 +63,10 @@ export default function Landing() {
           opacity: "0.9"
         }}
       >
-        A GuardianChain registra o hash criptográfico do seu arquivo na
-        blockchain Polygon, criando uma prova pública, imutável e
-        verificável de forma independente sem expor o conteúdo original.
+        {t("landing.description")}
       </p>
 
-      {/* LISTA DE BENEFÍCIOS */}
+      {/* BENEFICIOS */}
 
       <ul
         style={{
@@ -78,17 +78,17 @@ export default function Landing() {
         }}
       >
 
-        <li>🔒 Seu conteúdo permanece totalmente privado</li>
+        <li>🔒 {t("landing.private")}</li>
 
-        <li>⛓ Registro permanente na blockchain</li>
+        <li>⛓ {t("landing.blockchain")}</li>
 
-        <li>🌐 Verificação pública via link ou QR Code</li>
+        <li>🌐 {t("landing.verify")}</li>
 
-        <li>⏱ Prova criptográfica de precedência</li>
+        <li>⏱ {t("landing.proof")}</li>
 
       </ul>
 
-      {/* CARD DE PREÇO */}
+      {/* CARD PREÇO */}
 
       <div
         style={{
@@ -104,7 +104,7 @@ export default function Landing() {
       >
 
         <p style={{ marginBottom: "10px" }}>
-          Registro individual
+          {t("landing.individual")}
         </p>
 
         <h2 style={{ marginBottom: "5px" }}>
@@ -118,7 +118,7 @@ export default function Landing() {
             marginBottom: "25px"
           }}
         >
-          Valor atual por registro
+          {t("landing.price")}
         </p>
 
         <button
@@ -133,7 +133,7 @@ export default function Landing() {
             cursor: "pointer"
           }}
         >
-          Registrar prova agora
+          {t("landing.button")}
         </button>
 
       </div>
@@ -154,7 +154,7 @@ export default function Landing() {
             marginRight: "10px"
           }}
         >
-          Sobre
+          {t("landing.about")}
         </a>
 
         <a
@@ -164,7 +164,7 @@ export default function Landing() {
             marginRight: "10px"
           }}
         >
-          Termos
+          {t("landing.terms")}
         </a>
 
         <a
@@ -173,12 +173,11 @@ export default function Landing() {
             color: "white"
           }}
         >
-          Privacidade
+          {t("landing.privacy")}
         </a>
 
       </div>
 
     </div>
-
   );
 }
