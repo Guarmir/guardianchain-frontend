@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
 
-    const { hash } = req.body;
+    const { hash, lang } = req.body;
 
     if (!hash) {
       return res.status(400).json({ error: "Hash não informado" });
@@ -41,7 +41,8 @@ export default async function handler(req, res) {
       ],
 
       metadata: {
-        hash: hash
+        hash: hash,
+        lang: lang || "en"
       },
 
       success_url: `${req.headers.origin}/success?hash=${hash}`,

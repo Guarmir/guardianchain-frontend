@@ -28,7 +28,10 @@ export default function Register() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ hash: fileHash }),
+    body: JSON.stringify({
+      hash: fileHash,
+      lang: i18n.language
+    }),
     });
 
     const data = await response.json();

@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import nodemailer from "nodemailer";
+import generateCertificate from "./generate-certificate.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -38,7 +39,6 @@ export default async function handler(req, res) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // EVENTO DE PAGAMENTO CONFIRMADO
   if (event.type === "checkout.session.completed") {
 
     const session = event.data.object;
@@ -50,16 +50,23 @@ export default async function handler(req, res) {
 
     const hash = session.metadata?.hash || null;
 
+    const lang = session.metadata?.lang || "en";
+
     console.log("Pagamento confirmado");
     console.log("Email:", email);
     console.log("Hash:", hash);
+    console.log("Idioma:", lang);
 
-    if (!email) {
-      console.error("Email não encontrado.");
+    if (!email || !hash) {
+
+      console.error("Email ou hash não encontrados");
+
       return res.status(200).json({ received: true });
     }
 
     try {
+
+      const pdfBuffer = await generateCertificate(hash, lang);
 
       const transporter = nodemailer.createTransport({
 
@@ -82,26 +89,43 @@ export default async function handler(req, res) {
 
         to: email,
 
-        subject: "GuardianChain - Certificado de Registro",
+        subject:
+          lang === "pt"
+            ? "GuardianChain - Certificado de Registro"
+            : "GuardianChain - Registration Certificate",
 
         html: `
-        <h2>Registro realizado com sucesso</h2>
+        <h2>
+        ${
+          lang === "pt"
+            ? "Registro realizado com sucesso"
+            : "Registration completed successfully"
+        }
+        </h2>
 
-        <p>Seu arquivo foi registrado na blockchain.</p>
+        <p>
+        ${
+          lang === "pt"
+            ? "Seu certificado está anexado."
+            : "Your certificate is attached."
+        }
+        </p>
+        `,
 
-        <p><strong>Hash do arquivo:</strong></p>
+        attachments: [
+          {
+            filename: "GuardianChain_Certificate.pdf",
+            content: pdfBuffer
+          }
+        ]
 
-        <p>${hash}</p>
-
-        <p>Guarde este hash como prova de autoria.</p>
-        `
       });
 
-      console.log("Email enviado com sucesso");
+      console.log("Email enviado com certificado");
 
     } catch (error) {
 
-      console.error("Erro ao enviar email:", error);
+      console.error("Erro ao gerar ou enviar certificado:", error);
 
     }
 
