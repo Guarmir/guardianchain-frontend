@@ -16,97 +16,122 @@ export default function Success() {
   }
 
   function handleDownload() {
-
     if (!hash) return;
-
     window.open(`/api/generate-certificate?hash=${hash}`, "_blank");
   }
 
   return (
+
     <div
       style={{
         minHeight: "100vh",
+        background: "linear-gradient(135deg,#2f4fad,#3f6ae0)",
         display: "flex",
-        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        fontFamily: "Arial, sans-serif",
-        textAlign: "center",
-        padding: "20px"
+        fontFamily: "Arial, sans-serif"
       }}
     >
 
-      <h1>Registro realizado com sucesso ✅</h1>
-
-      <p style={{ marginTop: "10px" }}>
-        Seu hash foi enviado para registro na blockchain.
-      </p>
-
-      {hash && (
-        <>
-          <p style={{ marginTop: "20px" }}>
-            Hash do arquivo:
-          </p>
-
-          <textarea
-            value={hash}
-            readOnly
-            rows="3"
-            style={{
-              width: "420px",
-              padding: "10px",
-              marginTop: "10px"
-            }}
-          />
-        </>
-      )}
-
-      <p style={{ marginTop: "30px", opacity: 0.7 }}>
-        O certificado também foi enviado para o seu e-mail.
-      </p>
-
       <div
         style={{
-          display: "flex",
-          gap: "15px",
-          marginTop: "40px",
-          flexWrap: "wrap",
-          justifyContent: "center"
+          background: "white",
+          padding: "50px",
+          borderRadius: "10px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+          textAlign: "center",
+          maxWidth: "600px",
+          width: "90%"
         }}
       >
 
-        <button
-          onClick={handleDownload}
-          style={{
-            padding: "12px 20px",
-            fontSize: "16px",
-            cursor: "pointer"
-          }}
-        >
-          Baixar certificado
-        </button>
+        <h1 style={{ marginBottom: "10px" }}>
+          Registro realizado com sucesso ✅
+        </h1>
 
-        <button
-          onClick={handleNewRegister}
-          style={{
-            padding: "12px 20px",
-            fontSize: "16px",
-            cursor: "pointer"
-          }}
-        >
-          Registrar novo arquivo
-        </button>
+        <p style={{ color: "#555" }}>
+          Seu hash foi enviado para registro na blockchain.
+        </p>
 
-        <button
-          onClick={handleHome}
+        {hash && (
+          <>
+            <p style={{ marginTop: "25px", fontWeight: "bold" }}>
+              Hash do arquivo
+            </p>
+
+            <textarea
+              value={hash}
+              readOnly
+              rows="3"
+              style={{
+                width: "100%",
+                padding: "12px",
+                marginTop: "10px",
+                borderRadius: "6px",
+                border: "1px solid #ddd"
+              }}
+            />
+          </>
+        )}
+
+        <p style={{ marginTop: "20px", color: "#666" }}>
+          O certificado também foi enviado para o seu e-mail.
+        </p>
+
+        <div
           style={{
-            padding: "12px 20px",
-            fontSize: "16px",
-            cursor: "pointer"
+            marginTop: "35px",
+            display: "flex",
+            justifyContent: "center",
+            gap: "15px",
+            flexWrap: "wrap"
           }}
         >
-          Voltar ao início
-        </button>
+
+          <button
+            onClick={handleDownload}
+            style={{
+              background: "#2f4fad",
+              color: "white",
+              border: "none",
+              padding: "12px 22px",
+              borderRadius: "6px",
+              fontSize: "15px",
+              cursor: "pointer"
+            }}
+          >
+            Baixar certificado
+          </button>
+
+          <button
+            onClick={handleNewRegister}
+            style={{
+              background: "#f0f0f0",
+              border: "1px solid #ccc",
+              padding: "12px 22px",
+              borderRadius: "6px",
+              fontSize: "15px",
+              cursor: "pointer"
+            }}
+          >
+            Registrar novo arquivo
+          </button>
+
+          <button
+            onClick={handleHome}
+            style={{
+              background: "#f0f0f0",
+              border: "1px solid #ccc",
+              padding: "12px 22px",
+              borderRadius: "6px",
+              fontSize: "15px",
+              cursor: "pointer"
+            }}
+          >
+            Voltar ao início
+          </button>
+
+        </div>
 
       </div>
 
