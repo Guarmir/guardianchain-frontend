@@ -1,118 +1,184 @@
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Landing() {
-  const { t, i18n } = useTranslation();
+export default function Landing() {
 
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-  };
+  const navigate = useNavigate();
 
   return (
+
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg,#0D47A1,#1E63D5)",
+        background: "linear-gradient(135deg,#2f4fad,#3f6ae0)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        fontFamily: "Arial, sans-serif",
         color: "white",
-        fontFamily: "Arial, sans-serif"
+        paddingTop: "60px"
       }}
     >
-      {/* HEADER */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px 60px"
-        }}
-      >
+
+      {/* LOGO */}
+
+      <div style={{ marginBottom: "20px" }}>
         <img
           src="/logo.png"
           alt="GuardianChain"
-          style={{ height: "70px" }}
+          style={{
+            height: "60px"
+          }}
         />
+      </div>
 
-        <div>
-          <button onClick={() => changeLanguage("pt")}>PT</button>
-          <button onClick={() => changeLanguage("en")}>EN</button>
-        </div>
-      </header>
+      {/* TÍTULO */}
 
-      {/* HERO */}
-      <div
+      <h1
         style={{
-          textAlign: "center",
-          marginTop: "80px",
-          maxWidth: "900px",
-          marginLeft: "auto",
-          marginRight: "auto"
+          fontSize: "48px",
+          marginBottom: "10px",
+          textAlign: "center"
         }}
       >
-        <h1 style={{ fontSize: "48px" }}>
-          {t("hero.title")}
-        </h1>
+        Registro Digital On-Chain
+      </h1>
 
-        <p style={{ fontSize: "20px" }}>
-          {t("hero.subtitle")}
+      <p
+        style={{
+          fontSize: "20px",
+          marginBottom: "10px",
+          textAlign: "center"
+        }}
+      >
+        Prova pública e permanente de autoria e anterioridade.
+      </p>
+
+      <p
+        style={{
+          maxWidth: "700px",
+          textAlign: "center",
+          lineHeight: "1.5",
+          opacity: "0.9"
+        }}
+      >
+        A GuardianChain registra o hash criptográfico do seu arquivo na
+        blockchain Polygon, criando uma prova pública, imutável e
+        verificável de forma independente sem expor o conteúdo original.
+      </p>
+
+      {/* LISTA DE BENEFÍCIOS */}
+
+      <ul
+        style={{
+          listStyle: "none",
+          padding: 0,
+          marginTop: "30px",
+          textAlign: "center",
+          lineHeight: "2"
+        }}
+      >
+
+        <li>🔒 Seu conteúdo permanece totalmente privado</li>
+
+        <li>⛓ Registro permanente na blockchain</li>
+
+        <li>🌐 Verificação pública via link ou QR Code</li>
+
+        <li>⏱ Prova criptográfica de precedência</li>
+
+      </ul>
+
+      {/* CARD DE PREÇO */}
+
+      <div
+        style={{
+          background: "white",
+          color: "#333",
+          padding: "40px",
+          borderRadius: "12px",
+          width: "320px",
+          marginTop: "40px",
+          textAlign: "center",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+        }}
+      >
+
+        <p style={{ marginBottom: "10px" }}>
+          Registro individual
         </p>
 
-        <p style={{ marginTop: "20px" }}>
-          {t("hero.description")}
-        </p>
+        <h2 style={{ marginBottom: "5px" }}>
+          US$ 9,00
+        </h2>
 
-        {/* FEATURES */}
-        <div style={{ marginTop: "40px", lineHeight: "2" }}>
-          <div>🔒 {t("features.private")}</div>
-          <div>⛓ {t("features.blockchain")}</div>
-          <div>🌐 {t("features.verification")}</div>
-          <div>🕒 {t("features.proof")}</div>
-        </div>
-
-        {/* PRICING */}
-        <div
+        <p
           style={{
-            marginTop: "60px",
-            background: "white",
-            color: "#333",
-            padding: "40px",
-            borderRadius: "20px",
-            width: "350px",
-            marginLeft: "auto",
-            marginRight: "auto"
+            fontSize: "14px",
+            color: "#666",
+            marginBottom: "25px"
           }}
         >
-          <p>{t("pricing.label")}</p>
+          Valor atual por registro
+        </p>
 
-          <h2>US$ 9,00</h2>
+        <button
+          onClick={() => navigate("/register")}
+          style={{
+            background: "#2f4fad",
+            color: "white",
+            border: "none",
+            padding: "12px 22px",
+            borderRadius: "6px",
+            fontSize: "15px",
+            cursor: "pointer"
+          }}
+        >
+          Registrar prova agora
+        </button>
 
-          <p>{t("pricing.current")}</p>
-
-          <Link to="/register">
-            <button
-              style={{
-                marginTop: "20px",
-                padding: "15px 30px",
-                background: "#1E63D5",
-                color: "white",
-                border: "none",
-                borderRadius: "10px",
-                cursor: "pointer"
-              }}
-            >
-              {t("pricing.cta")}
-            </button>
-          </Link>
-        </div>
-
-        {/* FOOTER */}
-        <div style={{ marginTop: "40px" }}>
-          <Link to="/about">{t("footer.about")}</Link>{" "}
-          <Link to="/terms">{t("footer.terms")}</Link>{" "}
-          <Link to="/privacy">{t("footer.privacy")}</Link>
-        </div>
       </div>
+
+      {/* RODAPÉ */}
+
+      <div
+        style={{
+          marginTop: "30px",
+          fontSize: "14px"
+        }}
+      >
+
+        <a
+          href="#"
+          style={{
+            color: "white",
+            marginRight: "10px"
+          }}
+        >
+          Sobre
+        </a>
+
+        <a
+          href="#"
+          style={{
+            color: "white",
+            marginRight: "10px"
+          }}
+        >
+          Termos
+        </a>
+
+        <a
+          href="#"
+          style={{
+            color: "white"
+          }}
+        >
+          Privacidade
+        </a>
+
+      </div>
+
     </div>
+
   );
 }
-
-export default Landing;
