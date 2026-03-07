@@ -48,14 +48,14 @@ export default function Landing() {
         </div>
 
         <button
-          style={styles.button}
+          style={styles.primaryButton}
           onClick={() => navigate("/register")}
         >
           Registrar prova
         </button>
 
         <button
-          style={styles.verifyButton}
+          style={styles.secondaryButton}
           onClick={() => navigate("/verify")}
         >
           Verificar certificado
@@ -151,11 +151,11 @@ const styles = {
     marginBottom: "24px"
   },
 
-  button: {
+  primaryButton: {
     background: "#3949ab",
     color: "white",
     border: "none",
-    padding: "14px 28px",
+    padding: "14px",
     borderRadius: "8px",
     fontSize: "16px",
     cursor: "pointer",
@@ -163,11 +163,11 @@ const styles = {
     marginBottom: "12px"
   },
 
-  verifyButton: {
-    background: "transparent",
-    border: "1px solid #3949ab",
-    color: "#3949ab",
-    padding: "12px 28px",
+  secondaryButton: {
+    background: "#3949ab",
+    color: "white",
+    border: "none",
+    padding: "12px",
     borderRadius: "8px",
     fontSize: "15px",
     cursor: "pointer",
