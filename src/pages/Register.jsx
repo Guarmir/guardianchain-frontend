@@ -22,6 +22,30 @@ export default function Register() {
 
   }
 
+  async function handleCheckout() {
+
+    if (!hash) return
+
+    const response = await fetch("/api/create-checkout-session", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        hash: hash
+      })
+
+    })
+
+    const data = await response.json()
+
+    window.location.href = data.url
+
+  }
+
   return (
 
     <div style={styles.page}>
@@ -63,7 +87,10 @@ export default function Register() {
               style={styles.hashBox}
             />
 
-            <button style={styles.button}>
+            <button
+              style={styles.button}
+              onClick={handleCheckout}
+            >
               Prosseguir para pagamento
             </button>
           </>
