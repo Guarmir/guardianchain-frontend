@@ -1,234 +1,143 @@
 import { useState, useEffect } from "react"
-import { ethers } from "ethers"
-import { useSearchParams } from "react-router-dom"
 
 export default function Verify() {
 
-  const [searchParams] = useSearchParams()
-
-  const [file, setFile] = useState(null)
-  const [calculatedHash, setCalculatedHash] = useState("")
-  const [inputHash, setInputHash] = useState("")
+  const [hash, setHash] = useState("")
+  const [fileHash, setFileHash] = useState("")
   const [match, setMatch] = useState(null)
+  const [language, setLanguage] = useState("en")
 
-  // carregar hash da URL
   useEffect(() => {
-    const hashFromUrl = searchParams.get("hash")
 
-    if (hashFromUrl) {
-      setInputHash(hashFromUrl)
+    const params = new URLSearchParams(window.location.search)
+
+    const hashParam = params.get("hash")
+
+    const langParam = params.get("lang")
+
+    if (hashParam) {
+      setHash(hashParam)
     }
-  }, [searchParams])
 
-  // gerar hash do arquivo
+    if (langParam && langParam.startsWith("pt")) {
+      setLanguage("pt")
+    } else if (navigator.language.startsWith("pt")) {
+      setLanguage("pt")
+    }
+
+  }, [])
+
   async function generateHash(file) {
 
     const buffer = await file.arrayBuffer()
 
-    const hash = ethers.keccak256(new Uint8Array(buffer))
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
 
-    return hash
-  }
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
 
-  // quando usuário seleciona arquivo
-  async function handleFileChange(e) {
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("")
 
-    const selectedFile = e.target.files[0]
+    const fullHash = "0x" + hashHex
 
-    if (!selectedFile) return
+    setFileHash(fullHash)
 
-    setFile(selectedFile)
-
-    const hash = await generateHash(selectedFile)
-
-    setCalculatedHash(hash)
-
-    if (inputHash) {
-      setMatch(hash.toLowerCase() === inputHash.toLowerCase())
+    if (hash === fullHash) {
+      setMatch(true)
+    } else {
+      setMatch(false)
     }
+
   }
 
-  // quando usuário digita hash
-  function handleHashChange(e) {
+  const text = {
 
-    const value = e.target.value.trim()
+    pt: {
+      title: "Verificar Prova Digital",
+      description:
+        "Envie o arquivo original para comparar o hash criptográfico.",
+      registeredHash: "Hash Registrado",
+      uploadFile: "Enviar Arquivo",
+      viewBlockchain: "Ver registro na blockchain",
+      match: "Arquivo autêntico ✔",
+      fail: "Arquivo não corresponde ✖"
+    },
 
-    setInputHash(value)
-
-    if (calculatedHash) {
-      setMatch(calculatedHash.toLowerCase() === value.toLowerCase())
+    en: {
+      title: "Verify Digital Proof",
+      description:
+        "Upload a file and compare its cryptographic hash with a registered proof.",
+      registeredHash: "Registered Hash",
+      uploadFile: "Upload File",
+      viewBlockchain: "View blockchain record",
+      match: "File authentic ✔",
+      fail: "File does not match ✖"
     }
+
   }
+
+  const t = text[language]
 
   return (
 
-    <div style={styles.page}>
+    <div style={{
+      maxWidth: "700px",
+      margin: "auto",
+      padding: "40px",
+      fontFamily: "Arial"
+    }}>
 
-      <div style={styles.card}>
+      <h1>{t.title}</h1>
 
-        <h1 style={styles.title}>
-          Verify Digital Proof
-        </h1>
+      <p>{t.description}</p>
 
-        <p style={styles.description}>
-          Upload a file and compare its cryptographic hash with a registered proof.
+      <h3>{t.registeredHash}</h3>
+
+      <input
+        value={hash}
+        readOnly
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "20px"
+        }}
+      />
+
+      <h3>{t.uploadFile}</h3>
+
+      <input
+        type="file"
+        onChange={(e) => generateHash(e.target.files[0])}
+      />
+
+      <br/><br/>
+
+      <p>
+        {t.viewBlockchain}:
+        <br/>
+        <a
+          href={`https://polygonscan.com/search?q=${hash}`}
+          target="_blank"
+        >
+          Open in PolygonScan
+        </a>
+      </p>
+
+      {match === true && (
+        <p style={{color:"green",fontWeight:"bold"}}>
+          {t.match}
         </p>
+      )}
 
-        <label style={styles.label}>
-          Registered Hash
-        </label>
-
-        <input
-          type="text"
-          value={inputHash}
-          onChange={handleHashChange}
-          placeholder="0x..."
-          style={styles.input}
-        />
-
-        <label style={styles.label}>
-          Upload File
-        </label>
-
-        <input
-          type="file"
-          onChange={handleFileChange}
-          style={styles.file}
-        />
-
-        {calculatedHash && (
-
-          <div style={styles.hashBox}>
-
-            <p style={styles.hashLabel}>
-              Calculated Hash
-            </p>
-
-            <p style={styles.hash}>
-              {calculatedHash}
-            </p>
-
-          </div>
-
-        )}
-
-        {match !== null && (
-
-          <div style={{
-            ...styles.result,
-            backgroundColor: match ? "#e6f7ee" : "#fdecea",
-            color: match ? "#1a7f4b" : "#b42318"
-          }}>
-
-            {match
-              ? "File matches the registered hash. Proof verified."
-              : "File does NOT match the registered hash."}
-
-          </div>
-
-        )}
-
-        {inputHash && (
-
-          <div style={styles.explorer}>
-
-            <p>
-              View blockchain record:
-            </p>
-
-            <a
-              href={`https://polygonscan.com/search?query=${inputHash}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open in PolygonScan
-            </a>
-
-          </div>
-
-        )}
-
-      </div>
+      {match === false && (
+        <p style={{color:"red",fontWeight:"bold"}}>
+          {t.fail}
+        </p>
+      )}
 
     </div>
 
   )
-}
-
-const styles = {
-
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#f4f6f8",
-    padding: "20px"
-  },
-
-  card: {
-    maxWidth: "600px",
-    width: "100%",
-    background: "white",
-    padding: "40px",
-    borderRadius: "12px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.1)"
-  },
-
-  title: {
-    fontSize: "28px",
-    marginBottom: "10px"
-  },
-
-  description: {
-    marginBottom: "30px",
-    color: "#666"
-  },
-
-  label: {
-    display: "block",
-    marginBottom: "8px",
-    fontWeight: "600"
-  },
-
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "20px",
-    borderRadius: "6px",
-    border: "1px solid #ddd"
-  },
-
-  file: {
-    marginBottom: "20px"
-  },
-
-  hashBox: {
-    marginTop: "20px",
-    marginBottom: "20px"
-  },
-
-  hashLabel: {
-    fontSize: "14px",
-    color: "#888"
-  },
-
-  hash: {
-    fontFamily: "monospace",
-    wordBreak: "break-all"
-  },
-
-  result: {
-    marginTop: "20px",
-    padding: "16px",
-    borderRadius: "8px",
-    fontWeight: "600",
-    textAlign: "center"
-  },
-
-  explorer: {
-    marginTop: "20px",
-    fontSize: "14px"
-  }
 
 }

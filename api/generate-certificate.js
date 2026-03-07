@@ -58,7 +58,7 @@ export default async function generateCertificate({ hash, language }) {
       second: "2-digit"
     }).format(now)
 
-    const verificationUrl = `https://guardianchain.online/verify?hash=${hash}`
+    const verificationUrl = `https://guardianchain.online/verify?hash=${hash}&lang=${lang}`
 
     doc.fontSize(24).text(title, { align: "center" })
 
