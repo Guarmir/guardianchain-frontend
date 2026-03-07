@@ -55,20 +55,17 @@ export default async function generateCertificate({ hash, language }) {
         String(now.getUTCSeconds()).padStart(2, "0") +
         " UTC"
 
-      // horário local do servidor
+      // horário Brasil
 
-      const localTimestamp =
-        now.getFullYear() +
-        "-" +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        "-" +
-        String(now.getDate()).padStart(2, "0") +
-        " " +
-        String(now.getHours()).padStart(2, "0") +
-        ":" +
-        String(now.getMinutes()).padStart(2, "0") +
-        ":" +
-        String(now.getSeconds()).padStart(2, "0")
+      const brazilTime = new Intl.DateTimeFormat("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      }).format(now)
 
       doc.fontSize(24).text(title, {
         align: "center"
@@ -84,7 +81,7 @@ export default async function generateCertificate({ hash, language }) {
 
       doc.text(`${dateLabel}: ${utcTimestamp}`)
 
-      doc.text(`Local time: ${localTimestamp}`)
+      doc.text(`Horário Brasil: ${brazilTime}`)
 
       doc.text(`${networkLabel}: Polygon`)
 
@@ -93,8 +90,6 @@ export default async function generateCertificate({ hash, language }) {
       doc.text(description)
 
       doc.moveDown(2)
-
-      // gerar QR Code
 
       const qrData = await QRCode.toDataURL(hash)
 
