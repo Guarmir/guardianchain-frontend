@@ -19,10 +19,11 @@ export default async function generateCertificate({ hash, language }) {
       doc.on("end", () => {
 
         const pdfData = Buffer.concat(buffers)
-
         resolve(pdfData)
 
       })
+
+      // idioma
 
       const title =
         language === "pt"
@@ -36,10 +37,11 @@ export default async function generateCertificate({ hash, language }) {
 
       const dateLabel = language === "pt" ? "Data" : "Date"
       const networkLabel = language === "pt" ? "Rede" : "Network"
+      const verifyLabel = language === "pt" ? "Verificação" : "Verification"
 
       const now = new Date()
 
-      // UTC (padrão internacional)
+      // UTC (padrão global)
 
       const utcTimestamp =
         now.getUTCFullYear() +
@@ -67,6 +69,12 @@ export default async function generateCertificate({ hash, language }) {
         second: "2-digit"
       }).format(now)
 
+      // URL de verificação
+
+      const verificationUrl = `https://guardianchain.online/verify?hash=${hash}`
+
+      // título
+
       doc.fontSize(24).text(title, {
         align: "center"
       })
@@ -76,13 +84,10 @@ export default async function generateCertificate({ hash, language }) {
       doc.fontSize(12)
 
       doc.text(`Hash: ${hash}`)
-
       doc.moveDown()
 
       doc.text(`${dateLabel}: ${utcTimestamp}`)
-
       doc.text(`Horário Brasil: ${brazilTime}`)
-
       doc.text(`${networkLabel}: Polygon`)
 
       doc.moveDown(2)
@@ -91,10 +96,16 @@ export default async function generateCertificate({ hash, language }) {
 
       doc.moveDown(2)
 
-      const qrData = await QRCode.toDataURL(hash)
+      doc.text(`${verifyLabel}:`)
+      doc.text(verificationUrl)
+
+      doc.moveDown()
+
+      // gerar QR com URL de verificação
+
+      const qrData = await QRCode.toDataURL(verificationUrl)
 
       const qrImage = qrData.replace(/^data:image\/png;base64,/, "")
-
       const qrBuffer = Buffer.from(qrImage, "base64")
 
       doc.image(qrBuffer, {
