@@ -10,50 +10,42 @@ export default function Landing() {
 
     <div style={styles.page}>
 
-      <div style={styles.hero}>
+      <img src="/logo.png" style={styles.logo} />
 
-        <img
-          src="/logo.png"
-          alt="GuardianChain"
-          style={styles.logo}
-        />
+      <h1 style={styles.title}>
+        {t("landing.title")}
+      </h1>
 
-        <h1 style={styles.title}>
-          {t("landing.title")}
-        </h1>
+      <p style={styles.subtitle}>
+        {t("landing.subtitle")}
+      </p>
 
-        <p style={styles.subtitle}>
-          {t("landing.subtitle")}
-        </p>
+      <p style={styles.description}>
+        {t("landing.description")}
+      </p>
 
-        <p style={styles.description}>
-          {t("landing.description")}
-        </p>
+      <div style={styles.features}>
 
-        <div style={styles.features}>
-
-          <p>🔒 {t("landing.private")}</p>
-          <p>⛓ {t("landing.blockchain")}</p>
-          <p>🌐 {t("landing.verify")}</p>
-          <p>⏱ {t("landing.proof")}</p>
-
-        </div>
+        <div>🔒 {t("landing.private")}</div>
+        <div>⛓ {t("landing.blockchain")}</div>
+        <div>🌐 {t("landing.verify")}</div>
+        <div>⏱ {t("landing.proof")}</div>
 
       </div>
 
       <div style={styles.card}>
 
-        <p style={styles.plan}>
+        <div style={styles.plan}>
           {t("price.single")}
-        </p>
+        </div>
 
-        <h2 style={styles.price}>
+        <div style={styles.price}>
           {t("price.value")}
-        </h2>
+        </div>
 
-        <p style={styles.priceDescription}>
+        <div style={styles.priceDescription}>
           {t("price.description")}
-        </p>
+        </div>
 
         <button
           style={styles.button}
@@ -62,13 +54,13 @@ export default function Landing() {
           {t("price.button")}
         </button>
 
-      </div>
+        <div style={styles.trust}>
 
-      <div style={styles.footer}>
+          <p>✔ Blockchain timestamp</p>
+          <p>✔ Verifiable certificate</p>
+          <p>✔ File never uploaded</p>
 
-        <a href="#">Sobre</a>
-        <a href="#">Termos</a>
-        <a href="#">Privacidade</a>
+        </div>
 
       </div>
 
@@ -86,47 +78,51 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
     padding: "40px"
   },
 
-  hero: {
-    textAlign: "center",
-    maxWidth: "700px"
-  },
-
   logo: {
-    width: "180px",
+    width: "160px",
     marginBottom: "30px"
   },
 
   title: {
-    fontSize: "48px",
-    marginBottom: "20px"
+    fontSize: "44px",
+    textAlign: "center",
+    maxWidth: "800px"
   },
 
   subtitle: {
-    fontSize: "22px",
-    marginBottom: "10px"
+    marginTop: "20px",
+    fontSize: "20px",
+    textAlign: "center",
+    maxWidth: "700px"
   },
 
   description: {
+    marginTop: "10px",
     opacity: 0.9,
+    textAlign: "center",
     marginBottom: "30px"
   },
 
   features: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "12px",
     marginBottom: "40px",
-    lineHeight: "30px"
+    fontSize: "16px"
   },
 
   card: {
     background: "white",
     color: "#333",
     padding: "40px",
-    borderRadius: "12px",
-    width: "320px",
+    borderRadius: "14px",
+    width: "360px",
     textAlign: "center",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
   },
 
   plan: {
@@ -135,30 +131,31 @@ const styles = {
   },
 
   price: {
-    fontSize: "36px",
+    fontSize: "48px",
+    fontWeight: "bold",
     marginBottom: "10px"
   },
 
   priceDescription: {
     fontSize: "14px",
-    marginBottom: "25px"
+    marginBottom: "20px"
   },
 
   button: {
     background: "#3949ab",
     color: "white",
     border: "none",
-    padding: "12px 25px",
-    borderRadius: "6px",
+    padding: "14px 30px",
+    borderRadius: "8px",
     fontSize: "16px",
-    cursor: "pointer"
+    cursor: "pointer",
+    marginBottom: "20px"
   },
 
-  footer: {
-    marginTop: "40px",
-    display: "flex",
-    gap: "20px",
-    fontSize: "14px"
+  trust: {
+    fontSize: "13px",
+    opacity: 0.8,
+    lineHeight: "22px"
   }
 
 }
