@@ -8,6 +8,10 @@ export default function Success() {
 
   async function downloadCertificate() {
 
+    const browserLang = navigator.language || "en"
+
+    const language = browserLang.startsWith("pt") ? "pt" : "en"
+
     const response = await fetch("/api/send-certificate", {
 
       method: "POST",
@@ -18,7 +22,7 @@ export default function Success() {
 
       body: JSON.stringify({
         hash,
-        language: navigator.language
+        language
       })
 
     })
@@ -32,7 +36,11 @@ export default function Success() {
     a.href = url
     a.download = "guardianchain-certificate.pdf"
 
+    document.body.appendChild(a)
+
     a.click()
+
+    a.remove()
 
   }
 
@@ -54,14 +62,14 @@ export default function Success() {
           O certificado também foi enviado para seu e-mail.
         </p>
 
-        <div style={styles.buttons}>
+        <button
+          style={styles.primary}
+          onClick={downloadCertificate}
+        >
+          Baixar
+        </button>
 
-          <button
-            style={styles.primary}
-            onClick={downloadCertificate}
-          >
-            Baixar certificado
-          </button>
+        <div style={styles.buttons}>
 
           <a href="/register">
             <button style={styles.secondary}>
@@ -112,13 +120,6 @@ const styles = {
     marginBottom: "10px"
   },
 
-  buttons: {
-    marginTop: "25px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px"
-  },
-
   primary: {
     background: "#3949ab",
     color: "white",
@@ -126,7 +127,16 @@ const styles = {
     padding: "12px",
     borderRadius: "8px",
     cursor: "pointer",
-    fontSize: "16px"
+    fontSize: "16px",
+    width: "100%",
+    marginTop: "20px"
+  },
+
+  buttons: {
+    marginTop: "20px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px"
   },
 
   secondary: {

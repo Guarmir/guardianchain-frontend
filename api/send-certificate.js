@@ -18,12 +18,21 @@ export default async function handler(req, res) {
       })
     }
 
-    // detectar idioma
+    // detectar idioma corretamente
 
-    const lang =
-      language && language.startsWith("pt")
-        ? "pt"
-        : "en"
+    let lang = "en"
+
+    if (language) {
+
+      lang = language.startsWith("pt") ? "pt" : "en"
+
+    } else {
+
+      const browserLang = req.headers["accept-language"] || ""
+
+      lang = browserLang.startsWith("pt") ? "pt" : "en"
+
+    }
 
     const pdfBuffer = await generateCertificate({
       hash,
