@@ -40,7 +40,7 @@ export default async function generateCertificate({ hash, language }) {
 
       doc.fontSize(12).text(`Hash: ${hash}`)
 
-      doc.text(`${dateLabel}: ${new Date().toISOString()}`)
+      doc.text(`${dateLabel}: ${new Date().toLocaleString()}`)
 
       doc.text(`${networkLabel}: Polygon`)
 
