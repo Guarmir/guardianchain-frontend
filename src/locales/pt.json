@@ -1,17 +1,41 @@
 {
   "landing": {
-    "title": "Registro Digital On-Chain",
-    "subtitle": "Prova pública e permanente de autoria e anterioridade.",
-    "description": "A GuardianChain registra o hash criptográfico do seu arquivo na blockchain Polygon, criando uma prova pública, imutável e verificável sem expor o conteúdo original.",
-    "private": "Seu conteúdo permanece totalmente privado",
+    "title": "Prova digital verificável na blockchain",
+    "subtitle": "Registre a existência de qualquer arquivo com um timestamp público",
+    "description": "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
+    "private": "Arquivo nunca é enviado",
     "blockchain": "Registro permanente na blockchain",
-    "verify": "Verificação pública via link ou QR Code",
-    "proof": "Prova criptográfica de precedência",
-    "individual": "Registro individual",
-    "price": "Valor atual por registro",
-    "button": "Registrar prova agora",
-    "about": "Sobre",
-    "terms": "Termos",
-    "privacy": "Privacidade"
+    "verify": "Prova verificável",
+    "proof": "Certificado de prova"
+  },
+
+  "price": {
+    "single": "Registro individual",
+    "value": "US$ 9",
+    "description": "por registro",
+    "button": "Registrar prova"
+  },
+
+  "register": {
+    "title": "Registrar prova digital",
+    "upload": "Selecionar arquivo",
+    "hash": "Hash gerado",
+    "pay": "Continuar para pagamento"
+  },
+
+  "success": {
+    "title": "Registro concluído",
+    "description": "Sua prova foi registrada com sucesso.",
+    "download": "Baixar certificado",
+    "new": "Novo registro"
+  },
+
+  "verify": {
+    "title": "Verificar prova digital",
+    "description": "Envie o arquivo original para comparar com o hash registrado.",
+    "hash": "Hash registrado",
+    "upload": "Enviar arquivo",
+    "verified": "Arquivo corresponde ao hash registrado.",
+    "invalid": "Arquivo não corresponde ao hash registrado."
   }
 }

@@ -1,17 +1,41 @@
 {
   "landing": {
-    "title": "On-Chain Digital Registry",
-    "subtitle": "Public and permanent proof of authorship and precedence.",
-    "description": "GuardianChain records the cryptographic hash of your file on the Polygon blockchain, creating a public, immutable and independently verifiable proof without exposing the original content.",
-    "private": "Your content remains fully private",
-    "blockchain": "Permanent on-chain record",
-    "verify": "Public verification via link or QR Code",
-    "proof": "Cryptographic proof of precedence",
-    "individual": "Individual registration",
-    "price": "Current price per registration",
-    "button": "Register proof now",
-    "about": "About",
-    "terms": "Terms",
-    "privacy": "Privacy"
+    "title": "Verifiable digital proof on blockchain",
+    "subtitle": "Register the existence of any file with a public timestamp",
+    "description": "Your file is never uploaded. Only the cryptographic hash is recorded.",
+    "private": "File never uploaded",
+    "blockchain": "Permanent blockchain record",
+    "verify": "Verifiable proof",
+    "proof": "Proof certificate"
+  },
+
+  "price": {
+    "single": "Single registration",
+    "value": "$9",
+    "description": "per proof",
+    "button": "Register proof"
+  },
+
+  "register": {
+    "title": "Register digital proof",
+    "upload": "Select file",
+    "hash": "Generated hash",
+    "pay": "Continue to payment"
+  },
+
+  "success": {
+    "title": "Registration completed",
+    "description": "Your proof has been successfully registered.",
+    "download": "Download certificate",
+    "new": "New registration"
+  },
+
+  "verify": {
+    "title": "Verify digital proof",
+    "description": "Upload the original file to compare with the registered hash.",
+    "hash": "Registered hash",
+    "upload": "Upload file",
+    "verified": "File matches the registered hash.",
+    "invalid": "File does not match the registered hash."
   }
 }
