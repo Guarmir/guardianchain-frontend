@@ -44,7 +44,7 @@ export default function Landing() {
         </div>
 
         <div style={styles.priceDescription}>
-          por registro
+          pagamento único
         </div>
 
         <button
@@ -52,6 +52,13 @@ export default function Landing() {
           onClick={() => navigate("/register")}
         >
           Registrar prova
+        </button>
+
+        <button
+          style={styles.verifyButton}
+          onClick={() => navigate("/verify")}
+        >
+          Verificar certificado
         </button>
 
       </div>
@@ -151,6 +158,18 @@ const styles = {
     padding: "14px 28px",
     borderRadius: "8px",
     fontSize: "16px",
+    cursor: "pointer",
+    width: "100%",
+    marginBottom: "12px"
+  },
+
+  verifyButton: {
+    background: "transparent",
+    border: "1px solid #3949ab",
+    color: "#3949ab",
+    padding: "12px 28px",
+    borderRadius: "8px",
+    fontSize: "15px",
     cursor: "pointer",
     width: "100%"
   },
