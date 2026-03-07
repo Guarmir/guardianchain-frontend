@@ -1,14 +1,12 @@
 import generateCertificate from "./generate-certificate.js"
 import nodemailer from "nodemailer"
 
-export default async function sendCertificate({ hash, language, email }) {
+export default async function sendEmail({ hash, language, email }) {
 
   const pdfBuffer = await generateCertificate({
     hash,
     language
   })
-
-  if (!email) return pdfBuffer
 
   const transporter = nodemailer.createTransport({
 
@@ -47,7 +45,5 @@ export default async function sendCertificate({ hash, language, email }) {
     ]
 
   })
-
-  return pdfBuffer
 
 }

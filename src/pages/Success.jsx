@@ -8,7 +8,7 @@ export default function Success() {
 
   function downloadCertificate() {
 
-    window.open(`/api/send-certificate?hash=${hash}`)
+    window.open(`/api/download-certificate?hash=${hash}`)
 
   }
 

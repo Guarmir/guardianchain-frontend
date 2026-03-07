@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-import sendCertificate from "./send-certificate.js"
+import sendEmail from "./send-email.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   } catch (err) {
 
-    console.error("Webhook signature error:", err.message)
+    console.error(err.message)
 
     return res.status(400).send(`Webhook Error: ${err.message}`)
 
@@ -45,18 +45,19 @@ export default async function handler(req, res) {
 
     const hash = session.metadata.hash
     const language = session.metadata.language || "en"
+    const email = session.customer_details.email
 
     try {
 
-      await sendCertificate({
+      await sendEmail({
         hash,
         language,
-        email: session.customer_details.email
+        email
       })
 
     } catch (error) {
 
-      console.error("Email send error:", error)
+      console.error("Email error:", error)
 
     }
 
