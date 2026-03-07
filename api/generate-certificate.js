@@ -7,7 +7,10 @@ export default async function generateCertificate({ hash, language }) {
 
     try {
 
-      const doc = new PDFDocument()
+      const doc = new PDFDocument({
+        size: "A4",
+        margin: 50
+      })
 
       const buffers = []
 
@@ -34,11 +37,11 @@ export default async function generateCertificate({ hash, language }) {
       const dateLabel = language === "pt" ? "Data" : "Date"
       const networkLabel = language === "pt" ? "Rede" : "Network"
 
-      // DATA CORRETA EM UTC PADRÃO
-
       const now = new Date()
 
-      const timestamp =
+      // UTC (padrão internacional)
+
+      const utcTimestamp =
         now.getUTCFullYear() +
         "-" +
         String(now.getUTCMonth() + 1).padStart(2, "0") +
@@ -52,19 +55,46 @@ export default async function generateCertificate({ hash, language }) {
         String(now.getUTCSeconds()).padStart(2, "0") +
         " UTC"
 
-      doc.fontSize(24).text(title, 50, 50)
+      // horário local do servidor
+
+      const localTimestamp =
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0") +
+        " " +
+        String(now.getHours()).padStart(2, "0") +
+        ":" +
+        String(now.getMinutes()).padStart(2, "0") +
+        ":" +
+        String(now.getSeconds()).padStart(2, "0")
+
+      doc.fontSize(24).text(title, {
+        align: "center"
+      })
+
+      doc.moveDown(2)
+
+      doc.fontSize(12)
+
+      doc.text(`Hash: ${hash}`)
 
       doc.moveDown()
 
-      doc.fontSize(12).text(`Hash: ${hash}`)
+      doc.text(`${dateLabel}: ${utcTimestamp}`)
 
-      doc.text(`${dateLabel}: ${timestamp}`)
+      doc.text(`Local time: ${localTimestamp}`)
 
       doc.text(`${networkLabel}: Polygon`)
 
-      doc.moveDown()
+      doc.moveDown(2)
 
       doc.text(description)
+
+      doc.moveDown(2)
+
+      // gerar QR Code
 
       const qrData = await QRCode.toDataURL(hash)
 
@@ -72,7 +102,10 @@ export default async function generateCertificate({ hash, language }) {
 
       const qrBuffer = Buffer.from(qrImage, "base64")
 
-      doc.image(qrBuffer, 50, 200, { width: 120 })
+      doc.image(qrBuffer, {
+        fit: [120, 120],
+        align: "left"
+      })
 
       doc.end()
 
