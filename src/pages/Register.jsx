@@ -13,9 +13,7 @@ export default function Register() {
 
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
-    const hashHex = hashArray
-      .map(b => b.toString(16).padStart(2, "0"))
-      .join("")
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
 
     const fullHash = "0x" + hashHex
 
@@ -27,8 +25,10 @@ export default function Register() {
   async function handleCheckout() {
 
     if (!hash) {
+
       alert("Selecione um arquivo primeiro")
       return
+
     }
 
     const response = await fetch("/api/create-checkout-session", {
@@ -47,7 +47,7 @@ export default function Register() {
 
     const data = await response.json()
 
-    const stripe = Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+    const stripe = window.Stripe("pk_test_51SkLPvK4J089mMwmMDF2qmdzyzj6aPGVagvGoQnO0gaQ4vkkrTY68rcjhFlu56YznsF61oJ35TWXCVnXfouaSthv00pJPoWVKB")
 
     await stripe.redirectToCheckout({
       sessionId: data.id
@@ -66,9 +66,7 @@ export default function Register() {
 
       <h1>Registrar prova digital</h1>
 
-      <p>
-        Selecione um arquivo para gerar um hash criptográfico.
-      </p>
+      <p>Selecione um arquivo para gerar um hash criptográfico.</p>
 
       <input
         type="file"
@@ -83,9 +81,7 @@ export default function Register() {
             Arquivo selecionado: <b>{fileName}</b>
           </p>
 
-          <p>
-            Hash gerado automaticamente:
-          </p>
+          <p>Hash gerado automaticamente:</p>
 
           <textarea
             value={hash}
@@ -113,7 +109,9 @@ export default function Register() {
           cursor: "pointer"
         }}
       >
+
         Prosseguir para pagamento
+
       </button>
 
     </div>
