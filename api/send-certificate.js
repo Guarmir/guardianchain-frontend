@@ -1,20 +1,20 @@
-import generateCertificate from "./generate-certificate"
+import generateCertificate from "./generate-certificate.js"
 
 export default async function handler(req, res) {
 
-  const hash = req.query.hash
-
-  if (!hash) {
-
-    return res.status(400).json({
-      message: "Hash não fornecido"
-    })
-
-  }
-
   try {
 
-    const pdf = await generateCertificate({
+    const { hash } = req.query
+
+    if (!hash) {
+
+      return res.status(400).json({
+        error: "Hash não fornecido"
+      })
+
+    }
+
+    const pdfBuffer = await generateCertificate({
       hash,
       language: "pt"
     })
@@ -23,17 +23,17 @@ export default async function handler(req, res) {
 
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=GuardianChain_Certificate.pdf"
+      "attachment; filename=guardianchain-certificate.pdf"
     )
 
-    res.send(pdf)
+    res.status(200).send(pdfBuffer)
 
   } catch (error) {
 
-    console.error(error)
+    console.error("Certificate error:", error)
 
     res.status(500).json({
-      message: "Erro ao gerar certificado"
+      error: "Erro ao gerar certificado"
     })
 
   }

@@ -3,58 +3,66 @@ import QRCode from "qrcode"
 
 export default async function generateCertificate({ hash, language }) {
 
-  const doc = new PDFDocument()
+  return new Promise(async (resolve, reject) => {
 
-  const buffers = []
+    try {
 
-  doc.on("data", buffers.push.bind(buffers))
+      const doc = new PDFDocument()
 
-  const title =
-    language === "pt"
-      ? "Certificado GuardianChain"
-      : "GuardianChain Certificate"
+      const buffers = []
 
-  const description =
-    language === "pt"
-      ? "Este documento certifica prova de existência e autoria."
-      : "This document certifies proof of existence and authorship."
+      doc.on("data", buffers.push.bind(buffers))
 
-  const dateLabel = language === "pt" ? "Data" : "Date"
-  const networkLabel = language === "pt" ? "Rede" : "Network"
+      doc.on("end", () => {
 
-  doc.fontSize(24).text(title, 50, 50)
+        const pdfData = Buffer.concat(buffers)
 
-  doc.moveDown()
+        resolve(pdfData)
 
-  doc.fontSize(12).text(`Hash: ${hash}`)
+      })
 
-  doc.text(`${dateLabel}: ${new Date().toISOString()}`)
+      const title =
+        language === "pt"
+          ? "Certificado GuardianChain"
+          : "GuardianChain Certificate"
 
-  doc.text(`${networkLabel}: Polygon`)
+      const description =
+        language === "pt"
+          ? "Este documento certifica prova de existência e autoria."
+          : "This document certifies proof of existence and authorship."
 
-  doc.moveDown()
+      const dateLabel = language === "pt" ? "Data" : "Date"
+      const networkLabel = language === "pt" ? "Rede" : "Network"
 
-  doc.text(description)
+      doc.fontSize(24).text(title, 50, 50)
 
-  const qr = await QRCode.toDataURL(hash)
+      doc.moveDown()
 
-  const qrImage = qr.replace(/^data:image\/png;base64,/, "")
+      doc.fontSize(12).text(`Hash: ${hash}`)
 
-  const qrBuffer = Buffer.from(qrImage, "base64")
+      doc.text(`${dateLabel}: ${new Date().toISOString()}`)
 
-  doc.image(qrBuffer, 50, 200, { width: 120 })
+      doc.text(`${networkLabel}: Polygon`)
 
-  doc.end()
+      doc.moveDown()
 
-  return new Promise((resolve) => {
+      doc.text(description)
 
-    doc.on("end", () => {
+      const qrData = await QRCode.toDataURL(hash)
 
-      const pdfData = Buffer.concat(buffers)
+      const qrImage = qrData.replace(/^data:image\/png;base64,/, "")
 
-      resolve(pdfData)
+      const qrBuffer = Buffer.from(qrImage, "base64")
 
-    })
+      doc.image(qrBuffer, 50, 200, { width: 120 })
+
+      doc.end()
+
+    } catch (error) {
+
+      reject(error)
+
+    }
 
   })
 
