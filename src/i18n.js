@@ -8,15 +8,11 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: {
-        translation: en
-      },
-      pt: {
-        translation: pt
-      }
+      en: { translation: en },
+      pt: { translation: pt }
     },
 
-    lng: "en",          // idioma padrão
+    lng: "en",
     fallbackLng: "en",
 
     interpolation: {

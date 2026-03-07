@@ -1,7 +1,10 @@
 import { useState } from "react"
 import { ethers } from "ethers"
+import { useTranslation } from "react-i18next"
 
 export default function Register() {
+
+  const { t } = useTranslation()
 
   const [fileName, setFileName] = useState("")
   const [hash, setHash] = useState("")
@@ -34,9 +37,7 @@ export default function Register() {
         "Content-Type": "application/json"
       },
 
-      body: JSON.stringify({
-        hash: hash
-      })
+      body: JSON.stringify({ hash })
 
     })
 
@@ -53,11 +54,11 @@ export default function Register() {
       <div style={styles.card}>
 
         <h1 style={styles.title}>
-          Registrar prova digital
+          {t("register.title")}
         </h1>
 
         <p style={styles.subtitle}>
-          Selecione um arquivo para gerar uma prova criptográfica.
+          {t("register.subtitle")}
         </p>
 
         <input
@@ -69,7 +70,7 @@ export default function Register() {
         {fileName && (
 
           <p style={styles.fileName}>
-            Arquivo selecionado: <b>{fileName}</b>
+            {t("register.fileSelected")}: <b>{fileName}</b>
           </p>
 
         )}
@@ -78,7 +79,7 @@ export default function Register() {
 
           <>
             <p style={styles.hashLabel}>
-              Hash gerado automaticamente
+              {t("register.hash")}
             </p>
 
             <textarea
@@ -91,15 +92,15 @@ export default function Register() {
               style={styles.button}
               onClick={handleCheckout}
             >
-              Prosseguir para pagamento
+              {t("register.button")}
             </button>
+
           </>
 
         )}
 
         <p style={styles.info}>
-          O conteúdo do arquivo nunca é enviado ao servidor.
-          Apenas o hash criptográfico é utilizado.
+          {t("register.info")}
         </p>
 
       </div>

@@ -11,31 +11,18 @@
 
   "price": {
     "single": "Single registration",
-    "value": "$9",
-    "description": "per proof",
-    "button": "Register proof"
+    "value": "US$ 9",
+    "description": "one-time payment",
+    "register": "Register proof",
+    "verify": "Verify certificate"
   },
 
   "register": {
     "title": "Register digital proof",
-    "upload": "Select file",
-    "hash": "Generated hash",
-    "pay": "Continue to payment"
-  },
-
-  "success": {
-    "title": "Registration completed",
-    "description": "Your proof has been successfully registered.",
-    "download": "Download certificate",
-    "new": "New registration"
-  },
-
-  "verify": {
-    "title": "Verify digital proof",
-    "description": "Upload the original file to compare with the registered hash.",
-    "hash": "Registered hash",
-    "upload": "Upload file",
-    "verified": "File matches the registered hash.",
-    "invalid": "File does not match the registered hash."
+    "subtitle": "Select a file to generate a cryptographic proof",
+    "fileSelected": "Selected file",
+    "hash": "Hash generated automatically",
+    "button": "Proceed to payment",
+    "info": "Your file is never uploaded. Only the cryptographic hash is used."
   }
 }

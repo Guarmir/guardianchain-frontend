@@ -36,38 +36,38 @@ export default function Landing() {
       <div style={styles.card}>
 
         <div style={styles.plan}>
-          Registro único
+          {t("price.single")}
         </div>
 
         <div style={styles.price}>
-          US$ 9
+          {t("price.value")}
         </div>
 
         <div style={styles.priceDescription}>
-          pagamento único
+          {t("price.description")}
         </div>
 
         <button
           style={styles.primaryButton}
           onClick={() => navigate("/register")}
         >
-          Registrar prova
+          {t("price.register")}
         </button>
 
         <button
           style={styles.secondaryButton}
           onClick={() => navigate("/verify")}
         >
-          Verificar certificado
+          {t("price.verify")}
         </button>
 
       </div>
 
       <div style={styles.featuresBottom}>
 
-        <p>✔ Registro permanente na blockchain</p>
-        <p>✔ Certificado verificável</p>
-        <p>✔ Arquivo nunca enviado</p>
+        <p>✔ {t("landing.blockchain")}</p>
+        <p>✔ {t("landing.verify")}</p>
+        <p>✔ {t("landing.private")}</p>
 
       </div>
 
