@@ -4,17 +4,17 @@ export default async function handler(req, res) {
 
   if (req.method !== "POST") {
     return res.status(405).json({
-      message: "Method not allowed"
+      message: "Método não permitido"
     })
   }
 
   try {
 
-    const { hash, email, language } = req.body
+    const { hash, language } = req.body
 
     if (!hash) {
       return res.status(400).json({
-        message: "Hash not provided"
+        message: "Hash não informado"
       })
     }
 
@@ -37,14 +37,14 @@ export default async function handler(req, res) {
       "attachment; filename=guardianchain-certificate.pdf"
     )
 
-    return res.send(pdfBuffer)
+    res.send(pdfBuffer)
 
   } catch (error) {
 
     console.error(error)
 
-    return res.status(500).json({
-      error: "Certificate generation error"
+    res.status(500).json({
+      error: "Erro ao gerar certificado"
     })
 
   }
