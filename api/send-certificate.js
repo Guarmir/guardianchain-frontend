@@ -3,48 +3,48 @@ import generateCertificate from "./generate-certificate.js"
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Método não permitido" })
+    return res.status(405).json({
+      message: "Method not allowed"
+    })
   }
 
   try {
 
-    const { hash, email } = req.body
+    const { hash, email, language } = req.body
 
     if (!hash) {
-      return res.status(400).json({ message: "Hash não informado" })
+      return res.status(400).json({
+        message: "Hash not provided"
+      })
     }
 
-    // FORÇA idioma português
+    // detectar idioma
 
-    const certificate = await generateCertificate({
+    const lang =
+      language && language.startsWith("pt")
+        ? "pt"
+        : "en"
+
+    const pdfBuffer = await generateCertificate({
       hash,
-      language: "pt"
+      language: lang
     })
 
-    // download direto caso não tenha email
+    res.setHeader("Content-Type", "application/pdf")
 
-    if (!email) {
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=guardianchain-certificate.pdf"
+    )
 
-      res.setHeader("Content-Type", "application/pdf")
-      res.setHeader(
-        "Content-Disposition",
-        "attachment; filename=guardianchain-certificate.pdf"
-      )
-
-      return res.send(certificate)
-
-    }
-
-    return res.status(200).json({
-      success: true
-    })
+    return res.send(pdfBuffer)
 
   } catch (error) {
 
     console.error(error)
 
     return res.status(500).json({
-      error: "Erro ao gerar certificado"
+      error: "Certificate generation error"
     })
 
   }

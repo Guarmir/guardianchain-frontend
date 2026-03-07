@@ -6,9 +6,36 @@ export default function Success() {
 
   const hash = params.get("hash")
 
-  function downloadCertificate() {
+  async function downloadCertificate() {
 
-    window.open(`/api/download-certificate?hash=${hash}`)
+    const language = navigator.language
+
+    const response = await fetch("/api/send-certificate", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        hash,
+        language
+      })
+
+    })
+
+    const blob = await response.blob()
+
+    const url = window.URL.createObjectURL(blob)
+
+    const a = document.createElement("a")
+
+    a.href = url
+
+    a.download = "guardianchain-certificate.pdf"
+
+    a.click()
 
   }
 
@@ -19,45 +46,26 @@ export default function Success() {
       <div style={styles.card}>
 
         <h1 style={styles.title}>
-          Registro realizado com sucesso ✅
+          Registro realizado com sucesso
         </h1>
 
         <p style={styles.text}>
-          Seu hash foi enviado para registro na blockchain.
+          Seu certificado foi gerado.
         </p>
 
-        <p style={styles.text}>
-          O certificado também foi enviado para seu e-mail.
-        </p>
-
-        <div style={styles.buttons}>
-
-          <button
-            style={styles.primaryButton}
-            onClick={downloadCertificate}
-          >
-            Baixar certificado
-          </button>
-
-          <a href="/register">
-            <button style={styles.secondaryButton}>
-              Registrar novo arquivo
-            </button>
-          </a>
-
-          <a href="/">
-            <button style={styles.secondaryButton}>
-              Voltar ao início
-            </button>
-          </a>
-
-        </div>
+        <button
+          style={styles.button}
+          onClick={downloadCertificate}
+        >
+          Baixar certificado
+        </button>
 
       </div>
 
     </div>
 
   )
+
 }
 
 const styles = {
@@ -73,42 +81,24 @@ const styles = {
   card: {
     background: "white",
     padding: "40px",
-    borderRadius: "14px",
-    width: "520px",
+    borderRadius: "12px",
     textAlign: "center",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+    boxShadow: "0 20px 60px rgba(0,0,0,0.2)"
   },
 
   title: {
-    fontSize: "28px",
-    marginBottom: "20px"
+    marginBottom: "10px"
   },
 
   text: {
-    fontSize: "14px",
-    marginBottom: "8px"
+    marginBottom: "20px"
   },
 
-  buttons: {
-    marginTop: "25px",
-    display: "flex",
-    gap: "10px",
-    justifyContent: "center"
-  },
-
-  primaryButton: {
+  button: {
     background: "#3949ab",
     color: "white",
     border: "none",
-    padding: "12px 18px",
-    borderRadius: "8px",
-    cursor: "pointer"
-  },
-
-  secondaryButton: {
-    background: "#eee",
-    border: "none",
-    padding: "12px 18px",
+    padding: "12px 20px",
     borderRadius: "8px",
     cursor: "pointer"
   }
