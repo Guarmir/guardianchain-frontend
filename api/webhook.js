@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   } catch (err) {
 
-    console.error(err.message)
+    console.error("Webhook signature error:", err.message)
 
     return res.status(400).send(`Webhook Error: ${err.message}`)
 
@@ -55,9 +55,11 @@ export default async function handler(req, res) {
         email
       })
 
+      console.log("Email enviado para:", email)
+
     } catch (error) {
 
-      console.error("Email error:", error)
+      console.error("Erro ao enviar email:", error)
 
     }
 

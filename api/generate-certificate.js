@@ -34,13 +34,31 @@ export default async function generateCertificate({ hash, language }) {
       const dateLabel = language === "pt" ? "Data" : "Date"
       const networkLabel = language === "pt" ? "Rede" : "Network"
 
+      // DATA CORRETA EM UTC PADRÃO
+
+      const now = new Date()
+
+      const timestamp =
+        now.getUTCFullYear() +
+        "-" +
+        String(now.getUTCMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getUTCDate()).padStart(2, "0") +
+        " " +
+        String(now.getUTCHours()).padStart(2, "0") +
+        ":" +
+        String(now.getUTCMinutes()).padStart(2, "0") +
+        ":" +
+        String(now.getUTCSeconds()).padStart(2, "0") +
+        " UTC"
+
       doc.fontSize(24).text(title, 50, 50)
 
       doc.moveDown()
 
       doc.fontSize(12).text(`Hash: ${hash}`)
 
-      doc.text(`${dateLabel}: ${new Date().toLocaleString()}`)
+      doc.text(`${dateLabel}: ${timestamp}`)
 
       doc.text(`${networkLabel}: Polygon`)
 
