@@ -23,25 +23,27 @@ export default async function generateCertificate({ hash, language }) {
 
       })
 
-      // idioma
+      // idioma padrão PT
+
+      const lang = language === "en" ? "en" : "pt"
 
       const title =
-        language === "pt"
+        lang === "pt"
           ? "Certificado GuardianChain"
           : "GuardianChain Certificate"
 
       const description =
-        language === "pt"
+        lang === "pt"
           ? "Este documento certifica prova de existência e autoria."
           : "This document certifies proof of existence and authorship."
 
-      const dateLabel = language === "pt" ? "Data" : "Date"
-      const networkLabel = language === "pt" ? "Rede" : "Network"
-      const verifyLabel = language === "pt" ? "Verificação" : "Verification"
+      const dateLabel = lang === "pt" ? "Data" : "Date"
+      const networkLabel = lang === "pt" ? "Rede" : "Network"
+      const verifyLabel = lang === "pt" ? "Verificação" : "Verification"
 
       const now = new Date()
 
-      // UTC (padrão global)
+      // timestamp UTC
 
       const utcTimestamp =
         now.getUTCFullYear() +
@@ -69,11 +71,7 @@ export default async function generateCertificate({ hash, language }) {
         second: "2-digit"
       }).format(now)
 
-      // URL de verificação
-
       const verificationUrl = `https://guardianchain.online/verify?hash=${hash}`
-
-      // título
 
       doc.fontSize(24).text(title, {
         align: "center"
@@ -100,8 +98,6 @@ export default async function generateCertificate({ hash, language }) {
       doc.text(verificationUrl)
 
       doc.moveDown()
-
-      // gerar QR com URL de verificação
 
       const qrData = await QRCode.toDataURL(verificationUrl)
 
