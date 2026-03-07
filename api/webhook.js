@@ -1,6 +1,6 @@
 import Stripe from "stripe"
-import generateCertificate from "./generate-certificate.js"
 import nodemailer from "nodemailer"
+import generateCertificate from "./generate-certificate.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -21,7 +21,6 @@ async function buffer(readable) {
 export default async function handler(req, res) {
 
   const sig = req.headers["stripe-signature"]
-
   const buf = await buffer(req)
 
   let event
@@ -36,7 +35,7 @@ export default async function handler(req, res) {
 
   } catch (err) {
 
-    console.error("Webhook signature verification failed.", err)
+    console.error("Webhook error:", err.message)
 
     return res.status(400).send(`Webhook Error: ${err.message}`)
 
@@ -60,32 +59,45 @@ export default async function handler(req, res) {
       })
 
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: false,
+
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
         }
+
       })
 
-      const subject =
-        language === "pt"
-          ? "Seu certificado GuardianChain"
-          : "Your GuardianChain Certificate"
+      const texts = {
 
-      const text =
-        language === "pt"
-          ? "Seu certificado de prova digital está anexado."
-          : "Your digital proof certificate is attached."
+        pt: {
+          subject: "Seu certificado GuardianChain",
+          message:
+            "Seu certificado de prova digital foi gerado.\n\nO arquivo PDF está anexado.\n\nGuardianChain"
+        },
+
+        en: {
+          subject: "Your GuardianChain Certificate",
+          message:
+            "Your digital proof certificate has been generated.\n\nThe PDF file is attached.\n\nGuardianChain"
+        }
+
+      }
+
+      const t = language === "pt" ? texts.pt : texts.en
 
       await transporter.sendMail({
 
-        from: process.env.EMAIL_USER,
+        from: process.env.SMTP_USER,
 
         to: email,
 
-        subject,
+        subject: t.subject,
 
-        text,
+        text: t.message,
 
         attachments: [
           {
@@ -95,6 +107,8 @@ export default async function handler(req, res) {
         ]
 
       })
+
+      console.log("Email sent successfully")
 
     } catch (error) {
 
