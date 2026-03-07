@@ -24,7 +24,7 @@ export default function Landing() {
         {t("landing.description")}
       </p>
 
-      <div style={styles.features}>
+      <div style={styles.featuresTop}>
 
         <div>🔒 {t("landing.private")}</div>
         <div>⛓ {t("landing.blockchain")}</div>
@@ -36,31 +36,31 @@ export default function Landing() {
       <div style={styles.card}>
 
         <div style={styles.plan}>
-          {t("price.single")}
+          Registro único
         </div>
 
         <div style={styles.price}>
-          {t("price.value")}
+          US$ 9
         </div>
 
         <div style={styles.priceDescription}>
-          {t("price.description")}
+          por registro
         </div>
 
         <button
           style={styles.button}
           onClick={() => navigate("/register")}
         >
-          {t("price.button")}
+          Registrar prova
         </button>
 
-        <div style={styles.trust}>
+      </div>
 
-          <p>✔ Blockchain timestamp</p>
-          <p>✔ Verifiable certificate</p>
-          <p>✔ File never uploaded</p>
+      <div style={styles.featuresBottom}>
 
-        </div>
+        <p>✔ Registro permanente na blockchain</p>
+        <p>✔ Certificado verificável</p>
+        <p>✔ Arquivo nunca enviado</p>
 
       </div>
 
@@ -78,39 +78,40 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    padding: "40px"
+    paddingTop: "60px",
+    paddingBottom: "80px"
   },
 
   logo: {
     width: "160px",
-    marginBottom: "30px"
+    marginBottom: "40px"
   },
 
   title: {
     fontSize: "44px",
     textAlign: "center",
-    maxWidth: "800px"
+    maxWidth: "800px",
+    marginBottom: "20px"
   },
 
   subtitle: {
-    marginTop: "20px",
     fontSize: "20px",
     textAlign: "center",
-    maxWidth: "700px"
+    maxWidth: "700px",
+    marginBottom: "10px"
   },
 
   description: {
-    marginTop: "10px",
+    fontSize: "15px",
     opacity: 0.9,
     textAlign: "center",
     marginBottom: "30px"
   },
 
-  features: {
+  featuresTop: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: "12px",
+    gap: "14px",
     marginBottom: "40px",
     fontSize: "16px"
   },
@@ -120,42 +121,45 @@ const styles = {
     color: "#333",
     padding: "40px",
     borderRadius: "14px",
-    width: "360px",
+    width: "340px",
     textAlign: "center",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
+    marginBottom: "30px"
   },
 
   plan: {
     fontSize: "14px",
-    marginBottom: "10px"
+    marginBottom: "10px",
+    opacity: 0.8
   },
 
   price: {
-    fontSize: "48px",
+    fontSize: "52px",
     fontWeight: "bold",
-    marginBottom: "10px"
+    marginBottom: "6px"
   },
 
   priceDescription: {
     fontSize: "14px",
-    marginBottom: "20px"
+    marginBottom: "24px"
   },
 
   button: {
     background: "#3949ab",
     color: "white",
     border: "none",
-    padding: "14px 30px",
+    padding: "14px 28px",
     borderRadius: "8px",
     fontSize: "16px",
     cursor: "pointer",
-    marginBottom: "20px"
+    width: "100%"
   },
 
-  trust: {
-    fontSize: "13px",
-    opacity: 0.8,
-    lineHeight: "22px"
+  featuresBottom: {
+    fontSize: "14px",
+    opacity: 0.9,
+    textAlign: "center",
+    lineHeight: "26px"
   }
 
 }
