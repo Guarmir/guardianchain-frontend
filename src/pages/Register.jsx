@@ -1,135 +1,157 @@
-import { useState } from "react";
-import { ethers } from "ethers";
-import { useTranslation } from "react-i18next";
+import { useState } from "react"
+import { ethers } from "ethers"
 
 export default function Register() {
 
-  const { i18n } = useTranslation();
+  const [fileName, setFileName] = useState("")
+  const [hash, setHash] = useState("")
 
-  const [fileHash, setFileHash] = useState("");
-  const [fileName, setFileName] = useState("");
-  const [loading, setLoading] = useState(false);
+  async function handleFile(event) {
 
-  async function handleFileChange(event) {
+    const file = event.target.files[0]
 
-    const file = event.target.files[0];
-    if (!file) return;
+    if (!file) return
 
-    setFileName(file.name);
+    setFileName(file.name)
 
-    const arrayBuffer = await file.arrayBuffer();
+    const buffer = await file.arrayBuffer()
 
-    const hash = ethers.keccak256(new Uint8Array(arrayBuffer));
+    const hash = ethers.keccak256(new Uint8Array(buffer))
 
-    setFileHash(hash.replace("0x", ""));
-  }
+    setHash(hash)
 
-  async function handleCheckout() {
-
-    if (!fileHash) return;
-
-    setLoading(true);
-
-    try {
-
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          hash: fileHash,
-          lang: i18n.language
-        })
-      });
-
-      const data = await response.json();
-
-      console.log("Stripe response:", data);
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Erro ao iniciar pagamento.");
-        setLoading(false);
-      }
-
-    } catch (error) {
-
-      console.error("Erro:", error);
-      alert("Erro ao conectar com servidor.");
-      setLoading(false);
-
-    }
   }
 
   return (
 
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "Arial, sans-serif",
-        textAlign: "center",
-        padding: "20px"
-      }}
-    >
+    <div style={styles.page}>
 
-      <h1>Registrar Prova</h1>
+      <div style={styles.card}>
 
-      <input
-        type="file"
-        onChange={handleFileChange}
-        style={{ marginBottom: "20px" }}
-      />
+        <h1 style={styles.title}>
+          Registrar prova digital
+        </h1>
 
-      {fileName && (
-        <p>
-          Arquivo selecionado: <strong>{fileName}</strong>
+        <p style={styles.subtitle}>
+          Selecione um arquivo para gerar uma prova criptográfica.
         </p>
-      )}
 
-      {fileHash && (
-        <>
-          <p style={{ marginTop: "10px" }}>
-            Hash gerado automaticamente:
+        <input
+          type="file"
+          onChange={handleFile}
+          style={styles.fileInput}
+        />
+
+        {fileName && (
+
+          <p style={styles.fileName}>
+            Arquivo selecionado: <b>{fileName}</b>
           </p>
 
-          <textarea
-            value={fileHash}
-            readOnly
-            rows="3"
-            style={{
-              width: "400px",
-              marginTop: "10px",
-              padding: "10px"
-            }}
-          />
+        )}
 
-          <button
-            onClick={handleCheckout}
-            disabled={loading}
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              fontSize: "16px",
-              cursor: "pointer"
-            }}
-          >
-            {loading ? "Redirecionando..." : "Prosseguir para pagamento"}
-          </button>
-        </>
-      )}
+        {hash && (
 
-      <p style={{ marginTop: "30px", opacity: 0.6 }}>
-        O conteúdo não é enviado para o servidor.
-        Apenas o hash criptográfico é utilizado.
-      </p>
+          <>
+            <p style={styles.hashLabel}>
+              Hash gerado automaticamente
+            </p>
+
+            <textarea
+              value={hash}
+              readOnly
+              style={styles.hashBox}
+            />
+
+            <button style={styles.button}>
+              Prosseguir para pagamento
+            </button>
+          </>
+
+        )}
+
+        <p style={styles.info}>
+          O conteúdo do arquivo nunca é enviado ao servidor.
+          Apenas o hash criptográfico é utilizado.
+        </p>
+
+      </div>
 
     </div>
 
-  );
+  )
+}
+
+const styles = {
+
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(180deg,#4c5bd4,#3949ab)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "40px"
+  },
+
+  card: {
+    background: "white",
+    padding: "40px",
+    borderRadius: "14px",
+    width: "420px",
+    textAlign: "center",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+  },
+
+  title: {
+    fontSize: "28px",
+    marginBottom: "10px"
+  },
+
+  subtitle: {
+    fontSize: "14px",
+    marginBottom: "20px",
+    color: "#666"
+  },
+
+  fileInput: {
+    marginBottom: "20px"
+  },
+
+  fileName: {
+    fontSize: "14px",
+    marginBottom: "10px"
+  },
+
+  hashLabel: {
+    fontSize: "14px",
+    marginBottom: "8px"
+  },
+
+  hashBox: {
+    width: "100%",
+    height: "80px",
+    padding: "10px",
+    borderRadius: "6px",
+    border: "1px solid #ddd",
+    fontFamily: "monospace",
+    marginBottom: "20px"
+  },
+
+  button: {
+    background: "#3949ab",
+    color: "white",
+    border: "none",
+    padding: "14px",
+    borderRadius: "8px",
+    fontSize: "16px",
+    cursor: "pointer",
+    width: "100%",
+    marginBottom: "15px"
+  },
+
+  info: {
+    fontSize: "12px",
+    color: "#777"
+  }
+
 }
