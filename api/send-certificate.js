@@ -1,43 +1,41 @@
-import nodemailer from "nodemailer";
+import generateCertificate from "./generate-certificate"
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
 
-  const { email, pdfBase64 } = req.body;
+  const hash = req.query.hash
 
-  if (!email || !pdfBase64) {
-    return res.status(400).json({ message: "Missing data" });
+  if (!hash) {
+
+    return res.status(400).json({
+      message: "Hash não fornecido"
+    })
+
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
 
-    await transporter.sendMail({
-      from: `"GuardianChain" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Your Digital Proof Certificate",
-      text: "Your certificate is attached.",
-      attachments: [
-        {
-          filename: "guardianchain-certificate.pdf",
-          content: pdfBase64,
-          encoding: "base64",
-        },
-      ],
-    });
+    const pdf = await generateCertificate({
+      hash,
+      language: "pt"
+    })
 
-    return res.status(200).json({ message: "Email sent successfully" });
+    res.setHeader("Content-Type", "application/pdf")
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=GuardianChain_Certificate.pdf"
+    )
+
+    res.send(pdf)
 
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Error sending email" });
+
+    console.error(error)
+
+    res.status(500).json({
+      message: "Erro ao gerar certificado"
+    })
+
   }
+
 }
