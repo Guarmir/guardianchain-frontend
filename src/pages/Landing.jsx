@@ -1,183 +1,164 @@
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
 export default function Landing() {
 
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
 
   return (
 
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg,#2f4fad,#3f6ae0)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        fontFamily: "Arial, sans-serif",
-        color: "white",
-        paddingTop: "60px"
-      }}
-    >
+    <div style={styles.page}>
 
-      {/* LOGO */}
+      <div style={styles.hero}>
 
-      <div style={{ marginBottom: "20px" }}>
         <img
           src="/logo.png"
           alt="GuardianChain"
-          style={{
-            height: "60px"
-          }}
+          style={styles.logo}
         />
-      </div>
 
-      {/* TITULO */}
+        <h1 style={styles.title}>
+          {t("landing.title")}
+        </h1>
 
-      <h1
-        style={{
-          fontSize: "48px",
-          marginBottom: "10px",
-          textAlign: "center"
-        }}
-      >
-        {t("landing.title")}
-      </h1>
-
-      <p
-        style={{
-          fontSize: "20px",
-          marginBottom: "10px",
-          textAlign: "center"
-        }}
-      >
-        {t("landing.subtitle")}
-      </p>
-
-      <p
-        style={{
-          maxWidth: "700px",
-          textAlign: "center",
-          lineHeight: "1.5",
-          opacity: "0.9"
-        }}
-      >
-        {t("landing.description")}
-      </p>
-
-      {/* BENEFICIOS */}
-
-      <ul
-        style={{
-          listStyle: "none",
-          padding: 0,
-          marginTop: "30px",
-          textAlign: "center",
-          lineHeight: "2"
-        }}
-      >
-
-        <li>🔒 {t("landing.private")}</li>
-
-        <li>⛓ {t("landing.blockchain")}</li>
-
-        <li>🌐 {t("landing.verify")}</li>
-
-        <li>⏱ {t("landing.proof")}</li>
-
-      </ul>
-
-      {/* CARD PREÇO */}
-
-      <div
-        style={{
-          background: "white",
-          color: "#333",
-          padding: "40px",
-          borderRadius: "12px",
-          width: "320px",
-          marginTop: "40px",
-          textAlign: "center",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-        }}
-      >
-
-        <p style={{ marginBottom: "10px" }}>
-          {t("landing.individual")}
+        <p style={styles.subtitle}>
+          {t("landing.subtitle")}
         </p>
 
-        <h2 style={{ marginBottom: "5px" }}>
-          US$ 9,00
+        <p style={styles.description}>
+          {t("landing.description")}
+        </p>
+
+        <div style={styles.features}>
+
+          <p>🔒 {t("landing.private")}</p>
+          <p>⛓ {t("landing.blockchain")}</p>
+          <p>🌐 {t("landing.verify")}</p>
+          <p>⏱ {t("landing.proof")}</p>
+
+        </div>
+
+      </div>
+
+      <div style={styles.card}>
+
+        <p style={styles.plan}>
+          {t("price.single")}
+        </p>
+
+        <h2 style={styles.price}>
+          {t("price.value")}
         </h2>
 
-        <p
-          style={{
-            fontSize: "14px",
-            color: "#666",
-            marginBottom: "25px"
-          }}
-        >
-          {t("landing.price")}
+        <p style={styles.priceDescription}>
+          {t("price.description")}
         </p>
 
         <button
+          style={styles.button}
           onClick={() => navigate("/register")}
-          style={{
-            background: "#2f4fad",
-            color: "white",
-            border: "none",
-            padding: "12px 22px",
-            borderRadius: "6px",
-            fontSize: "15px",
-            cursor: "pointer"
-          }}
         >
-          {t("landing.button")}
+          {t("price.button")}
         </button>
 
       </div>
 
-      {/* RODAPÉ */}
+      <div style={styles.footer}>
 
-      <div
-        style={{
-          marginTop: "30px",
-          fontSize: "14px"
-        }}
-      >
-
-        <a
-          href="#"
-          style={{
-            color: "white",
-            marginRight: "10px"
-          }}
-        >
-          {t("landing.about")}
-        </a>
-
-        <a
-          href="#"
-          style={{
-            color: "white",
-            marginRight: "10px"
-          }}
-        >
-          {t("landing.terms")}
-        </a>
-
-        <a
-          href="#"
-          style={{
-            color: "white"
-          }}
-        >
-          {t("landing.privacy")}
-        </a>
+        <a href="#">Sobre</a>
+        <a href="#">Termos</a>
+        <a href="#">Privacidade</a>
 
       </div>
 
     </div>
-  );
+
+  )
+}
+
+const styles = {
+
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(180deg,#4c5bd4,#3949ab)",
+    color: "white",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "40px"
+  },
+
+  hero: {
+    textAlign: "center",
+    maxWidth: "700px"
+  },
+
+  logo: {
+    width: "180px",
+    marginBottom: "30px"
+  },
+
+  title: {
+    fontSize: "48px",
+    marginBottom: "20px"
+  },
+
+  subtitle: {
+    fontSize: "22px",
+    marginBottom: "10px"
+  },
+
+  description: {
+    opacity: 0.9,
+    marginBottom: "30px"
+  },
+
+  features: {
+    marginBottom: "40px",
+    lineHeight: "30px"
+  },
+
+  card: {
+    background: "white",
+    color: "#333",
+    padding: "40px",
+    borderRadius: "12px",
+    width: "320px",
+    textAlign: "center",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+  },
+
+  plan: {
+    fontSize: "14px",
+    marginBottom: "10px"
+  },
+
+  price: {
+    fontSize: "36px",
+    marginBottom: "10px"
+  },
+
+  priceDescription: {
+    fontSize: "14px",
+    marginBottom: "25px"
+  },
+
+  button: {
+    background: "#3949ab",
+    color: "white",
+    border: "none",
+    padding: "12px 25px",
+    borderRadius: "6px",
+    fontSize: "16px",
+    cursor: "pointer"
+  },
+
+  footer: {
+    marginTop: "40px",
+    display: "flex",
+    gap: "20px",
+    fontSize: "14px"
+  }
+
 }
