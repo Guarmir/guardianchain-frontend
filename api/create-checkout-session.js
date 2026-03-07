@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         language: language || "en"
       },
 
-      success_url: `${process.env.BASE_URL}/success`,
+      success_url: `${process.env.BASE_URL}/success?hash=${hash}`,
       cancel_url: `${process.env.BASE_URL}`
 
     })

@@ -1,140 +1,116 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom"
 
 export default function Success() {
 
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [params] = useSearchParams()
 
-  const hash = searchParams.get("hash");
+  const hash = params.get("hash")
 
-  function handleNewRegister() {
-    navigate("/register");
-  }
+  function downloadCertificate() {
 
-  function handleHome() {
-    navigate("/");
-  }
+    window.open(`/api/send-certificate?hash=${hash}`)
 
-  function handleDownload() {
-    if (!hash) return;
-    window.open(`/api/generate-certificate?hash=${hash}`, "_blank");
   }
 
   return (
 
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg,#2f4fad,#3f6ae0)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "Arial, sans-serif"
-      }}
-    >
+    <div style={styles.page}>
 
-      <div
-        style={{
-          background: "white",
-          padding: "50px",
-          borderRadius: "10px",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-          textAlign: "center",
-          maxWidth: "600px",
-          width: "90%"
-        }}
-      >
+      <div style={styles.card}>
 
-        <h1 style={{ marginBottom: "10px" }}>
+        <h1 style={styles.title}>
           Registro realizado com sucesso ✅
         </h1>
 
-        <p style={{ color: "#555" }}>
+        <p style={styles.text}>
           Seu hash foi enviado para registro na blockchain.
         </p>
 
-        {hash && (
-          <>
-            <p style={{ marginTop: "25px", fontWeight: "bold" }}>
-              Hash do arquivo
-            </p>
-
-            <textarea
-              value={hash}
-              readOnly
-              rows="3"
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginTop: "10px",
-                borderRadius: "6px",
-                border: "1px solid #ddd"
-              }}
-            />
-          </>
-        )}
-
-        <p style={{ marginTop: "20px", color: "#666" }}>
-          O certificado também foi enviado para o seu e-mail.
+        <p style={styles.text}>
+          O certificado também foi enviado para seu e-mail.
         </p>
 
-        <div
-          style={{
-            marginTop: "35px",
-            display: "flex",
-            justifyContent: "center",
-            gap: "15px",
-            flexWrap: "wrap"
-          }}
-        >
+        <div style={styles.buttons}>
 
           <button
-            onClick={handleDownload}
-            style={{
-              background: "#2f4fad",
-              color: "white",
-              border: "none",
-              padding: "12px 22px",
-              borderRadius: "6px",
-              fontSize: "15px",
-              cursor: "pointer"
-            }}
+            style={styles.primaryButton}
+            onClick={downloadCertificate}
           >
             Baixar certificado
           </button>
 
-          <button
-            onClick={handleNewRegister}
-            style={{
-              background: "#f0f0f0",
-              border: "1px solid #ccc",
-              padding: "12px 22px",
-              borderRadius: "6px",
-              fontSize: "15px",
-              cursor: "pointer"
-            }}
-          >
-            Registrar novo arquivo
-          </button>
+          <a href="/register">
+            <button style={styles.secondaryButton}>
+              Registrar novo arquivo
+            </button>
+          </a>
 
-          <button
-            onClick={handleHome}
-            style={{
-              background: "#f0f0f0",
-              border: "1px solid #ccc",
-              padding: "12px 22px",
-              borderRadius: "6px",
-              fontSize: "15px",
-              cursor: "pointer"
-            }}
-          >
-            Voltar ao início
-          </button>
+          <a href="/">
+            <button style={styles.secondaryButton}>
+              Voltar ao início
+            </button>
+          </a>
 
         </div>
 
       </div>
 
     </div>
-  );
+
+  )
+}
+
+const styles = {
+
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(180deg,#4c5bd4,#3949ab)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+  card: {
+    background: "white",
+    padding: "40px",
+    borderRadius: "14px",
+    width: "520px",
+    textAlign: "center",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+  },
+
+  title: {
+    fontSize: "28px",
+    marginBottom: "20px"
+  },
+
+  text: {
+    fontSize: "14px",
+    marginBottom: "8px"
+  },
+
+  buttons: {
+    marginTop: "25px",
+    display: "flex",
+    gap: "10px",
+    justifyContent: "center"
+  },
+
+  primaryButton: {
+    background: "#3949ab",
+    color: "white",
+    border: "none",
+    padding: "12px 18px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  },
+
+  secondaryButton: {
+    background: "#eee",
+    border: "none",
+    padding: "12px 18px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  }
+
 }
