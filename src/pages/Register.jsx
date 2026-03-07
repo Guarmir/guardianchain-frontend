@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { ethers } from "ethers"
 import { useTranslation } from "react-i18next"
+import i18n from "../i18n"
 
 export default function Register() {
 
@@ -19,15 +20,17 @@ export default function Register() {
 
     const buffer = await file.arrayBuffer()
 
-    const hash = ethers.keccak256(new Uint8Array(buffer))
+    const generatedHash = ethers.keccak256(new Uint8Array(buffer))
 
-    setHash(hash)
+    setHash(generatedHash)
 
   }
 
   async function handleCheckout() {
 
     if (!hash) return
+
+    const language = i18n.language
 
     const response = await fetch("/api/create-checkout-session", {
 
@@ -37,7 +40,10 @@ export default function Register() {
         "Content-Type": "application/json"
       },
 
-      body: JSON.stringify({ hash })
+      body: JSON.stringify({
+        hash,
+        language
+      })
 
     })
 

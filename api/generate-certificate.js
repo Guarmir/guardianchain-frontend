@@ -1,70 +1,61 @@
-import PDFDocument from "pdfkit";
-import QRCode from "qrcode";
+import PDFDocument from "pdfkit"
+import QRCode from "qrcode"
 
-export default async function generateCertificate(hash, lang = "en") {
+export default async function generateCertificate({ hash, language }) {
 
-  const texts = {
+  const doc = new PDFDocument()
 
-    en: {
-      title: "GuardianChain Certificate",
-      proof: "This document certifies proof of existence and authorship.",
-      hash: "Hash:",
-      date: "Date:",
-      network: "Network:"
-    },
+  const buffers = []
 
-    pt: {
-      title: "Certificado GuardianChain",
-      proof: "Este documento certifica prova de existência e autoria.",
-      hash: "Hash:",
-      date: "Data:",
-      network: "Rede:"
-    }
+  doc.on("data", buffers.push.bind(buffers))
 
-  };
+  const title =
+    language === "pt"
+      ? "Certificado GuardianChain"
+      : "GuardianChain Certificate"
 
-  const t = texts[lang] || texts.en;
+  const description =
+    language === "pt"
+      ? "Este documento certifica prova de existência e autoria."
+      : "This document certifies proof of existence and authorship."
 
-  const verifyURL = `https://guardianchain.online/verify?hash=${hash}`;
+  const dateLabel = language === "pt" ? "Data" : "Date"
+  const networkLabel = language === "pt" ? "Rede" : "Network"
 
-  const qr = await QRCode.toDataURL(verifyURL);
+  doc.fontSize(24).text(title, 50, 50)
 
-  const doc = new PDFDocument();
+  doc.moveDown()
 
-  const buffers = [];
+  doc.fontSize(12).text(`Hash: ${hash}`)
 
-  doc.on("data", buffers.push.bind(buffers));
+  doc.text(`${dateLabel}: ${new Date().toISOString()}`)
 
-  const result = new Promise((resolve) => {
+  doc.text(`${networkLabel}: Polygon`)
+
+  doc.moveDown()
+
+  doc.text(description)
+
+  const qr = await QRCode.toDataURL(hash)
+
+  const qrImage = qr.replace(/^data:image\/png;base64,/, "")
+
+  const qrBuffer = Buffer.from(qrImage, "base64")
+
+  doc.image(qrBuffer, 50, 200, { width: 120 })
+
+  doc.end()
+
+  return new Promise((resolve) => {
+
     doc.on("end", () => {
-      resolve(Buffer.concat(buffers));
-    });
-  });
 
-  doc.fontSize(24).text(t.title, { align: "center" });
+      const pdfData = Buffer.concat(buffers)
 
-  doc.moveDown();
+      resolve(pdfData)
 
-  doc.fontSize(12).text(`${t.hash} ${hash}`);
-  doc.text(`${t.date} ${new Date().toISOString()}`);
-  doc.text(`${t.network} Polygon`);
+    })
 
-  doc.moveDown();
-
-  doc.text(t.proof);
-
-  doc.moveDown();
-
-  const qrImage = qr.replace(/^data:image\/png;base64,/, "");
-  const qrBuffer = Buffer.from(qrImage, "base64");
-
-  doc.image(qrBuffer, {
-    fit: [150, 150],
-    align: "center"
-  });
-
-  doc.end();
-
-  return result;
+  })
 
 }

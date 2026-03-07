@@ -1,38 +1,27 @@
-import Stripe from "stripe";
+import Stripe from "stripe"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "Method not allowed" })
   }
 
   try {
 
-    const { hash, lang } = req.body;
-
-    if (!hash) {
-      return res.status(400).json({ error: "Hash não informado" });
-    }
+    const { hash, language } = req.body
 
     const session = await stripe.checkout.sessions.create({
 
-      mode: "payment",
-
       payment_method_types: ["card"],
-
-      billing_address_collection: "auto",
-
-      customer_creation: "always",
 
       line_items: [
         {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "GuardianChain Digital Proof Registration",
-              description: "On-chain proof of authorship and precedence"
+              name: "GuardianChain Digital Proof"
             },
             unit_amount: 900
           },
@@ -40,26 +29,25 @@ export default async function handler(req, res) {
         }
       ],
 
+      mode: "payment",
+
       metadata: {
         hash: hash,
-        lang: lang || "en"
+        language: language || "en"
       },
 
-      success_url: `${req.headers.origin}/success?hash=${hash}`,
+      success_url: `${process.env.BASE_URL}/success`,
+      cancel_url: `${process.env.BASE_URL}`
 
-      cancel_url: `${req.headers.origin}`
+    })
 
-    });
-
-    return res.status(200).json({ url: session.url });
+    res.status(200).json({ url: session.url })
 
   } catch (error) {
 
-    console.error("Stripe error:", error);
+    console.error(error)
 
-    return res.status(500).json({
-      error: "Erro ao criar sessão de pagamento"
-    });
+    res.status(500).json({ error: "Stripe session error" })
 
   }
 
