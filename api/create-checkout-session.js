@@ -5,16 +5,28 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" })
+    return res.status(405).json({ message: "Method not allowed" })
   }
 
   try {
 
-    const { hash, language } = req.body
+    const { hash } = req.body
+
+    if (!hash) {
+      return res.status(400).json({ error: "Hash missing" })
+    }
+
+    const languageHeader = req.headers["accept-language"] || "en"
+
+    const language = languageHeader.startsWith("pt")
+      ? "pt"
+      : "en"
 
     const session = await stripe.checkout.sessions.create({
 
       payment_method_types: ["card"],
+
+      mode: "payment",
 
       line_items: [
         {
@@ -29,25 +41,24 @@ export default async function handler(req, res) {
         }
       ],
 
-      mode: "payment",
+      success_url: `${process.env.BASE_URL}/success?hash=${hash}`,
+
+      cancel_url: `${process.env.BASE_URL}`,
 
       metadata: {
         hash: hash,
-        language: language || "en"
-      },
-
-      success_url: `${process.env.BASE_URL}/success?hash=${hash}`,
-      cancel_url: `${process.env.BASE_URL}`
+        language: language
+      }
 
     })
 
-    res.status(200).json({ url: session.url })
+    res.status(200).json({ id: session.id })
 
   } catch (error) {
 
     console.error(error)
 
-    res.status(500).json({ error: "Stripe session error" })
+    res.status(500).json({ error: "Stripe error" })
 
   }
 
