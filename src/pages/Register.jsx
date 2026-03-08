@@ -2,45 +2,48 @@ import { useState } from "react"
 
 export default function Register() {
 
-  const [hash, setHash] = useState("")
-  const [fileName, setFileName] = useState("")
+  const [hash,setHash] = useState("")
+  const [fileName,setFileName] = useState("")
 
-  async function generateHash(file) {
+  async function generateHash(file){
 
     const buffer = await file.arrayBuffer()
 
-    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
+    const hashBuffer = await crypto.subtle.digest("SHA-256",buffer)
 
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
-    const hashHex = hashArray
-      .map(b => b.toString(16).padStart(2, "0"))
-      .join("")
+    const hashHex = hashArray.map(b=>b.toString(16).padStart(2,"0")).join("")
 
-    const fullHash = "0x" + hashHex
+    setHash("0x"+hashHex)
 
-    setHash(fullHash)
     setFileName(file.name)
 
   }
 
-  async function handleCheckout() {
+  async function handleCheckout(){
 
-    if (!hash) {
+    if(!hash){
+
       alert("Selecione um arquivo primeiro")
+
       return
+
     }
 
-    const response = await fetch("/api/create-checkout-session", {
+    const language = navigator.language.startsWith("pt") ? "pt" : "en"
 
-      method: "POST",
+    const response = await fetch("/api/create-checkout-session",{
 
-      headers: {
-        "Content-Type": "application/json"
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
       },
 
-      body: JSON.stringify({
-        hash
+      body:JSON.stringify({
+        hash,
+        language
       })
 
     })
@@ -50,41 +53,39 @@ export default function Register() {
     const stripe = window.Stripe("pk_test_51SkLPvK4J089mMwmMDF2qmdzyzj6aPGVagvGoQnO0gaQ4vkkrTY68rcjhFlu56YznsF61oJ35TWXCVnXfouaSthv00pJPoWVKB")
 
     await stripe.redirectToCheckout({
-      sessionId: data.id
+      sessionId:data.id
     })
 
   }
 
-  return (
+  return(
 
     <div style={styles.page}>
 
       <div style={styles.card}>
 
-        <h1 style={styles.title}>
-          Registrar prova digital
-        </h1>
+        <h1>Registrar prova digital</h1>
 
-        <p style={styles.subtitle}>
-          Selecione um arquivo para gerar um hash criptográfico.
-        </p>
+        <p>Selecione um arquivo para gerar um hash criptográfico.</p>
 
         <input
-          type="file"
-          style={styles.fileInput}
-          onChange={(e) => generateHash(e.target.files[0])}
+        type="file"
+        onChange={(e)=>generateHash(e.target.files[0])}
         />
 
         {fileName && (
 
-          <div style={styles.hashBox}>
+          <div style={{marginTop:"20px"}}>
 
             <p><b>{fileName}</b></p>
 
             <textarea
-              value={hash}
-              readOnly
-              style={styles.hash}
+            value={hash}
+            readOnly
+            style={{
+              width:"100%",
+              height:"100px"
+            }}
             />
 
           </div>
@@ -92,10 +93,12 @@ export default function Register() {
         )}
 
         <button
-          onClick={handleCheckout}
-          style={styles.button}
+        onClick={handleCheckout}
+        style={styles.button}
         >
-          Prosseguir para pagamento
+
+        Prosseguir para pagamento
+
         </button>
 
       </div>
@@ -106,60 +109,35 @@ export default function Register() {
 
 }
 
-const styles = {
+const styles={
 
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(180deg,#4c5bd4,#3949ab)"
+  page:{
+    minHeight:"100vh",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    background:"linear-gradient(180deg,#4c5bd4,#3949ab)"
   },
 
-  card: {
-    background: "white",
-    padding: "40px",
-    borderRadius: "14px",
-    width: "420px",
-    textAlign: "center",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+  card:{
+    background:"white",
+    padding:"40px",
+    borderRadius:"14px",
+    width:"420px",
+    textAlign:"center",
+    boxShadow:"0 20px 60px rgba(0,0,0,0.25)"
   },
 
-  title: {
-    fontSize: "32px",
-    marginBottom: "10px"
-  },
-
-  subtitle: {
-    fontSize: "15px",
-    marginBottom: "20px",
-    color: "#555"
-  },
-
-  fileInput: {
-    marginBottom: "20px"
-  },
-
-  hashBox: {
-    marginBottom: "20px"
-  },
-
-  hash: {
-    width: "100%",
-    height: "100px",
-    marginTop: "10px",
-    padding: "10px"
-  },
-
-  button: {
-    background: "#3949ab",
-    color: "white",
-    border: "none",
-    padding: "14px",
-    borderRadius: "8px",
-    fontSize: "16px",
-    cursor: "pointer",
-    width: "100%"
+  button:{
+    background:"#3949ab",
+    color:"white",
+    border:"none",
+    padding:"14px",
+    borderRadius:"8px",
+    fontSize:"16px",
+    cursor:"pointer",
+    width:"100%",
+    marginTop:"20px"
   }
 
 }
