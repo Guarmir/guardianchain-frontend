@@ -4,59 +4,39 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default async function handler(req,res){
 
-  if(req.method !== "POST"){
+  const { hash } = req.body
 
-    return res.status(405).json({error:"Method not allowed"})
-
+  if(!hash){
+    return res.status(400).json({error:"Hash não fornecido"})
   }
 
-  const {hash,language} = req.body
+  const session = await stripe.checkout.sessions.create({
 
-  try{
+    payment_method_types:["card"],
 
-    const session = await stripe.checkout.sessions.create({
+    mode:"payment",
 
-      payment_method_types:["card"],
-
-      line_items:[{
-
-        price_data:{
-
-          currency:"usd",
-
-          product_data:{
-            name:"GuardianChain Proof Registration"
-          },
-
-          unit_amount:900
-
+    line_items:[{
+      price_data:{
+        currency:"usd",
+        product_data:{
+          name:"GuardianChain Registration"
         },
+        unit_amount:900
+      },
+      quantity:1
+    }],
 
-        quantity:1
+    success_url:`${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
 
-      }],
+    cancel_url:`${process.env.BASE_URL}/register`,
 
-      mode:"payment",
+    metadata:{
+      hash:hash
+    }
 
-      success_url:`${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+  })
 
-      cancel_url:`${process.env.BASE_URL}`,
-
-      metadata:{
-        hash,
-        language
-      }
-
-    })
-
-    res.status(200).json({id:session.id})
-
-  }
-
-  catch(error){
-
-    res.status(500).json({error:error.message})
-
-  }
+  res.json({id:session.id})
 
 }
