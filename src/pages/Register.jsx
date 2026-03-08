@@ -13,7 +13,9 @@ export default function Register() {
 
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("")
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("")
 
     const fullHash = "0x" + hashHex
 
@@ -25,10 +27,8 @@ export default function Register() {
   async function handleCheckout() {
 
     if (!hash) {
-
       alert("Selecione um arquivo primeiro")
       return
-
     }
 
     const response = await fetch("/api/create-checkout-session", {
@@ -57,65 +57,109 @@ export default function Register() {
 
   return (
 
-    <div style={{
-      maxWidth: "600px",
-      margin: "auto",
-      padding: "40px",
-      textAlign: "center"
-    }}>
+    <div style={styles.page}>
 
-      <h1>Registrar prova digital</h1>
+      <div style={styles.card}>
 
-      <p>Selecione um arquivo para gerar um hash criptográfico.</p>
+        <h1 style={styles.title}>
+          Registrar prova digital
+        </h1>
 
-      <input
-        type="file"
-        onChange={(e) => generateHash(e.target.files[0])}
-      />
+        <p style={styles.subtitle}>
+          Selecione um arquivo para gerar um hash criptográfico.
+        </p>
 
-      {fileName && (
+        <input
+          type="file"
+          style={styles.fileInput}
+          onChange={(e) => generateHash(e.target.files[0])}
+        />
 
-        <div style={{ marginTop: "20px" }}>
+        {fileName && (
 
-          <p>
-            Arquivo selecionado: <b>{fileName}</b>
-          </p>
+          <div style={styles.hashBox}>
 
-          <p>Hash gerado automaticamente:</p>
+            <p><b>{fileName}</b></p>
 
-          <textarea
-            value={hash}
-            readOnly
-            style={{
-              width: "100%",
-              height: "100px"
-            }}
-          />
+            <textarea
+              value={hash}
+              readOnly
+              style={styles.hash}
+            />
 
-        </div>
+          </div>
 
-      )}
+        )}
 
-      <button
-        onClick={handleCheckout}
-        style={{
-          marginTop: "20px",
-          padding: "12px 30px",
-          background: "#4f46e5",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          fontSize: "16px",
-          cursor: "pointer"
-        }}
-      >
+        <button
+          onClick={handleCheckout}
+          style={styles.button}
+        >
+          Prosseguir para pagamento
+        </button>
 
-        Prosseguir para pagamento
-
-      </button>
+      </div>
 
     </div>
 
   )
+
+}
+
+const styles = {
+
+  page: {
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "linear-gradient(180deg,#4c5bd4,#3949ab)"
+  },
+
+  card: {
+    background: "white",
+    padding: "40px",
+    borderRadius: "14px",
+    width: "420px",
+    textAlign: "center",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+  },
+
+  title: {
+    fontSize: "32px",
+    marginBottom: "10px"
+  },
+
+  subtitle: {
+    fontSize: "15px",
+    marginBottom: "20px",
+    color: "#555"
+  },
+
+  fileInput: {
+    marginBottom: "20px"
+  },
+
+  hashBox: {
+    marginBottom: "20px"
+  },
+
+  hash: {
+    width: "100%",
+    height: "100px",
+    marginTop: "10px",
+    padding: "10px"
+  },
+
+  button: {
+    background: "#3949ab",
+    color: "white",
+    border: "none",
+    padding: "14px",
+    borderRadius: "8px",
+    fontSize: "16px",
+    cursor: "pointer",
+    width: "100%"
+  }
 
 }
