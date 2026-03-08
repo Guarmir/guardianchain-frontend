@@ -14,19 +14,29 @@ export default async function handler(req,res){
 
   const sig = req.headers["stripe-signature"]
 
+  const buf = await new Promise(resolve => {
+
+    const chunks = []
+
+    req.on("data",chunk => chunks.push(chunk))
+
+    req.on("end",() => resolve(Buffer.concat(chunks)))
+
+  })
+
   let event
 
   try{
 
     event = stripe.webhooks.constructEvent(
-      req.body,
+      buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     )
 
-  }
+  }catch(err){
 
-  catch(err){
+    console.error("Webhook error:",err.message)
 
     return res.status(400).send(`Webhook Error: ${err.message}`)
 
@@ -36,15 +46,31 @@ export default async function handler(req,res){
 
     const session = event.data.object
 
-    const hash = session.metadata.hash
+    const hash = session.metadata?.hash
+    const email = session.customer_details?.email
+    const language = session.metadata?.language || "en"
 
-    const language = session.metadata.language || "en"
+    if(!hash){
 
-    const email = session.customer_details.email
+      console.error("HASH NÃO ENCONTRADO")
 
-    const pdf = await generateCertificate(hash,language)
+      return res.status(400).end()
 
-    await sendCertificate(email,pdf)
+    }
+
+    try{
+
+      const pdf = await generateCertificate(hash,language)
+
+      await sendCertificate(email,pdf)
+
+      console.log("Certificado enviado para:",email)
+
+    }catch(err){
+
+      console.error("Erro ao gerar certificado:",err)
+
+    }
 
   }
 
