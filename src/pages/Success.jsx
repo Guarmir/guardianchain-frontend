@@ -9,7 +9,7 @@ export default function Success(){
 
   const download = () => {
 
-    window.open(`/api/download-certificate?session_id=${session}`,"_blank")
+    window.open(`/api/download-certificate?session_id=${session}`)
 
   }
 

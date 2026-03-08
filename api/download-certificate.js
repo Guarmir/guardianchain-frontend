@@ -1,41 +1,32 @@
+import Stripe from "stripe"
 import generateCertificate from "./generate-certificate.js"
 
-export default async function handler(req, res) {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-  try {
+export default async function handler(req,res){
 
-    const { hash } = req.query
+  const {session_id,hash} = req.query
 
-    if (!hash) {
+  let fileHash = hash
 
-      return res.status(400).json({
-        error: "Hash não fornecido"
-      })
+  if(session_id){
 
-    }
+    const session = await stripe.checkout.sessions.retrieve(session_id)
 
-    const pdfBuffer = await generateCertificate({
-      hash,
-      language: "pt"
-    })
-
-    res.setHeader("Content-Type", "application/pdf")
-
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=guardianchain-certificate.pdf"
-    )
-
-    res.status(200).send(pdfBuffer)
-
-  } catch (error) {
-
-    console.error(error)
-
-    res.status(500).json({
-      error: "Erro ao gerar certificado"
-    })
+    fileHash = session.metadata.hash
 
   }
+
+  if(!fileHash){
+
+    return res.status(400).json({error:"Hash não fornecido"})
+
+  }
+
+  const pdf = await generateCertificate(fileHash)
+
+  res.setHeader("Content-Type","application/pdf")
+
+  res.send(pdf)
 
 }
