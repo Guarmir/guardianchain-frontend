@@ -3,30 +3,24 @@ import generateCertificate from "./generate-certificate.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-export default async function handler(req,res){
+export default async function handler(req, res) {
 
-  const {session_id,hash} = req.query
+  const { session_id } = req.query
 
-  let fileHash = hash
-
-  if(session_id){
-
-    const session = await stripe.checkout.sessions.retrieve(session_id)
-
-    fileHash = session.metadata.hash
-
+  if (!session_id) {
+    return res.status(400).json({ error: "session_id não fornecido" })
   }
 
-  if(!fileHash){
+  const session = await stripe.checkout.sessions.retrieve(session_id)
 
-    return res.status(400).json({error:"Hash não fornecido"})
+  const hash = session.metadata?.hash
 
+  if (!hash) {
+    return res.status(400).json({ error: "hash não encontrado no metadata" })
   }
 
-  const pdf = await generateCertificate(fileHash)
+  const pdf = await generateCertificate(hash)
 
-  res.setHeader("Content-Type","application/pdf")
-
+  res.setHeader("Content-Type", "application/pdf")
   res.send(pdf)
-
 }
