@@ -1,8 +1,17 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate,useSearchParams } from "react-router-dom"
 
 export default function Success(){
 
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+
+  const session = params.get("session_id")
+
+  const download = () => {
+
+    window.open(`/api/download-certificate?session_id=${session}`,"_blank")
+
+  }
 
   return(
 
@@ -17,25 +26,25 @@ export default function Success(){
         </p>
 
         <p>
-        O certificado foi enviado para seu e-mail.
+        O certificado também foi enviado para seu e-mail.
         </p>
 
+        <button style={styles.button} onClick={download}>
+          Baixar certificado
+        </button>
+
         <button
-        style={styles.button}
+        style={styles.secondary}
         onClick={()=>navigate("/register")}
         >
-
         Registrar novo arquivo
-
         </button>
 
         <button
         style={styles.secondary}
         onClick={()=>navigate("/")}
         >
-
         Voltar ao início
-
         </button>
 
       </div>
@@ -82,7 +91,8 @@ const styles={
     padding:"10px",
     border:"none",
     borderRadius:"8px",
-    cursor:"pointer"
+    cursor:"pointer",
+    width:"100%"
   }
 
 }

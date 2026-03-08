@@ -20,9 +20,9 @@
   "register": {
     "title": "Register digital proof",
     "subtitle": "Select a file to generate a cryptographic proof",
-    "fileSelected": "Selected file",
-    "hash": "Hash generated automatically",
-    "button": "Proceed to payment",
+    "select_file": "Selected file",
+    "choose_file": "Hash generated automatically",
+    "pay": "Proceed to payment",
     "info": "Your file is never uploaded. Only the cryptographic hash is used."
   }
 }

@@ -27,25 +27,16 @@ export default function Register() {
   async function handleCheckout(){
 
     if(!hash){
-
       alert(t("register.select_file"))
-
       return
-
     }
 
     const response = await fetch("/api/create-checkout-session",{
-
       method:"POST",
-
       headers:{
         "Content-Type":"application/json"
       },
-
-      body:JSON.stringify({
-        hash
-      })
-
+      body:JSON.stringify({ hash })
     })
 
     const data = await response.json()
@@ -68,9 +59,13 @@ export default function Register() {
 
         <p>{t("register.subtitle")}</p>
 
+        <label style={styles.label}>
+          {t("register.choose_file")}
+        </label>
+
         <input
-        type="file"
-        onChange={(e)=>generateHash(e.target.files[0])}
+          type="file"
+          onChange={(e)=>generateHash(e.target.files[0])}
         />
 
         {fileName && (
@@ -80,12 +75,12 @@ export default function Register() {
             <p><b>{fileName}</b></p>
 
             <textarea
-            value={hash}
-            readOnly
-            style={{
-              width:"100%",
-              height:"100px"
-            }}
+              value={hash}
+              readOnly
+              style={{
+                width:"100%",
+                height:"100px"
+              }}
             />
 
           </div>
@@ -93,11 +88,11 @@ export default function Register() {
         )}
 
         <button
-        onClick={handleCheckout}
-        style={styles.button}
+          onClick={handleCheckout}
+          style={styles.button}
         >
 
-        {t("register.pay")}
+          {t("register.pay")}
 
         </button>
 
@@ -126,6 +121,12 @@ const styles={
     width:"420px",
     textAlign:"center",
     boxShadow:"0 20px 60px rgba(0,0,0,0.25)"
+  },
+
+  label:{
+    display:"block",
+    marginBottom:"8px",
+    fontWeight:"bold"
   },
 
   button:{

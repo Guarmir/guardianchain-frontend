@@ -20,9 +20,9 @@
   "register": {
     "title": "Registrar prova digital",
     "subtitle": "Selecione um arquivo para gerar uma prova criptográfica",
-    "fileSelected": "Arquivo selecionado",
-    "hash": "Hash gerado automaticamente",
-    "button": "Prosseguir para pagamento",
+    "select_file": "Arquivo selecionado",
+    "choose_file": "Hash gerado automaticamente",
+    "pay": "Prosseguir para pagamento",
     "info": "O conteúdo do arquivo nunca é enviado ao servidor. Apenas o hash criptográfico é utilizado."
   }
 }
