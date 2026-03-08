@@ -1,6 +1,9 @@
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export default function Register() {
+
+  const { t } = useTranslation()
 
   const [hash,setHash] = useState("")
   const [fileName,setFileName] = useState("")
@@ -25,13 +28,11 @@ export default function Register() {
 
     if(!hash){
 
-      alert("Selecione um arquivo primeiro")
+      alert(t("register.select_file"))
 
       return
 
     }
-
-    const language = navigator.language.startsWith("pt") ? "pt" : "en"
 
     const response = await fetch("/api/create-checkout-session",{
 
@@ -42,8 +43,7 @@ export default function Register() {
       },
 
       body:JSON.stringify({
-        hash,
-        language
+        hash
       })
 
     })
@@ -64,9 +64,9 @@ export default function Register() {
 
       <div style={styles.card}>
 
-        <h1>Registrar prova digital</h1>
+        <h1>{t("register.title")}</h1>
 
-        <p>Selecione um arquivo para gerar um hash criptográfico.</p>
+        <p>{t("register.subtitle")}</p>
 
         <input
         type="file"
@@ -97,7 +97,7 @@ export default function Register() {
         style={styles.button}
         >
 
-        Prosseguir para pagamento
+        {t("register.pay")}
 
         </button>
 
