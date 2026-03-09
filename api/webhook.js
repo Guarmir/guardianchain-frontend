@@ -10,23 +10,25 @@ export const config = {
   }
 }
 
-export default async function handler(req,res){
+function normalizeLanguage(lang) {
+  if (!lang) return "en"
+  const value = String(lang).toLowerCase()
+  return value.startsWith("pt") ? "pt" : "en"
+}
+
+export default async function handler(req, res) {
 
   const sig = req.headers["stripe-signature"]
 
   const buf = await new Promise(resolve => {
-
     const chunks = []
-
-    req.on("data",chunk => chunks.push(chunk))
-
-    req.on("end",() => resolve(Buffer.concat(chunks)))
-
+    req.on("data", chunk => chunks.push(chunk))
+    req.on("end", () => resolve(Buffer.concat(chunks)))
   })
 
   let event
 
-  try{
+  try {
 
     event = stripe.webhooks.constructEvent(
       buf,
@@ -34,49 +36,51 @@ export default async function handler(req,res){
       process.env.STRIPE_WEBHOOK_SECRET
     )
 
-  }catch(err){
+  } catch (err) {
 
-    console.error("Webhook error:",err.message)
+    console.error("Webhook signature error:", err.message)
 
     return res.status(400).send(`Webhook Error: ${err.message}`)
-
   }
 
-  if(event.type === "checkout.session.completed"){
+  if (event.type === "checkout.session.completed") {
 
     const session = event.data.object
 
     const hash = session.metadata?.hash
     const email = session.customer_details?.email
-    const language = session.metadata?.language || "en"
 
-    if(!hash || !email){
+    // NORMALIZAÇÃO DEFINITIVA DO IDIOMA
+    const language = normalizeLanguage(session.metadata?.language)
 
-      console.error("Dados faltando:",{hash,email})
+    if (!hash || !email) {
 
-      return res.status(200).json({received:true})
+      console.error("Missing data:", { hash, email })
 
+      return res.status(200).json({ received: true })
     }
 
-    try{
+    try {
 
       const pdf = await generateCertificate({
         hash,
         language
       })
 
-      await sendCertificate(email,pdf)
+      await sendCertificate(email, pdf)
 
-      console.log("Certificado enviado para:",email)
+      console.log("Certificate sent:", {
+        email,
+        language,
+        hash
+      })
 
-    }catch(err){
+    } catch (err) {
 
-      console.error("Erro ao gerar certificado:",err)
-
+      console.error("Certificate generation error:", err)
     }
 
   }
 
-  res.json({received:true})
-
+  res.json({ received: true })
 }
