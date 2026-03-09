@@ -16,35 +16,37 @@ export default async function generateCertificate({ hash, language }) {
       resolve(pdfData)
     })
 
-    // normaliza idioma
-    const lang = (language || "en").toLowerCase().startsWith("pt") ? "pt" : "en"
+    // normaliza idioma (resolve pt-BR, en-US, etc)
+    const normalized = (language || "en").toLowerCase()
 
-    const title =
-      lang === "pt"
-        ? "Certificado GuardianChain"
-        : "GuardianChain Certificate"
+    const lang = normalized.startsWith("pt") ? "pt" : "en"
 
-    const description =
-      lang === "pt"
-        ? "Este documento certifica prova de existência e autoria."
-        : "This document certifies proof of existence and authorship."
+    // textos traduzidos
+    const texts = {
 
-    const hashLabel = "Hash"
+      pt: {
+        title: "Certificado GuardianChain",
+        description: "Este documento certifica prova de existência e autoria.",
+        hash: "Hash",
+        date: "Data",
+        brazilTime: "Horário Brasil",
+        network: "Rede",
+        verify: "Verificação"
+      },
 
-    const dateLabel =
-      lang === "pt"
-        ? "Data"
-        : "Date"
+      en: {
+        title: "GuardianChain Certificate",
+        description: "This document certifies proof of existence and authorship.",
+        hash: "Hash",
+        date: "Date",
+        brazilTime: "Brazil Time",
+        network: "Network",
+        verify: "Verification"
+      }
 
-    const networkLabel =
-      lang === "pt"
-        ? "Rede"
-        : "Network"
+    }
 
-    const verifyLabel =
-      lang === "pt"
-        ? "Verificação"
-        : "Verification"
+    const t = texts[lang]
 
     const now = new Date()
 
@@ -62,7 +64,7 @@ export default async function generateCertificate({ hash, language }) {
       String(now.getUTCSeconds()).padStart(2, "0") +
       " UTC"
 
-    const brazilTime = new Intl.DateTimeFormat("pt-BR", {
+    const brazilTime = new Intl.DateTimeFormat(lang === "pt" ? "pt-BR" : "en-US", {
       timeZone: "America/Sao_Paulo",
       year: "numeric",
       month: "2-digit",
@@ -72,32 +74,39 @@ export default async function generateCertificate({ hash, language }) {
       second: "2-digit"
     }).format(now)
 
-    const verificationUrl = `https://guardianchain.online/verify?hash=${hash}&lang=${lang}`
+    const verificationUrl =
+      `https://guardianchain.online/verify?hash=${hash}&lang=${lang}`
 
-    doc.fontSize(24).text(title, { align: "center" })
+    // título
+    doc.fontSize(24).text(t.title, { align: "center" })
 
     doc.moveDown(2)
 
     doc.fontSize(12)
 
-    doc.text(`${hashLabel}: ${hash}`)
+    // hash
+    doc.text(`${t.hash}: ${hash}`)
     doc.moveDown()
 
-    doc.text(`${dateLabel}: ${utcTimestamp}`)
-    doc.text(`Horário Brasil: ${brazilTime}`)
-    doc.text(`${networkLabel}: Polygon`)
+    // datas
+    doc.text(`${t.date}: ${utcTimestamp}`)
+    doc.text(`${t.brazilTime}: ${brazilTime}`)
+    doc.text(`${t.network}: Polygon`)
 
     doc.moveDown(2)
 
-    doc.text(description)
+    // descrição
+    doc.text(t.description)
 
     doc.moveDown(2)
 
-    doc.text(`${verifyLabel}:`)
+    // verificação
+    doc.text(`${t.verify}:`)
     doc.text(verificationUrl)
 
     doc.moveDown()
 
+    // QR Code
     const qrData = await QRCode.toDataURL(verificationUrl)
 
     const qrImage = qrData.replace(/^data:image\/png;base64,/, "")

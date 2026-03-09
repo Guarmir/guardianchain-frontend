@@ -1,13 +1,17 @@
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
-import i18n from "../i18n"
+import { useSearchParams } from "react-router-dom"
 import { loadStripe } from "@stripe/stripe-js"
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 export default function Register(){
 
-  const { t } = useTranslation()
+  const [params] = useSearchParams()
+
+  const langParam = params.get("lang")
+
+  const language =
+    langParam === "pt" ? "pt" : "en"
 
   const [hash,setHash] = useState(null)
   const [loading,setLoading] = useState(false)
@@ -42,13 +46,11 @@ export default function Register(){
   async function handleRegister(){
 
     if(!hash){
-      alert("File hash not generated")
+      alert("Hash not generated")
       return
     }
 
     setLoading(true)
-
-    const language = i18n.language?.startsWith("pt") ? "pt" : "en"
 
     try{
 
@@ -79,7 +81,7 @@ export default function Register(){
 
       console.error(err)
 
-      alert("Payment initialization failed")
+      alert("Payment error")
 
     }
 
@@ -89,85 +91,23 @@ export default function Register(){
 
   return(
 
-    <div style={styles.page}>
+    <div style={{textAlign:"center",marginTop:"100px"}}>
 
-      <div style={styles.card}>
+      <h1>GuardianChain</h1>
 
-        <h1>{t("register.title") || "Register File"}</h1>
+      <input type="file" onChange={handleFile}/>
 
-        <p>
-          {t("register.description") ||
-          "Select a file to generate blockchain proof of existence"}
-        </p>
+      {hash && <p>{hash}</p>}
 
-        <input
-          type="file"
-          onChange={handleFile}
-          style={{marginTop:"20px"}}
-        />
-
-        {hash && (
-
-          <div style={{marginTop:"20px"}}>
-
-            <p><strong>SHA256</strong></p>
-
-            <p style={{wordBreak:"break-all"}}>
-              {hash}
-            </p>
-
-          </div>
-
-        )}
-
-        <button
-          onClick={handleRegister}
-          disabled={!hash || loading}
-          style={styles.primary}
-        >
-
-          {loading
-            ? "Processing..."
-            : "Pay & Register"}
-
-        </button>
-
-      </div>
+      <button
+        onClick={handleRegister}
+        disabled={!hash || loading}
+      >
+        Pay & Register
+      </button>
 
     </div>
 
   )
-
-}
-
-const styles={
-
-  page:{
-    minHeight:"100vh",
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    background:"linear-gradient(180deg,#4c5bd4,#3949ab)"
-  },
-
-  card:{
-    background:"white",
-    padding:"40px",
-    borderRadius:"14px",
-    width:"420px",
-    textAlign:"center",
-    boxShadow:"0 20px 60px rgba(0,0,0,0.25)"
-  },
-
-  primary:{
-    background:"#3949ab",
-    color:"white",
-    border:"none",
-    padding:"14px",
-    borderRadius:"8px",
-    width:"100%",
-    marginTop:"20px",
-    cursor:"pointer"
-  }
 
 }
