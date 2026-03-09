@@ -8,7 +8,7 @@ export default async function handler(req,res){
   const { session_id, lang } = req.query
 
   if(!session_id){
-    return res.status(400).json({error:"Session id missing"})
+    return res.status(400).json({ error:"Session not provided" })
   }
 
   try{
@@ -17,12 +17,11 @@ export default async function handler(req,res){
 
     const hash = session.metadata?.hash
 
-    if(!hash){
-      return res.status(400).json({error:"Hash not found"})
-    }
+    const language = lang || session.metadata?.language || "en"
 
-    const language =
-      (lang || "en").toLowerCase().startsWith("pt") ? "pt" : "en"
+    if(!hash){
+      return res.status(400).json({ error:"Hash not found" })
+    }
 
     const pdf = await generateCertificate({
       hash,
@@ -42,7 +41,7 @@ export default async function handler(req,res){
 
     console.error("Download error:",err)
 
-    res.status(500).json({error:"Certificate generation failed"})
+    res.status(500).json({ error:"Certificate generation failed" })
 
   }
 
