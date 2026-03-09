@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const { session_id } = req.query
 
   if (!session_id) {
-    return res.status(400).json({ error: "session_id não fornecido" })
+    return res.status(400).json({ error: "Session não fornecida" })
   }
 
   try {
@@ -16,23 +16,28 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.retrieve(session_id)
 
     const hash = session.metadata?.hash
+    const language = session.metadata?.language || "en"
 
     if (!hash) {
-      return res.status(400).json({ error: "hash não encontrado no metadata" })
+      return res.status(400).json({ error: "Hash não encontrado" })
     }
 
     const pdf = await generateCertificate({
-      hash: hash,
-      language: "en"
+      hash,
+      language
     })
 
     res.setHeader("Content-Type", "application/pdf")
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=guardianchain-certificate.pdf"
+    )
 
     res.send(pdf)
 
   } catch (error) {
 
-    console.error(error)
+    console.error("Erro ao gerar download:", error)
 
     res.status(500).json({ error: "Erro ao gerar certificado" })
 
