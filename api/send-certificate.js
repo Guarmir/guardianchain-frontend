@@ -1,49 +1,38 @@
-import generateCertificate from "./generate-certificate.js"
+import nodemailer from "nodemailer"
 
-export default async function handler(req, res) {
+export default async function sendCertificate(email, pdfBuffer) {
 
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      message: "Método não permitido"
-    })
-  }
+  const transporter = nodemailer.createTransport({
 
-  try {
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
 
-    const { hash, language } = req.body
+    secure: false,
 
-    if (!hash) {
-      return res.status(400).json({
-        message: "Hash não informado"
-      })
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
     }
 
-    const lang = language && language.startsWith("pt")
-      ? "pt"
-      : "en"
+  })
 
-    const pdfBuffer = await generateCertificate({
-      hash,
-      language: lang
-    })
+  await transporter.sendMail({
 
-    res.setHeader("Content-Type", "application/pdf")
+    from: `"GuardianChain" <${process.env.SMTP_USER}>`,
 
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=guardianchain-certificate.pdf"
-    )
+    to: email,
 
-    res.send(pdfBuffer)
+    subject: "GuardianChain Certificate",
 
-  } catch (error) {
+    text: "Your digital certificate is attached.",
 
-    console.error(error)
+    attachments: [
+      {
+        filename: "guardianchain-certificate.pdf",
+        content: pdfBuffer
+      }
+    ]
 
-    res.status(500).json({
-      error: "Erro ao gerar certificado"
-    })
-
-  }
+  })
 
 }
