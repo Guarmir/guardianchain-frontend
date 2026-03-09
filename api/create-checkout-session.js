@@ -2,6 +2,16 @@ import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
+function normalizeLanguage(lang) {
+
+  if (!lang) return "en"
+
+  const value = String(lang).toLowerCase()
+
+  return value.startsWith("pt") ? "pt" : "en"
+
+}
+
 export default async function handler(req, res) {
 
   const { hash, language } = req.body
@@ -10,7 +20,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Hash not provided" })
   }
 
-  const lang = language || "en"
+  const lang = normalizeLanguage(language)
 
   const session = await stripe.checkout.sessions.create({
 
@@ -43,4 +53,5 @@ export default async function handler(req, res) {
   })
 
   res.json({ id: session.id })
+
 }
