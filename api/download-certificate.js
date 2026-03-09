@@ -3,31 +3,34 @@ import generateCertificate from "./generate-certificate.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-export default async function handler(req, res) {
+export default async function handler(req,res){
 
-  const { session_id } = req.query
+  const { session_id, lang } = req.query
 
-  if (!session_id) {
-    return res.status(400).json({ error: "Session não fornecida" })
+  if(!session_id){
+    return res.status(400).json({error:"Session id missing"})
   }
 
-  try {
+  try{
 
     const session = await stripe.checkout.sessions.retrieve(session_id)
 
     const hash = session.metadata?.hash
-    const language = session.metadata?.language || "en"
 
-    if (!hash) {
-      return res.status(400).json({ error: "Hash não encontrado" })
+    if(!hash){
+      return res.status(400).json({error:"Hash not found"})
     }
+
+    const language =
+      (lang || "en").toLowerCase().startsWith("pt") ? "pt" : "en"
 
     const pdf = await generateCertificate({
       hash,
       language
     })
 
-    res.setHeader("Content-Type", "application/pdf")
+    res.setHeader("Content-Type","application/pdf")
+
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=guardianchain-certificate.pdf"
@@ -35,11 +38,11 @@ export default async function handler(req, res) {
 
     res.send(pdf)
 
-  } catch (error) {
+  }catch(err){
 
-    console.error("Erro ao gerar download:", error)
+    console.error("Download error:",err)
 
-    res.status(500).json({ error: "Erro ao gerar certificado" })
+    res.status(500).json({error:"Certificate generation failed"})
 
   }
 

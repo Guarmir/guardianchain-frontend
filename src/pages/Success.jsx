@@ -1,15 +1,16 @@
-import { useNavigate,useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 
 export default function Success(){
 
-  const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const session = params.get("session_id")
+  const sessionId = params.get("session_id")
+  const lang = params.get("lang") || "en"
 
-  const download = () => {
+  function download(){
 
-    window.open(`/api/download-certificate?session_id=${session}`)
+    window.location.href =
+      `/api/download-certificate?session_id=${sessionId}&lang=${lang}`
 
   }
 
@@ -19,32 +20,31 @@ export default function Success(){
 
       <div style={styles.card}>
 
-        <h1>Registro realizado com sucesso ✔</h1>
+        <h1>Registro realizado com sucesso ✓</h1>
 
-        <p>
-        Seu hash foi registrado na blockchain.
-        </p>
+        <p>Seu hash foi registrado na blockchain.</p>
 
-        <p>
-        O certificado também foi enviado para seu e-mail.
-        </p>
+        <p>O certificado também foi enviado para seu e-mail.</p>
 
-        <button style={styles.button} onClick={download}>
+        <button
+          onClick={download}
+          style={styles.primary}
+        >
           Baixar certificado
         </button>
 
         <button
-        style={styles.secondary}
-        onClick={()=>navigate("/register")}
+          onClick={()=>window.location.href="/register"}
+          style={styles.secondary}
         >
-        Registrar novo arquivo
+          Registrar novo arquivo
         </button>
 
         <button
-        style={styles.secondary}
-        onClick={()=>navigate("/")}
+          onClick={()=>window.location.href="/"}
+          style={styles.secondary}
         >
-        Voltar ao início
+          Voltar ao início
         </button>
 
       </div>
@@ -74,25 +74,23 @@ const styles={
     boxShadow:"0 20px 60px rgba(0,0,0,0.25)"
   },
 
-  button:{
+  primary:{
     background:"#3949ab",
     color:"white",
     border:"none",
     padding:"14px",
     borderRadius:"8px",
-    fontSize:"16px",
-    cursor:"pointer",
     width:"100%",
     marginTop:"20px"
   },
 
   secondary:{
-    marginTop:"10px",
-    padding:"10px",
+    background:"#eee",
     border:"none",
+    padding:"12px",
     borderRadius:"8px",
-    cursor:"pointer",
-    width:"100%"
+    width:"100%",
+    marginTop:"10px"
   }
 
 }
