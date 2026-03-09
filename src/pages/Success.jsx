@@ -9,7 +9,12 @@ export default function Success(){
   const [params] = useSearchParams()
 
   const sessionId = params.get("session_id")
+
   const lang = params.get("lang") || i18n.language || "en"
+
+  if(i18n.language !== lang){
+    i18n.changeLanguage(lang)
+  }
 
   function download(){
 
@@ -24,31 +29,37 @@ export default function Success(){
 
       <div style={styles.card}>
 
-        <h1>{t("success.title")}</h1>
+        <h1>{t("success.title") || "Certificate Created"}</h1>
 
-        <p>{t("success.blockchain")}</p>
+        <p>
+          {t("success.blockchain") ||
+          "Your file hash has been registered."}
+        </p>
 
-        <p>{t("success.email")}</p>
+        <p>
+          {t("success.email") ||
+          "The certificate was also sent to your email."}
+        </p>
 
         <button
           onClick={download}
           style={styles.primary}
         >
-          {t("success.download")}
+          {t("success.download") || "Download Certificate"}
         </button>
 
         <button
           onClick={()=>window.location.href="/register"}
           style={styles.secondary}
         >
-          {t("success.new")}
+          {t("success.new") || "Register Another File"}
         </button>
 
         <button
           onClick={()=>window.location.href="/"}
           style={styles.secondary}
         >
-          {t("success.home")}
+          {t("success.home") || "Home"}
         </button>
 
       </div>

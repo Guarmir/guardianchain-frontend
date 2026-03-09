@@ -1,150 +1,138 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import i18n from "../i18n"
+import { useRouter } from "next/router"
 
 export default function Register() {
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const router = useRouter()
 
-  const [hash,setHash] = useState("")
-  const [fileName,setFileName] = useState("")
+  const [file, setFile] = useState(null)
+  const [hash, setHash] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  async function generateHash(file){
+  async function generateHash(file) {
 
     const buffer = await file.arrayBuffer()
 
-    const hashBuffer = await crypto.subtle.digest("SHA-256",buffer)
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
 
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
-    const hashHex = hashArray.map(b=>b.toString(16).padStart(2,"0")).join("")
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("")
 
-    setHash("0x"+hashHex)
+    setHash(hashHex)
 
-    setFileName(file.name)
+    return hashHex
+  }
+
+  async function handleFile(e) {
+
+    const selected = e.target.files[0]
+
+    if (!selected) return
+
+    setFile(selected)
+
+    await generateHash(selected)
 
   }
 
-  async function handleCheckout(){
+  async function handleRegister() {
 
-    if(!hash){
-      alert(t("register.select_file"))
-      return
+    if (!hash) return alert("File hash not generated")
+
+    setLoading(true)
+
+    const language = i18n.language || "en"
+
+    try {
+
+      const res = await fetch("/api/create-checkout-session", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          hash: hash,
+          language: language
+        })
+
+      })
+
+      const data = await res.json()
+
+      const stripe = await import("@stripe/stripe-js")
+      const stripeClient = await stripe.loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+      )
+
+      await stripeClient.redirectToCheckout({
+        sessionId: data.id
+      })
+
+    } catch (err) {
+
+      console.error(err)
+      alert("Payment initialization failed")
+
     }
 
-    const language = i18n.language
-
-    const response = await fetch("/api/create-checkout-session",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        hash,
-        language: i18n.language
-      })
-    })
-
-    const data = await response.json()
-
-    const stripe = window.Stripe("pk_test_51SkLPvK4J089mMwmMDF2qmdzyzj6aPGVagvGoQnO0gaQ4vkkrTY68rcjhFlu56YznsF61oJ35TWXCVnXfouaSthv00pJPoWVKB")
-
-    await stripe.redirectToCheckout({
-      sessionId:data.id
-    })
+    setLoading(false)
 
   }
 
-  return(
+  return (
 
-    <div style={styles.page}>
+    <div style={{ maxWidth: 600, margin: "50px auto", textAlign: "center" }}>
 
-      <div style={styles.card}>
+      <h1>{t("register_title") || "Register File"}</h1>
 
-        <h1>{t("register.title")}</h1>
+      <p>
+        {t("register_description") ||
+          "Select a file to generate a blockchain proof of existence."}
+      </p>
 
-        <p>{t("register.subtitle")}</p>
+      <input type="file" onChange={handleFile} />
 
-        <label style={styles.label}>
-          {t("register.choose_file")}
-        </label>
+      {hash && (
 
-        <input
-          type="file"
-          onChange={(e)=>generateHash(e.target.files[0])}
-        />
+        <div style={{ marginTop: 20 }}>
 
-        {fileName && (
+          <p>
+            <strong>SHA256:</strong>
+          </p>
 
-          <div style={{marginTop:"20px"}}>
+          <p style={{ wordBreak: "break-all" }}>{hash}</p>
 
-            <p><b>{fileName}</b></p>
+        </div>
 
-            <textarea
-              value={hash}
-              readOnly
-              style={{
-                width:"100%",
-                height:"100px"
-              }}
-            />
+      )}
 
-          </div>
+      <button
+        onClick={handleRegister}
+        disabled={!hash || loading}
+        style={{
+          marginTop: 30,
+          padding: "12px 24px",
+          fontSize: 16,
+          cursor: "pointer"
+        }}
+      >
 
-        )}
+        {loading
+          ? t("processing") || "Processing..."
+          : t("pay_and_register") || "Pay & Register"}
 
-        <button
-          onClick={handleCheckout}
-          style={styles.button}
-        >
-
-          {t("register.pay")}
-
-        </button>
-
-      </div>
+      </button>
 
     </div>
 
   )
-
-}
-
-const styles={
-
-  page:{
-    minHeight:"100vh",
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    background:"linear-gradient(180deg,#4c5bd4,#3949ab)"
-  },
-
-  card:{
-    background:"white",
-    padding:"40px",
-    borderRadius:"14px",
-    width:"420px",
-    textAlign:"center",
-    boxShadow:"0 20px 60px rgba(0,0,0,0.25)"
-  },
-
-  label:{
-    display:"block",
-    marginBottom:"8px",
-    fontWeight:"bold"
-  },
-
-  button:{
-    background:"#3949ab",
-    color:"white",
-    border:"none",
-    padding:"14px",
-    borderRadius:"8px",
-    fontSize:"16px",
-    cursor:"pointer",
-    width:"100%",
-    marginTop:"20px"
-  }
 
 }
