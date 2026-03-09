@@ -38,7 +38,7 @@ export default function Success(){
 
         <p>
           {t("success.email") ||
-          "The certificate was also sent to your email."}
+          "The certificate was sent to your email."}
         </p>
 
         <button
