@@ -50,17 +50,20 @@ export default async function handler(req,res){
     const email = session.customer_details?.email
     const language = session.metadata?.language || "en"
 
-    if(!hash){
+    if(!hash || !email){
 
-      console.error("HASH NÃO ENCONTRADO")
+      console.error("Dados faltando:",{hash,email})
 
-      return res.status(400).end()
+      return res.status(200).json({received:true})
 
     }
 
     try{
 
-      const pdf = await generateCertificate(hash,language)
+      const pdf = await generateCertificate({
+        hash,
+        language
+      })
 
       await sendCertificate(email,pdf)
 
