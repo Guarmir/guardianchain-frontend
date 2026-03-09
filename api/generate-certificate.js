@@ -16,7 +16,8 @@ export default async function generateCertificate({ hash, language }) {
       resolve(pdfData)
     })
 
-    const lang = language === "pt" ? "pt" : "en"
+    // normaliza idioma
+    const lang = (language || "en").toLowerCase().startsWith("pt") ? "pt" : "en"
 
     const title =
       lang === "pt"
@@ -28,9 +29,22 @@ export default async function generateCertificate({ hash, language }) {
         ? "Este documento certifica prova de existência e autoria."
         : "This document certifies proof of existence and authorship."
 
-    const dateLabel = lang === "pt" ? "Data" : "Date"
-    const networkLabel = lang === "pt" ? "Rede" : "Network"
-    const verifyLabel = lang === "pt" ? "Verificação" : "Verification"
+    const hashLabel = "Hash"
+
+    const dateLabel =
+      lang === "pt"
+        ? "Data"
+        : "Date"
+
+    const networkLabel =
+      lang === "pt"
+        ? "Rede"
+        : "Network"
+
+    const verifyLabel =
+      lang === "pt"
+        ? "Verificação"
+        : "Verification"
 
     const now = new Date()
 
@@ -66,7 +80,7 @@ export default async function generateCertificate({ hash, language }) {
 
     doc.fontSize(12)
 
-    doc.text(`Hash: ${hash}`)
+    doc.text(`${hashLabel}: ${hash}`)
     doc.moveDown()
 
     doc.text(`${dateLabel}: ${utcTimestamp}`)
