@@ -18,10 +18,13 @@ export default async function handler(req, res) {
     const hash = session.metadata?.hash
 
     if (!hash) {
-      return res.status(400).json({ error: "hash não encontrado no metadata do Stripe" })
+      return res.status(400).json({ error: "hash não encontrado no metadata" })
     }
 
-    const pdf = await generateCertificate(hash)
+    const pdf = await generateCertificate({
+      hash: hash,
+      language: "en"
+    })
 
     res.setHeader("Content-Type", "application/pdf")
 
