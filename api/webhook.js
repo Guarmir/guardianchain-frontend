@@ -10,12 +10,6 @@ export const config = {
   }
 }
 
-function normalizeLanguage(lang) {
-  if (!lang) return "en"
-  const value = String(lang).toLowerCase()
-  return value.startsWith("pt") ? "pt" : "en"
-}
-
 export default async function handler(req, res) {
 
   const sig = req.headers["stripe-signature"]
@@ -29,17 +23,13 @@ export default async function handler(req, res) {
   let event
 
   try {
-
     event = stripe.webhooks.constructEvent(
       buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     )
-
   } catch (err) {
-
-    console.error("Webhook signature error:", err.message)
-
+    console.error("Webhook error:", err.message)
     return res.status(400).send(`Webhook Error: ${err.message}`)
   }
 
@@ -50,13 +40,13 @@ export default async function handler(req, res) {
     const hash = session.metadata?.hash
     const email = session.customer_details?.email
 
-    // NORMALIZAÇÃO DEFINITIVA DO IDIOMA
-    const language = normalizeLanguage(session.metadata?.language)
+    // 👇 idioma vem SOMENTE da Stripe metadata
+    const language = session.metadata?.language === "pt" ? "pt" : "en"
+
+    console.log("Idioma recebido da Stripe:", language)
 
     if (!hash || !email) {
-
-      console.error("Missing data:", { hash, email })
-
+      console.error("Dados faltando:", { hash, email })
       return res.status(200).json({ received: true })
     }
 
@@ -69,15 +59,10 @@ export default async function handler(req, res) {
 
       await sendCertificate(email, pdf)
 
-      console.log("Certificate sent:", {
-        email,
-        language,
-        hash
-      })
+      console.log("Certificado enviado:", email, language)
 
     } catch (err) {
-
-      console.error("Certificate generation error:", err)
+      console.error("Erro ao gerar certificado:", err)
     }
 
   }
