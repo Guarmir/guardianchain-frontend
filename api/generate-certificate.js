@@ -16,10 +16,8 @@ export default async function generateCertificate({ hash, language }) {
       resolve(pdfData)
     })
 
-    // normaliza idioma (resolve pt-BR, en-US, etc)
-    const normalized = (language || "en").toLowerCase()
-
-    const lang = normalized.startsWith("pt") ? "pt" : "en"
+    // idioma final do certificado (somente pt ou en)
+    const lang = language === "pt" ? "pt" : "en"
 
     // textos traduzidos
     const texts = {
