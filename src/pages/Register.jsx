@@ -48,7 +48,7 @@ export default function Register(){
 
     setLoading(true)
 
-    const language = i18n.language || "en"
+    const language = i18n.language?.startsWith("pt") ? "pt" : "en"
 
     try{
 
