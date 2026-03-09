@@ -24,5 +24,14 @@
     "choose_file": "Hash generated automatically",
     "pay": "Proceed to payment",
     "info": "Your file is never uploaded. Only the cryptographic hash is used."
+  },
+
+  "success": {
+    "title": "Registration completed successfully ✓",
+    "blockchain": "Your hash has been recorded on the blockchain.",
+    "email": "The certificate has also been sent to your email.",
+    "download": "Download certificate",
+    "new": "Register another file",
+    "home": "Back to home"
   }
 }

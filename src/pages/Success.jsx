@@ -1,11 +1,15 @@
 import { useSearchParams } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import i18n from "../i18n"
 
 export default function Success(){
+
+  const { t } = useTranslation()
 
   const [params] = useSearchParams()
 
   const sessionId = params.get("session_id")
-  const lang = params.get("lang") || "en"
+  const lang = params.get("lang") || i18n.language || "en"
 
   function download(){
 
@@ -20,31 +24,31 @@ export default function Success(){
 
       <div style={styles.card}>
 
-        <h1>Registro realizado com sucesso ✓</h1>
+        <h1>{t("success.title")}</h1>
 
-        <p>Seu hash foi registrado na blockchain.</p>
+        <p>{t("success.blockchain")}</p>
 
-        <p>O certificado também foi enviado para seu e-mail.</p>
+        <p>{t("success.email")}</p>
 
         <button
           onClick={download}
           style={styles.primary}
         >
-          Baixar certificado
+          {t("success.download")}
         </button>
 
         <button
           onClick={()=>window.location.href="/register"}
           style={styles.secondary}
         >
-          Registrar novo arquivo
+          {t("success.new")}
         </button>
 
         <button
           onClick={()=>window.location.href="/"}
           style={styles.secondary}
         >
-          Voltar ao início
+          {t("success.home")}
         </button>
 
       </div>
@@ -81,7 +85,8 @@ const styles={
     padding:"14px",
     borderRadius:"8px",
     width:"100%",
-    marginTop:"20px"
+    marginTop:"20px",
+    cursor:"pointer"
   },
 
   secondary:{
@@ -90,7 +95,8 @@ const styles={
     padding:"12px",
     borderRadius:"8px",
     width:"100%",
-    marginTop:"10px"
+    marginTop:"10px",
+    cursor:"pointer"
   }
 
 }

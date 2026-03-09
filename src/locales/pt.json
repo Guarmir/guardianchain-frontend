@@ -24,5 +24,14 @@
     "choose_file": "Hash gerado automaticamente",
     "pay": "Prosseguir para pagamento",
     "info": "O conteúdo do arquivo nunca é enviado ao servidor. Apenas o hash criptográfico é utilizado."
+  },
+
+  "success": {
+    "title": "Registro realizado com sucesso ✓",
+    "blockchain": "Seu hash foi registrado na blockchain.",
+    "email": "O certificado também foi enviado para seu e-mail.",
+    "download": "Baixar certificado",
+    "new": "Registrar novo arquivo",
+    "home": "Voltar ao início"
   }
 }
