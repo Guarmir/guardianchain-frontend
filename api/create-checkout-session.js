@@ -4,7 +4,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default async function handler(req, res) {
 
-  const { hash } = req.body
+  const { hash, language } = req.body
 
   if (!hash) {
     return res.status(400).json({ error: "Hash não fornecido" })
@@ -34,7 +34,8 @@ export default async function handler(req, res) {
     cancel_url: `${process.env.BASE_URL}/register`,
 
     metadata: {
-      hash: hash
+      hash: hash,
+      language: language || "en"
     }
 
   })

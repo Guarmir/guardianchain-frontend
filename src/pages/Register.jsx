@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import i18n from "../i18n"
 
 export default function Register() {
 
@@ -31,12 +32,17 @@ export default function Register() {
       return
     }
 
+    const language = i18n.language
+
     const response = await fetch("/api/create-checkout-session",{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
       },
-      body:JSON.stringify({ hash })
+      body:JSON.stringify({
+        hash,
+        language
+      })
     })
 
     const data = await response.json()
