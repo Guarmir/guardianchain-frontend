@@ -7,8 +7,10 @@ export default async function handler(req, res) {
   const { hash, language } = req.body
 
   if (!hash) {
-    return res.status(400).json({ error: "Hash não fornecido" })
+    return res.status(400).json({ error: "Hash not provided" })
   }
+
+  const lang = language || "en"
 
   const session = await stripe.checkout.sessions.create({
 
@@ -29,13 +31,13 @@ export default async function handler(req, res) {
       }
     ],
 
-    success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&lang=${lang}`,
 
-    cancel_url: `${process.env.BASE_URL}/register`,
+    cancel_url: `${process.env.BASE_URL}/register?lang=${lang}`,
 
     metadata: {
       hash: hash,
-      language: language || "en"
+      language: lang
     }
 
   })

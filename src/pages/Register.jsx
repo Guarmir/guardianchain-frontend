@@ -41,7 +41,7 @@ export default function Register() {
       },
       body:JSON.stringify({
         hash,
-        language
+        language: i18n.language
       })
     })
 
