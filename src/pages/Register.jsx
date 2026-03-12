@@ -9,13 +9,12 @@ export default function Register(){
   const [params] = useSearchParams()
 
   // idioma vindo da URL
-  const langParam = params.get("lang")
+  const urlParams = new URLSearchParams(window.location.search)
 
   // idioma final (apenas pt ou en)
-  const language =
-    langParam && langParam.toLowerCase() === "pt"
-      ? "pt"
-      : "en"
+  const langParam = urlParams.get("lang")
+
+  const language = langParam === "pt" ? "pt" : "en"
 
   const [hash,setHash] = useState(null)
   const [loading,setLoading] = useState(false)
