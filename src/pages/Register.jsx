@@ -15,6 +15,8 @@ export default function Register(){
   const langParam = urlParams.get("lang")
 
   const language = langParam === "pt" ? "pt" : "en"
+  
+  console.log("Idioma enviado para Stripe:", language)
 
   const [hash,setHash] = useState(null)
   const [loading,setLoading] = useState(false)
