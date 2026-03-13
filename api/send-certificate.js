@@ -1,51 +1,61 @@
 import nodemailer from "nodemailer"
+import generateCertificate from "./generate-certificate.js"
 
-export default async function sendCertificate(email, verificationUrl){
+export default async function sendEmail({ hash, language, email }) {
+
+  if (!email) {
+    throw new Error("Email destinatário não definido")
+  }
+
+  console.log("ENVIANDO EMAIL PARA:", email)
+
+  const pdfBuffer = await generateCertificate({
+    hash,
+    language
+  })
 
   const transporter = nodemailer.createTransport({
 
     host: process.env.SMTP_HOST,
-
-    port: 587,
-
+    port: Number(process.env.SMTP_PORT),
     secure: false,
 
-    auth:{
+    auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
     }
 
   })
 
+  const subject =
+    language === "pt"
+      ? "Seu certificado GuardianChain"
+      : "Your GuardianChain certificate"
+
+  const text =
+    language === "pt"
+      ? "Seu certificado digital está anexado."
+      : "Your digital certificate is attached."
+
   await transporter.sendMail({
 
-    from: '"GuardianChain" <no-reply@guardianchain.online>',
+    from: `"GuardianChain" <${process.env.SMTP_USER}>`,
 
-    to: email,
+    to: String(email),   // 🔴 garante que nunca seja undefined
 
-    subject: "Your GuardianChain Certificate",
+    subject,
 
-    html: `
-      <h2>Your certificate is ready</h2>
+    text,
 
-      <p>
-      Your file hash has been successfully registered.
-      </p>
+    attachments: [
+      {
+        filename: "guardianchain-certificate.pdf",
+        content: pdfBuffer
+      }
+    ]
 
-      <p>
-      Access your certificate using the link below:
-      </p>
-
-      <p>
-      <a href="${verificationUrl}">
-      ${verificationUrl}
-      </a>
-      </p>
-
-      <p>
-      GuardianChain
-      </p>
-    `
   })
+
+  console.log("EMAIL ENVIADO COM SUCESSO")
 
 }
