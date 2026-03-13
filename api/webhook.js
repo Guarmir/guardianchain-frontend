@@ -1,5 +1,4 @@
 import Stripe from "stripe"
-import generateCertificate from "./generate-certificate.js"
 import sendCertificate from "./send-certificate.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -10,62 +9,70 @@ export const config = {
   }
 }
 
-export default async function handler(req, res) {
+export default async function handler(req,res){
 
   const sig = req.headers["stripe-signature"]
 
   const buf = await new Promise(resolve => {
+
     const chunks = []
-    req.on("data", chunk => chunks.push(chunk))
-    req.on("end", () => resolve(Buffer.concat(chunks)))
+
+    req.on("data",chunk => chunks.push(chunk))
+
+    req.on("end",() => resolve(Buffer.concat(chunks)))
+
   })
 
   let event
 
-  try {
+  try{
+
     event = stripe.webhooks.constructEvent(
       buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     )
-  } catch (err) {
-    console.error("Webhook error:", err.message)
+
+  }catch(err){
+
+    console.error("Webhook error:",err.message)
+
     return res.status(400).send(`Webhook Error: ${err.message}`)
+
   }
 
-  if (event.type === "checkout.session.completed") {
+  if(event.type === "checkout.session.completed"){
 
     const session = event.data.object
 
     const hash = session.metadata?.hash
     const email = session.customer_details?.email
 
-    // 👇 idioma vem SOMENTE da Stripe metadata
-    const language = session.metadata?.language === "pt" ? "pt" : "en"
+    if(!hash || !email){
 
-    console.log("Idioma recebido da Stripe:", language)
+      console.error("Dados faltando:",{hash,email})
 
-    if (!hash || !email) {
-      console.error("Dados faltando:", { hash, email })
-      return res.status(200).json({ received: true })
+      return res.status(200).json({received:true})
+
     }
 
-    try {
+    try{
 
-      const pdf = await generateCertificate({
-        hash,
-        language
-      })
+      const verificationUrl =
+        `https://guardianchain.online/verify?hash=${hash}`
 
-      await sendCertificate(email, pdf)
+      await sendCertificate(email,verificationUrl)
 
-      console.log("Certificado enviado:", email, language)
+      console.log("Link enviado para:",email)
 
-    } catch (err) {
-      console.error("Erro ao gerar certificado:", err)
+    }catch(err){
+
+      console.error("Erro ao enviar email:",err)
+
     }
 
   }
 
-  res.json({ received: true })
+  res.json({received:true})
+
 }

@@ -1,15 +1,16 @@
 import nodemailer from "nodemailer"
 
-export default async function sendCertificate(email, pdfBuffer) {
+export default async function sendCertificate(email, verificationUrl){
 
   const transporter = nodemailer.createTransport({
 
     host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
+
+    port: 587,
 
     secure: false,
 
-    auth: {
+    auth:{
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
     }
@@ -18,21 +19,33 @@ export default async function sendCertificate(email, pdfBuffer) {
 
   await transporter.sendMail({
 
-    from: `"GuardianChain" <${process.env.SMTP_USER}>`,
+    from: '"GuardianChain" <no-reply@guardianchain.online>',
 
     to: email,
 
-    subject: "GuardianChain Certificate",
+    subject: "Your GuardianChain Certificate",
 
-    text: "Your digital certificate is attached.",
+    html: `
+      <h2>Your certificate is ready</h2>
 
-    attachments: [
-      {
-        filename: "guardianchain-certificate.pdf",
-        content: pdfBuffer
-      }
-    ]
+      <p>
+      Your file hash has been successfully registered.
+      </p>
 
+      <p>
+      Access your certificate using the link below:
+      </p>
+
+      <p>
+      <a href="${verificationUrl}">
+      ${verificationUrl}
+      </a>
+      </p>
+
+      <p>
+      GuardianChain
+      </p>
+    `
   })
 
 }
