@@ -5,30 +5,35 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default async function handler(req,res){
 
- generateCertificate({
-  hash,
-  language: lang
-})
+  const { session_id, hash, lang } = req.query
 
-  if(!session_id){
-    return res.status(400).json({ error:"Session not provided" })
-  }
+  let fileHash = hash
+  let language = lang === "pt" ? "pt" : "en"
 
   try{
 
-    const session = await stripe.checkout.sessions.retrieve(session_id)
+    // Se veio session_id (fluxo Stripe)
+    if(session_id){
 
-    const hash = session.metadata?.hash
+      const session = await stripe.checkout.sessions.retrieve(session_id)
 
-    const language = lang || session.metadata?.language || "en"
+      fileHash = session.metadata?.hash
 
-    if(!hash){
-      return res.status(400).json({ error:"Hash not found" })
+      if(!fileHash){
+        return res.status(400).json({ error:"Hash not found" })
+      }
+
+      // idioma vindo da URL tem prioridade
+      language = lang === "pt" ? "pt" : "en"
+    }
+
+    if(!fileHash){
+      return res.status(400).json({ error:"Hash not provided" })
     }
 
     const pdf = await generateCertificate({
-      hash,
-      language
+      hash: fileHash,
+      language: language
     })
 
     res.setHeader("Content-Type","application/pdf")
