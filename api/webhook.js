@@ -9,7 +9,7 @@ export const config = {
   }
 }
 
-export default async function handler(req,res){
+export default async function handler(req, res) {
 
   const sig = req.headers["stripe-signature"]
 
@@ -17,15 +17,15 @@ export default async function handler(req,res){
 
     const chunks = []
 
-    req.on("data",chunk => chunks.push(chunk))
+    req.on("data", chunk => chunks.push(chunk))
 
-    req.on("end",() => resolve(Buffer.concat(chunks)))
+    req.on("end", () => resolve(Buffer.concat(chunks)))
 
   })
 
   let event
 
-  try{
+  try {
 
     event = stripe.webhooks.constructEvent(
       buf,
@@ -33,33 +33,39 @@ export default async function handler(req,res){
       process.env.STRIPE_WEBHOOK_SECRET
     )
 
-  }catch(err){
+  } catch (err) {
 
-    console.error("Webhook error:",err.message)
+    console.error("Webhook error:", err.message)
 
     return res.status(400).send(`Webhook Error: ${err.message}`)
 
   }
 
-  if(event.type === "checkout.session.completed"){
+  if (event.type === "checkout.session.completed") {
 
     const session = event.data.object
 
     const hash = session.metadata?.hash
     const language = session.metadata?.language || "en"
-    const email = 
+
+    // captura email de qualquer campo possível do Stripe
+    const email =
       session.customer_details?.email ||
-      session.customer_email
+      session.customer_email ||
+      session.metadata?.email ||
+      null
 
-    if(!hash || !email){
+    console.log("EMAIL CAPTURADO:", email)
 
-      console.error("Dados faltando:",{hash,email})
+    if (!hash || !email) {
 
-      return res.status(200).json({received:true})
+      console.error("Dados faltando:", { hash, email })
+
+      return res.status(200).json({ received: true })
 
     }
 
-    try{
+    try {
 
       await sendEmail({
         hash,
@@ -67,16 +73,16 @@ export default async function handler(req,res){
         email
       })
 
-      console.log("Certificado enviado para:",email)
+      console.log("Certificado enviado para:", email)
 
-    }catch(err){
+    } catch (err) {
 
-      console.error("Erro ao enviar email:",err)
+      console.error("Erro ao enviar email:", err)
 
     }
 
   }
 
-  res.json({received:true})
+  res.json({ received: true })
 
 }
