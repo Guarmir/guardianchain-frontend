@@ -1,21 +1,14 @@
 import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { useTranslation } from "react-i18next"
 import { loadStripe } from "@stripe/stripe-js"
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 export default function Register(){
 
-  const { t, i18n } = useTranslation()
-
   const [params] = useSearchParams()
 
-  const langParam = params.get("lang") || "en"
-
-  if(i18n.language !== langParam){
-    i18n.changeLanguage(langParam)
-  }
+  const langParam = params.get("lang")
 
   const language = langParam === "pt" ? "pt" : "en"
 
@@ -54,7 +47,7 @@ export default function Register(){
   async function handleRegister(){
 
     if(!hash){
-      alert("Hash not generated")
+      alert(language === "pt" ? "Hash não gerado" : "Hash not generated")
       return
     }
 
@@ -112,31 +105,58 @@ export default function Register(){
           }
         </p>
 
-        <input type="file" onChange={handleFile}/>
+        {/* input escondido */}
+        <input
+          type="file"
+          id="fileUpload"
+          style={{display:"none"}}
+          onChange={handleFile}
+        />
 
-        {fileName && (
-          <p style={{marginTop:"10px"}}>
-            {fileName}
-          </p>
-        )}
+        {/* botão customizado */}
+        <button
+          onClick={()=>document.getElementById("fileUpload").click()}
+          style={styles.secondary}
+        >
+          {language === "pt"
+            ? "Selecionar arquivo"
+            : "Select file"}
+        </button>
 
+        {/* nome do arquivo */}
+        <p style={{marginTop:"10px"}}>
+
+          {fileName
+            ? fileName
+            : language === "pt"
+              ? "Nenhum arquivo selecionado"
+              : "No file selected"
+          }
+
+        </p>
+
+        {/* hash */}
         {hash && (
+
           <textarea
             readOnly
             value={hash}
             style={styles.hashBox}
           />
+
         )}
 
+        {/* botão pagamento */}
         <button
           onClick={handleRegister}
           disabled={!hash || loading}
-          style={styles.button}
+          style={styles.primary}
         >
+
           {language === "pt"
-            ? "Pagar e Registrar"
-            : "Pay & Register"
-          }
+            ? "Pagar & Registrar"
+            : "Pay & Register"}
+
         </button>
 
       </div>
@@ -172,7 +192,7 @@ const styles={
     height:"100px"
   },
 
-  button:{
+  primary:{
     background:"#3949ab",
     color:"white",
     border:"none",
@@ -180,6 +200,15 @@ const styles={
     borderRadius:"8px",
     width:"100%",
     marginTop:"20px",
+    cursor:"pointer"
+  },
+
+  secondary:{
+    background:"#eee",
+    border:"none",
+    padding:"10px",
+    borderRadius:"6px",
+    marginTop:"10px",
     cursor:"pointer"
   }
 
