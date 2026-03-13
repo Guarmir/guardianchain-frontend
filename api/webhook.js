@@ -47,7 +47,9 @@ export default async function handler(req,res){
 
     const hash = session.metadata?.hash
     const language = session.metadata?.language || "en"
-    const email = session.customer_details?.email
+    const email = 
+      session.customer_details?.email ||
+      session.customer_email
 
     if(!hash || !email){
 
