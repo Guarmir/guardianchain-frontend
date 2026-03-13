@@ -12,7 +12,7 @@ export default async function handler(req,res){
 
   try{
 
-    // Se veio session_id (fluxo Stripe)
+    // fluxo vindo do Stripe success page
     if(session_id){
 
       const session = await stripe.checkout.sessions.retrieve(session_id)
@@ -23,10 +23,9 @@ export default async function handler(req,res){
         return res.status(400).json({ error:"Hash not found" })
       }
 
-      // idioma vindo da URL tem prioridade
-      language = lang === "pt" ? "pt" : "en"
     }
 
+    // fluxo vindo da página verify
     if(!fileHash){
       return res.status(400).json({ error:"Hash not provided" })
     }
