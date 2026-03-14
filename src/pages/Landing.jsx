@@ -1,16 +1,37 @@
+import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import i18n from "../i18n"
 
 export default function Landing() {
-
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+
+  const langParam = params.get("lang")
+  const lang = langParam === "pt" ? "pt" : "en"
+
+  useEffect(() => {
+    if (i18n.language !== lang) {
+      i18n.changeLanguage(lang)
+    }
+  }, [lang])
+
+  function goRegister() {
+    navigate(`/register?lang=${lang}`)
+  }
+
+  function goVerify() {
+    navigate(`/verify?lang=${lang}`)
+  }
 
   return (
-
     <div style={styles.page}>
-
-      <img src="/logo.png" style={styles.logo} />
+      <img
+        src="/logo.png"
+        alt="GuardianChain logo"
+        style={styles.logo}
+      />
 
       <h1 style={styles.title}>
         {t("landing.title")}
@@ -25,16 +46,13 @@ export default function Landing() {
       </p>
 
       <div style={styles.featuresTop}>
-
         <div>🔒 {t("landing.private")}</div>
         <div>⛓ {t("landing.blockchain")}</div>
         <div>🌐 {t("landing.verify")}</div>
         <div>⏱ {t("landing.proof")}</div>
-
       </div>
 
       <div style={styles.card}>
-
         <div style={styles.plan}>
           {t("price.single")}
         </div>
@@ -49,35 +67,31 @@ export default function Landing() {
 
         <button
           style={styles.primaryButton}
-          onClick={() => navigate("/register")}
+          onClick={goRegister}
+          type="button"
         >
           {t("price.register")}
         </button>
 
         <button
           style={styles.secondaryButton}
-          onClick={() => navigate("/verify")}
+          onClick={goVerify}
+          type="button"
         >
           {t("price.verify")}
         </button>
-
       </div>
 
       <div style={styles.featuresBottom}>
-
         <p>✔ {t("landing.blockchain")}</p>
         <p>✔ {t("landing.verify")}</p>
         <p>✔ {t("landing.private")}</p>
-
       </div>
-
     </div>
-
   )
 }
 
 const styles = {
-
   page: {
     minHeight: "100vh",
     background: "linear-gradient(180deg,#4c5bd4,#3949ab)",
@@ -86,33 +100,35 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     paddingTop: "60px",
-    paddingBottom: "80px"
+    paddingBottom: "80px",
+    paddingLeft: "20px",
+    paddingRight: "20px",
   },
 
   logo: {
     width: "160px",
-    marginBottom: "40px"
+    marginBottom: "40px",
   },
 
   title: {
     fontSize: "44px",
     textAlign: "center",
     maxWidth: "800px",
-    marginBottom: "20px"
+    marginBottom: "20px",
   },
 
   subtitle: {
     fontSize: "20px",
     textAlign: "center",
     maxWidth: "700px",
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
 
   description: {
     fontSize: "15px",
     opacity: 0.9,
     textAlign: "center",
-    marginBottom: "30px"
+    marginBottom: "30px",
   },
 
   featuresTop: {
@@ -120,7 +136,7 @@ const styles = {
     gridTemplateColumns: "1fr 1fr",
     gap: "14px",
     marginBottom: "40px",
-    fontSize: "16px"
+    fontSize: "16px",
   },
 
   card: {
@@ -129,26 +145,27 @@ const styles = {
     padding: "40px",
     borderRadius: "14px",
     width: "340px",
+    maxWidth: "100%",
     textAlign: "center",
     boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
-    marginBottom: "30px"
+    marginBottom: "30px",
   },
 
   plan: {
     fontSize: "14px",
     marginBottom: "10px",
-    opacity: 0.8
+    opacity: 0.8,
   },
 
   price: {
     fontSize: "52px",
     fontWeight: "bold",
-    marginBottom: "6px"
+    marginBottom: "6px",
   },
 
   priceDescription: {
     fontSize: "14px",
-    marginBottom: "24px"
+    marginBottom: "24px",
   },
 
   primaryButton: {
@@ -160,7 +177,7 @@ const styles = {
     fontSize: "16px",
     cursor: "pointer",
     width: "100%",
-    marginBottom: "12px"
+    marginBottom: "12px",
   },
 
   secondaryButton: {
@@ -171,14 +188,13 @@ const styles = {
     borderRadius: "8px",
     fontSize: "15px",
     cursor: "pointer",
-    width: "100%"
+    width: "100%",
   },
 
   featuresBottom: {
     fontSize: "14px",
     opacity: 0.9,
     textAlign: "center",
-    lineHeight: "26px"
-  }
-
+    lineHeight: "26px",
+  },
 }
