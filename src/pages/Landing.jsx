@@ -9,13 +9,40 @@ export default function Landing() {
   const [params] = useSearchParams()
 
   const langParam = params.get("lang")
-  const lang = langParam === "pt" ? "pt" : "en"
+  const normalizedParamLang = langParam === "pt" || langParam === "en" ? langParam : null
 
   useEffect(() => {
-    if (i18n.language !== lang) {
-      i18n.changeLanguage(lang)
+    if (normalizedParamLang) {
+      if (i18n.language !== normalizedParamLang) {
+        i18n.changeLanguage(normalizedParamLang)
+      }
+
+      localStorage.setItem("guardianchain_lang", normalizedParamLang)
+      return
     }
-  }, [lang])
+
+    const savedLang = localStorage.getItem("guardianchain_lang")
+    const browserLang = navigator.language?.toLowerCase().startsWith("pt") ? "pt" : "en"
+    const detectedLang = savedLang === "pt" || savedLang === "en" ? savedLang : browserLang
+
+    if (i18n.language !== detectedLang) {
+      i18n.changeLanguage(detectedLang)
+    }
+
+    navigate(`/?lang=${detectedLang}`, { replace: true })
+  }, [normalizedParamLang, navigate])
+
+  const lang = normalizedParamLang || (i18n.language === "pt" ? "pt" : "en")
+
+  function setLang(newLang) {
+    localStorage.setItem("guardianchain_lang", newLang)
+
+    if (i18n.language !== newLang) {
+      i18n.changeLanguage(newLang)
+    }
+
+    navigate(`/?lang=${newLang}`, { replace: true })
+  }
 
   function goRegister() {
     navigate(`/register?lang=${lang}`)
@@ -27,6 +54,32 @@ export default function Landing() {
 
   return (
     <div style={styles.page}>
+      <div style={styles.langSwitch}>
+        <button
+          type="button"
+          style={{
+            ...styles.langButton,
+            ...(lang === "pt" ? styles.langButtonActive : {}),
+          }}
+          onClick={() => setLang("pt")}
+        >
+          PT
+        </button>
+
+        <span style={styles.langDivider}>|</span>
+
+        <button
+          type="button"
+          style={{
+            ...styles.langButton,
+            ...(lang === "en" ? styles.langButtonActive : {}),
+          }}
+          onClick={() => setLang("en")}
+        >
+          EN
+        </button>
+      </div>
+
       <img
         src="/logo.png"
         alt="GuardianChain logo"
@@ -103,6 +156,40 @@ const styles = {
     paddingBottom: "80px",
     paddingLeft: "20px",
     paddingRight: "20px",
+    position: "relative",
+  },
+
+  langSwitch: {
+    position: "absolute",
+    top: "20px",
+    right: "20px",
+    display: "flex",
+    alignItems: "center",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.25)",
+    borderRadius: "999px",
+    padding: "6px 10px",
+    backdropFilter: "blur(6px)",
+  },
+
+  langButton: {
+    background: "transparent",
+    border: "none",
+    color: "white",
+    cursor: "pointer",
+    fontWeight: "bold",
+    fontSize: "14px",
+    opacity: 0.65,
+  },
+
+  langButtonActive: {
+    opacity: 1,
+    textDecoration: "underline",
+  },
+
+  langDivider: {
+    margin: "0 8px",
+    opacity: 0.7,
   },
 
   logo: {
