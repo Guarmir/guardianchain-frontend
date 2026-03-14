@@ -1,215 +1,226 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { loadStripe } from "@stripe/stripe-js"
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
-export default function Register(){
-
+export default function Register() {
   const [params] = useSearchParams()
+  const inputRef = useRef(null)
 
   const langParam = params.get("lang")
-
   const language = langParam === "pt" ? "pt" : "en"
 
-  const [hash,setHash] = useState(null)
-  const [loading,setLoading] = useState(false)
-  const [fileName,setFileName] = useState("")
+  const [hash, setHash] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [fileName, setFileName] = useState("")
 
-  async function generateHash(file){
-
+  async function generateHash(file) {
     const buffer = await file.arrayBuffer()
-
-    const hashBuffer = await crypto.subtle.digest("SHA-256",buffer)
-
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
 
     const hashHex = hashArray
-      .map(b => b.toString(16).padStart(2,"0"))
+      .map((b) => b.toString(16).padStart(2, "0"))
       .join("")
 
     setHash(hashHex)
-
   }
 
-  async function handleFile(e){
+  async function handleFile(e) {
+    const file = e.target.files?.[0]
 
-    const file = e.target.files[0]
-
-    if(!file) return
+    if (!file) return
 
     setFileName(file.name)
+    setHash("")
 
-    await generateHash(file)
-
+    try {
+      await generateHash(file)
+    } catch (error) {
+      console.error("Hash generation error:", error)
+      alert(
+        language === "pt"
+          ? "Erro ao gerar o hash do arquivo."
+          : "Error generating the file hash."
+      )
+    }
   }
 
-  async function handleRegister(){
-
-    if(!hash){
-      alert(language === "pt" ? "Hash não gerado" : "Hash not generated")
+  async function handleRegister() {
+    if (!hash) {
+      alert(language === "pt" ? "Hash não gerado." : "Hash not generated.")
       return
     }
 
     setLoading(true)
 
-    try{
-
-      const res = await fetch("/api/create-checkout-session",{
-
-        method:"POST",
-
-        headers:{
-          "Content-Type":"application/json"
+    try {
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-
-        body:JSON.stringify({
+        body: JSON.stringify({
           hash,
-          language
-        })
-
+          fileName,
+          language,
+        }),
       })
 
       const data = await res.json()
 
-      const stripe = await stripePromise
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to create checkout session")
+      }
 
-      await stripe.redirectToCheckout({
-        sessionId:data.id
-      })
+      if (data?.url) {
+        window.location.href = data.url
+        return
+      }
 
-    }catch(err){
+      if (data?.id) {
+        const stripe = await stripePromise
 
-      console.error(err)
+        if (!stripe) {
+          throw new Error("Stripe failed to initialize")
+        }
 
-      alert("Payment error")
+        const result = await stripe.redirectToCheckout({
+          sessionId: data.id,
+        })
 
+        if (result?.error) {
+          throw new Error(result.error.message)
+        }
+
+        return
+      }
+
+      throw new Error("Invalid checkout response")
+    } catch (err) {
+      console.error("Checkout error:", err)
+
+      alert(
+        language === "pt"
+          ? "Erro ao iniciar o pagamento."
+          : "Error starting payment."
+      )
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
-
   }
 
-  return(
-
+  return (
     <div style={styles.page}>
-
       <div style={styles.card}>
-
         <h1>GuardianChain</h1>
 
         <p>
           {language === "pt"
             ? "Selecione um arquivo para gerar prova criptográfica."
-            : "Select a file to generate a cryptographic proof."
-          }
+            : "Select a file to generate a cryptographic proof."}
         </p>
 
-        {/* input escondido */}
         <input
+          ref={inputRef}
           type="file"
-          id="fileUpload"
-          style={{display:"none"}}
+          style={{ display: "none" }}
           onChange={handleFile}
         />
 
-        {/* botão customizado */}
         <button
-          onClick={()=>document.getElementById("fileUpload").click()}
+          onClick={() => inputRef.current?.click()}
           style={styles.secondary}
+          type="button"
         >
-          {language === "pt"
-            ? "Selecionar arquivo"
-            : "Select file"}
+          {language === "pt" ? "Selecionar arquivo" : "Select file"}
         </button>
 
-        {/* nome do arquivo */}
-        <p style={{marginTop:"10px"}}>
-
+        <p style={{ marginTop: "10px", wordBreak: "break-word" }}>
           {fileName
             ? fileName
             : language === "pt"
               ? "Nenhum arquivo selecionado"
-              : "No file selected"
-          }
-
+              : "No file selected"}
         </p>
 
-        {/* hash */}
         {hash && (
-
           <textarea
             readOnly
             value={hash}
             style={styles.hashBox}
           />
-
         )}
 
-        {/* botão pagamento */}
         <button
           onClick={handleRegister}
           disabled={!hash || loading}
-          style={styles.primary}
+          style={{
+            ...styles.primary,
+            opacity: !hash || loading ? 0.7 : 1,
+            cursor: !hash || loading ? "not-allowed" : "pointer",
+          }}
+          type="button"
         >
-
-          {language === "pt"
-            ? "Pagar & Registrar"
-            : "Pay & Register"}
-
+          {loading
+            ? language === "pt"
+              ? "Processando..."
+              : "Processing..."
+            : language === "pt"
+              ? "Pagar & Registrar"
+              : "Pay & Register"}
         </button>
-
       </div>
-
     </div>
-
   )
-
 }
 
-const styles={
-
-  page:{
-    minHeight:"100vh",
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    background:"linear-gradient(180deg,#4c5bd4,#3949ab)"
+const styles = {
+  page: {
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "linear-gradient(180deg,#4c5bd4,#3949ab)",
+    padding: "20px",
   },
 
-  card:{
-    background:"white",
-    padding:"40px",
-    borderRadius:"14px",
-    width:"420px",
-    textAlign:"center",
-    boxShadow:"0 20px 60px rgba(0,0,0,0.25)"
+  card: {
+    background: "white",
+    padding: "40px",
+    borderRadius: "14px",
+    width: "420px",
+    maxWidth: "100%",
+    textAlign: "center",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
   },
 
-  hashBox:{
-    width:"100%",
-    marginTop:"15px",
-    height:"100px"
+  hashBox: {
+    width: "100%",
+    marginTop: "15px",
+    height: "100px",
+    resize: "none",
+    padding: "10px",
+    boxSizing: "border-box",
   },
 
-  primary:{
-    background:"#3949ab",
-    color:"white",
-    border:"none",
-    padding:"14px",
-    borderRadius:"8px",
-    width:"100%",
-    marginTop:"20px",
-    cursor:"pointer"
+  primary: {
+    background: "#3949ab",
+    color: "white",
+    border: "none",
+    padding: "14px",
+    borderRadius: "8px",
+    width: "100%",
+    marginTop: "20px",
   },
 
-  secondary:{
-    background:"#eee",
-    border:"none",
-    padding:"10px",
-    borderRadius:"6px",
-    marginTop:"10px",
-    cursor:"pointer"
-  }
-
+  secondary: {
+    background: "#eee",
+    border: "none",
+    padding: "10px 14px",
+    borderRadius: "6px",
+    marginTop: "10px",
+    cursor: "pointer",
+  },
 }
