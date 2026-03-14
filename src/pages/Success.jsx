@@ -10,8 +10,12 @@ export default function Success(){
 
   const sessionId = params.get("session_id")
 
-  const lang = params.get("lang") || i18n.language || "en"
+  // idioma vindo da URL
+  const langParam = params.get("lang")
 
+  const lang = langParam === "pt" ? "pt" : "en"
+
+  // sincroniza idioma do i18n
   if(i18n.language !== lang){
     i18n.changeLanguage(lang)
   }
@@ -29,37 +33,67 @@ export default function Success(){
 
       <div style={styles.card}>
 
-        <h1>{t("success.title") || "Certificate Created"}</h1>
+        <h1>
+
+          {lang === "pt"
+            ? "Certificado criado"
+            : "Certificate created"
+          }
+
+        </h1>
 
         <p>
-          {t("success.blockchain") ||
-          "Your file hash has been registered."}
+
+          {lang === "pt"
+            ? "O hash do seu arquivo foi registrado."
+            : "Your file hash has been registered."
+          }
+
         </p>
 
         <p>
-          {t("success.email") ||
-          "The certificate was sent to your email."}
+
+          {lang === "pt"
+            ? "O certificado foi enviado para o seu email."
+            : "The certificate was sent to your email."
+          }
+
         </p>
 
         <button
           onClick={download}
           style={styles.primary}
         >
-          {t("success.download") || "Download Certificate"}
+
+          {lang === "pt"
+            ? "Baixar certificado"
+            : "Download certificate"
+          }
+
         </button>
 
         <button
-          onClick={()=>window.location.href="/register"}
+          onClick={()=>window.location.href=`/register?lang=${lang}`}
           style={styles.secondary}
         >
-          {t("success.new") || "Register Another File"}
+
+          {lang === "pt"
+            ? "Registrar outro arquivo"
+            : "Register another file"
+          }
+
         </button>
 
         <button
-          onClick={()=>window.location.href="/"}
+          onClick={()=>window.location.href=`/?lang=${lang}`}
           style={styles.secondary}
         >
-          {t("success.home") || "Home"}
+
+          {lang === "pt"
+            ? "Página inicial"
+            : "Home"
+          }
+
         </button>
 
       </div>
@@ -70,7 +104,7 @@ export default function Success(){
 
 }
 
-const styles={
+const styles = {
 
   page:{
     minHeight:"100vh",
