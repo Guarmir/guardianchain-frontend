@@ -5,84 +5,96 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export const config = {
   api: {
-    bodyParser: false
-  }
+    bodyParser: false,
+  },
+}
+
+async function getRawBody(req) {
+  return await new Promise((resolve, reject) => {
+    const chunks = []
+
+    req.on("data", (chunk) => chunks.push(chunk))
+    req.on("end", () => resolve(Buffer.concat(chunks)))
+    req.on("error", (err) => reject(err))
+  })
 }
 
 export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" })
+  }
 
   const sig = req.headers["stripe-signature"]
 
-  const buf = await new Promise(resolve => {
+  if (!sig) {
+    console.error("[STRIPE WEBHOOK] Missing stripe-signature header")
+    return res.status(400).send("Missing stripe-signature header")
+  }
 
-    const chunks = []
+  let buf
 
-    req.on("data", chunk => chunks.push(chunk))
-
-    req.on("end", () => resolve(Buffer.concat(chunks)))
-
-  })
+  try {
+    buf = await getRawBody(req)
+  } catch (err) {
+    console.error("[STRIPE WEBHOOK] Error reading request body:", err)
+    return res.status(400).send("Invalid request body")
+  }
 
   let event
 
   try {
-
     event = stripe.webhooks.constructEvent(
       buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     )
-
   } catch (err) {
-
-    console.error("Webhook error:", err.message)
-
+    console.error("[STRIPE WEBHOOK] Signature verification failed:", err.message)
     return res.status(400).send(`Webhook Error: ${err.message}`)
-
   }
 
   if (event.type === "checkout.session.completed") {
-
     const session = event.data.object
 
-    const hash = session.metadata?.hash
-    const language = session.metadata?.language || "en"
+    const hash = session.metadata?.hash || null
+    const language = session.metadata?.language === "pt" ? "pt" : "en"
+    const fileName = session.metadata?.fileName || ""
 
-    // captura email de qualquer campo possível do Stripe
     const email =
       session.customer_details?.email ||
       session.customer_email ||
       session.metadata?.email ||
       null
 
-    console.log("EMAIL CAPTURADO:", email)
+    console.log("[STRIPE WEBHOOK] Session completed:", {
+      hash,
+      language,
+      fileName,
+      email,
+    })
 
     if (!hash || !email) {
-
-      console.error("Dados faltando:", { hash, email })
+      console.error("[STRIPE WEBHOOK] Missing required data:", {
+        hash,
+        email,
+      })
 
       return res.status(200).json({ received: true })
-
     }
 
     try {
-
       await sendEmail({
         hash,
         language,
-        email
+        email,
+        fileName,
       })
 
-      console.log("Certificado enviado para:", email)
-
+      console.log("[STRIPE WEBHOOK] Certificate sent successfully to:", email)
     } catch (err) {
-
-      console.error("Erro ao enviar email:", err)
-
+      console.error("[STRIPE WEBHOOK] Error sending certificate email:", err)
     }
-
   }
 
-  res.json({ received: true })
-
+  return res.status(200).json({ received: true })
 }
