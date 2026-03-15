@@ -1,3 +1,4 @@
+import Footer from "../components/Footer"
 import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
@@ -140,6 +141,7 @@ export default function Landing() {
         <p>✔ {t("landing.verify")}</p>
         <p>✔ {t("landing.private")}</p>
       </div>
+      <Footer />
     </div>
   )
 }
