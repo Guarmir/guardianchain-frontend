@@ -1,147 +1,101 @@
-import Footer from "../components/Footer"
-import { useEffect } from "react"
-import { useTranslation } from "react-i18next"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import i18n from "../i18n"
+import { Link, useSearchParams } from "react-router-dom"
 
-export default function Landing() {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
+export default function LandingPage() {
   const [params] = useSearchParams()
 
   const langParam = params.get("lang")
-  const normalizedParamLang = langParam === "pt" || langParam === "en" ? langParam : null
+  const lang = langParam === "pt" ? "pt" : "en"
 
-  useEffect(() => {
-    if (normalizedParamLang) {
-      if (i18n.language !== normalizedParamLang) {
-        i18n.changeLanguage(normalizedParamLang)
-      }
+  const t = {
+    pt: {
+      title: "Prova digital verificável em blockchain",
+      subtitle:
+        "Registre a existência de qualquer arquivo com um carimbo de data/hora público",
+      note: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
+      feature1: "Arquivo nunca enviado",
+      feature2: "Registro permanente na blockchain",
+      feature3: "Prova verificável",
+      feature4: "Certificado de comprovação",
+      priceTitle: "Registro único",
+      pay: "pagamento único",
+      register: "Registrar prova",
+      verify: "Verificar certificado",
+      secure1: "Pagamento seguro via Stripe",
+      secure2: "Certificado gerado imediatamente após o pagamento",
+      secure3: "Seu arquivo nunca é enviado para nossos servidores",
+      how: "Como funciona",
+      step1: "1. Selecione um arquivo",
+      step2: "2. O hash criptográfico é gerado no navegador",
+      step3: "3. Registre a prova por US$ 9",
+      step4: "4. Receba um certificado verificável",
+    },
 
-      localStorage.setItem("guardianchain_lang", normalizedParamLang)
-      return
-    }
-
-    const savedLang = localStorage.getItem("guardianchain_lang")
-    const browserLang = navigator.language?.toLowerCase().startsWith("pt") ? "pt" : "en"
-    const detectedLang = savedLang === "pt" || savedLang === "en" ? savedLang : browserLang
-
-    if (i18n.language !== detectedLang) {
-      i18n.changeLanguage(detectedLang)
-    }
-
-    navigate(`/?lang=${detectedLang}`, { replace: true })
-  }, [normalizedParamLang, navigate])
-
-  const lang = normalizedParamLang || (i18n.language === "pt" ? "pt" : "en")
-
-  function setLang(newLang) {
-    localStorage.setItem("guardianchain_lang", newLang)
-
-    if (i18n.language !== newLang) {
-      i18n.changeLanguage(newLang)
-    }
-
-    navigate(`/?lang=${newLang}`, { replace: true })
-  }
-
-  function goRegister() {
-    navigate(`/register?lang=${lang}`)
-  }
-
-  function goVerify() {
-    navigate(`/verify?lang=${lang}`)
-  }
+    en: {
+      title: "Verifiable digital proof on blockchain",
+      subtitle:
+        "Register the existence of any file with a public timestamp",
+      note: "Your file is never uploaded. Only the cryptographic hash is recorded.",
+      feature1: "File never uploaded",
+      feature2: "Permanent blockchain record",
+      feature3: "Verifiable proof",
+      feature4: "Proof certificate",
+      priceTitle: "One-time registration",
+      pay: "one-time payment",
+      register: "Register proof",
+      verify: "Verify certificate",
+      secure1: "Secure payment powered by Stripe",
+      secure2: "Certificate generated immediately after payment",
+      secure3: "Your file is never uploaded to our servers",
+      how: "How it works",
+      step1: "1. Select a file",
+      step2: "2. Cryptographic hash is generated in the browser",
+      step3: "3. Register proof for $9",
+      step4: "4. Receive a verifiable certificate",
+    },
+  }[lang]
 
   return (
     <div style={styles.page}>
-      <div style={styles.langSwitch}>
-        <button
-          type="button"
-          style={{
-            ...styles.langButton,
-            ...(lang === "pt" ? styles.langButtonActive : {}),
-          }}
-          onClick={() => setLang("pt")}
-        >
-          PT
-        </button>
+      <h1 style={styles.title}>{t.title}</h1>
 
-        <span style={styles.langDivider}>|</span>
+      <p style={styles.subtitle}>{t.subtitle}</p>
 
-        <button
-          type="button"
-          style={{
-            ...styles.langButton,
-            ...(lang === "en" ? styles.langButtonActive : {}),
-          }}
-          onClick={() => setLang("en")}
-        >
-          EN
-        </button>
-      </div>
+      <p style={styles.note}>{t.note}</p>
 
-      <img
-        src="/logo.png"
-        alt="GuardianChain logo"
-        style={styles.logo}
-      />
-
-      <h1 style={styles.title}>
-        {t("landing.title")}
-      </h1>
-
-      <p style={styles.subtitle}>
-        {t("landing.subtitle")}
-      </p>
-
-      <p style={styles.description}>
-        {t("landing.description")}
-      </p>
-
-      <div style={styles.featuresTop}>
-        <div>🔒 {t("landing.private")}</div>
-        <div>⛓ {t("landing.blockchain")}</div>
-        <div>🌐 {t("landing.verify")}</div>
-        <div>⏱ {t("landing.proof")}</div>
+      <div style={styles.features}>
+        <span>🔒 {t.feature1}</span>
+        <span>⛓ {t.feature2}</span>
+        <span>🌐 {t.feature3}</span>
+        <span>📄 {t.feature4}</span>
       </div>
 
       <div style={styles.card}>
-        <div style={styles.plan}>
-          {t("price.single")}
-        </div>
+        <p style={styles.priceTitle}>{t.priceTitle}</p>
 
-        <div style={styles.price}>
-          {t("price.value")}
-        </div>
+        <h2 style={styles.price}>US$ 9</h2>
 
-        <div style={styles.priceDescription}>
-          {t("price.description")}
-        </div>
+        <p>{t.pay}</p>
 
-        <button
-          style={styles.primaryButton}
-          onClick={goRegister}
-          type="button"
-        >
-          {t("price.register")}
-        </button>
+        <p style={styles.secure}>{t.secure1}</p>
+        <p style={styles.secure}>{t.secure2}</p>
+        <p style={styles.secure}>{t.secure3}</p>
 
-        <button
-          style={styles.secondaryButton}
-          onClick={goVerify}
-          type="button"
-        >
-          {t("price.verify")}
-        </button>
+        <Link to={`/register?lang=${lang}`}>
+          <button style={styles.buttonPrimary}>{t.register}</button>
+        </Link>
+
+        <Link to={`/verify?lang=${lang}`}>
+          <button style={styles.buttonSecondary}>{t.verify}</button>
+        </Link>
       </div>
 
-      <div style={styles.featuresBottom}>
-        <p>✔ {t("landing.blockchain")}</p>
-        <p>✔ {t("landing.verify")}</p>
-        <p>✔ {t("landing.private")}</p>
+      <div style={styles.how}>
+        <h2>{t.how}</h2>
+        <p>{t.step1}</p>
+        <p>{t.step2}</p>
+        <p>{t.step3}</p>
+        <p>{t.step4}</p>
       </div>
-      <Footer />
     </div>
   )
 }
@@ -149,141 +103,83 @@ export default function Landing() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(180deg,#4c5bd4,#3949ab)",
+    textAlign: "center",
+    padding: "60px 20px",
+    background: "linear-gradient(180deg,#5a60d1,#3b3fa3)",
     color: "white",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: "60px",
-    paddingBottom: "80px",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    position: "relative",
-  },
-
-  langSwitch: {
-    position: "absolute",
-    top: "20px",
-    right: "20px",
-    display: "flex",
-    alignItems: "center",
-    background: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.25)",
-    borderRadius: "999px",
-    padding: "6px 10px",
-    backdropFilter: "blur(6px)",
-  },
-
-  langButton: {
-    background: "transparent",
-    border: "none",
-    color: "white",
-    cursor: "pointer",
-    fontWeight: "bold",
-    fontSize: "14px",
-    opacity: 0.65,
-  },
-
-  langButtonActive: {
-    opacity: 1,
-    textDecoration: "underline",
-  },
-
-  langDivider: {
-    margin: "0 8px",
-    opacity: 0.7,
-  },
-
-  logo: {
-    width: "160px",
-    marginBottom: "40px",
   },
 
   title: {
-    fontSize: "44px",
-    textAlign: "center",
-    maxWidth: "800px",
+    fontSize: "42px",
     marginBottom: "20px",
   },
 
   subtitle: {
     fontSize: "20px",
-    textAlign: "center",
-    maxWidth: "700px",
     marginBottom: "10px",
   },
 
-  description: {
-    fontSize: "15px",
+  note: {
     opacity: 0.9,
-    textAlign: "center",
-    marginBottom: "30px",
+    marginBottom: "20px",
   },
 
-  featuresTop: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "14px",
+  features: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    flexWrap: "wrap",
     marginBottom: "40px",
-    fontSize: "16px",
   },
 
   card: {
-    background: "white",
-    color: "#333",
-    padding: "40px",
+    background: "#f3f3f3",
+    color: "#111",
+    maxWidth: "420px",
+    margin: "auto",
+    padding: "30px",
     borderRadius: "14px",
-    width: "340px",
-    maxWidth: "100%",
-    textAlign: "center",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
-    marginBottom: "30px",
   },
 
-  plan: {
-    fontSize: "14px",
-    marginBottom: "10px",
+  priceTitle: {
     opacity: 0.8,
   },
 
   price: {
-    fontSize: "52px",
-    fontWeight: "bold",
-    marginBottom: "6px",
+    fontSize: "42px",
+    margin: "10px 0",
   },
 
-  priceDescription: {
+  secure: {
     fontSize: "14px",
-    marginBottom: "24px",
-  },
-
-  primaryButton: {
-    background: "#3949ab",
-    color: "white",
-    border: "none",
-    padding: "14px",
-    borderRadius: "8px",
-    fontSize: "16px",
-    cursor: "pointer",
-    width: "100%",
-    marginBottom: "12px",
-  },
-
-  secondaryButton: {
-    background: "#3949ab",
-    color: "white",
-    border: "none",
-    padding: "12px",
-    borderRadius: "8px",
-    fontSize: "15px",
-    cursor: "pointer",
-    width: "100%",
-  },
-
-  featuresBottom: {
-    fontSize: "14px",
+    marginTop: "6px",
     opacity: 0.9,
-    textAlign: "center",
-    lineHeight: "26px",
+  },
+
+  buttonPrimary: {
+    width: "100%",
+    marginTop: "20px",
+    padding: "14px",
+    background: "#4b4fbf",
+    border: "none",
+    color: "white",
+    borderRadius: "8px",
+    cursor: "pointer",
+  },
+
+  buttonSecondary: {
+    width: "100%",
+    marginTop: "10px",
+    padding: "14px",
+    background: "#6366f1",
+    border: "none",
+    color: "white",
+    borderRadius: "8px",
+    cursor: "pointer",
+  },
+
+  how: {
+    marginTop: "60px",
+    lineHeight: "1.8",
   },
 }
