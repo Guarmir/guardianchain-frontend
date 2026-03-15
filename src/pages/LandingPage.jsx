@@ -28,12 +28,12 @@ export default function LandingPage() {
       step2: "2. O hash criptográfico é gerado no navegador",
       step3: "3. Registre a prova por US$ 9",
       step4: "4. Receba um certificado verificável",
+      switchToPt: "PT",
+      switchToEn: "EN",
     },
-
     en: {
       title: "Verifiable digital proof on blockchain",
-      subtitle:
-        "Register the existence of any file with a public timestamp",
+      subtitle: "Register the existence of any file with a public timestamp",
       note: "Your file is never uploaded. Only the cryptographic hash is recorded.",
       feature1: "File never uploaded",
       feature2: "Permanent blockchain record",
@@ -49,13 +49,41 @@ export default function LandingPage() {
       how: "How it works",
       step1: "1. Select a file",
       step2: "2. Cryptographic hash is generated in the browser",
-      step3: "3. Register proof for $9",
+      step3: "3. Register proof for US$ 9",
       step4: "4. Receive a verifiable certificate",
+      switchToPt: "PT",
+      switchToEn: "EN",
     },
   }[lang]
 
   return (
     <div style={styles.page}>
+      <div style={styles.langSwitch}>
+        <Link
+          to="/?lang=pt"
+          style={{
+            ...styles.langLink,
+            opacity: lang === "pt" ? 1 : 0.7,
+            fontWeight: lang === "pt" ? "700" : "400",
+          }}
+        >
+          {t.switchToPt}
+        </Link>
+
+        <span style={styles.langDivider}>|</span>
+
+        <Link
+          to="/?lang=en"
+          style={{
+            ...styles.langLink,
+            opacity: lang === "en" ? 1 : 0.7,
+            fontWeight: lang === "en" ? "700" : "400",
+          }}
+        >
+          {t.switchToEn}
+        </Link>
+      </div>
+
       <h1 style={styles.title}>{t.title}</h1>
 
       <p style={styles.subtitle}>{t.subtitle}</p>
@@ -104,9 +132,27 @@ const styles = {
   page: {
     minHeight: "100vh",
     textAlign: "center",
-    padding: "60px 20px",
+    padding: "30px 20px 60px",
     background: "linear-gradient(180deg,#5a60d1,#3b3fa3)",
     color: "white",
+  },
+
+  langSwitch: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "10px",
+    marginBottom: "40px",
+  },
+
+  langLink: {
+    color: "white",
+    textDecoration: "none",
+    fontSize: "16px",
+  },
+
+  langDivider: {
+    opacity: 0.8,
   },
 
   title: {
@@ -135,8 +181,8 @@ const styles = {
   card: {
     background: "#f3f3f3",
     color: "#111",
-    maxWidth: "420px",
-    margin: "auto",
+    maxWidth: "480px",
+    margin: "0 auto",
     padding: "30px",
     borderRadius: "14px",
   },
