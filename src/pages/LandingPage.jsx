@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from "react-router-dom"
+import Footer from "../components/Footer.jsx"
 
 export default function LandingPage() {
   const [params] = useSearchParams()
@@ -23,11 +24,6 @@ export default function LandingPage() {
       secure1: "Pagamento seguro via Stripe",
       secure2: "Certificado gerado imediatamente após o pagamento",
       secure3: "Seu arquivo nunca é enviado para nossos servidores",
-      how: "Como funciona",
-      step1: "1. Selecione um arquivo",
-      step2: "2. O hash criptográfico é gerado no navegador",
-      step3: "3. Registre a prova por US$ 9",
-      step4: "4. Receba um certificado verificável",
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -46,11 +42,6 @@ export default function LandingPage() {
       secure1: "Secure payment powered by Stripe",
       secure2: "Certificate generated immediately after payment",
       secure3: "Your file is never uploaded to our servers",
-      how: "How it works",
-      step1: "1. Select a file",
-      step2: "2. Cryptographic hash is generated in the browser",
-      step3: "3. Register proof for US$ 9",
-      step4: "4. Receive a verifiable certificate",
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -117,13 +108,7 @@ export default function LandingPage() {
         </Link>
       </div>
 
-      <div style={styles.how}>
-        <h2>{t.how}</h2>
-        <p>{t.step1}</p>
-        <p>{t.step2}</p>
-        <p>{t.step3}</p>
-        <p>{t.step4}</p>
-      </div>
+      <Footer />
     </div>
   )
 }
@@ -222,10 +207,5 @@ const styles = {
     color: "white",
     borderRadius: "8px",
     cursor: "pointer",
-  },
-
-  how: {
-    marginTop: "60px",
-    lineHeight: "1.8",
   },
 }
