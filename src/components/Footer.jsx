@@ -40,7 +40,8 @@ const styles = {
     width: "100%",
     marginTop: "60px",
     paddingTop: "30px",
-    borderTop: "1px solid rgba(255,255,255,0.2)",
+    paddingBottom: "10px",
+    borderTop: "1px solid rgba(255,255,255,0.25)",
     textAlign: "center",
   },
 
@@ -62,5 +63,6 @@ const styles = {
   copy: {
     fontSize: "13px",
     opacity: 0.8,
+    color: "white",
   },
 }
