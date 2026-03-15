@@ -19,6 +19,10 @@ export default function Faq() {
     lang === "pt"
       ? [
           {
+            q: "Como funciona o GuardianChain?",
+            a: "O processo é simples: 1) você seleciona um arquivo, 2) o hash criptográfico é gerado no navegador, 3) você realiza o pagamento do registro, 4) a plataforma gera um certificado verificável e envia para o email informado no pagamento.",
+          },
+          {
             q: "O que é GuardianChain?",
             a: "GuardianChain é uma plataforma de prova digital que permite registrar a existência de um arquivo através de um hash criptográfico com timestamp verificável.",
           },
@@ -42,8 +46,24 @@ export default function Faq() {
             q: "O que pode ser registrado?",
             a: "Documentos, imagens, fotografias, músicas, vídeos, códigos fonte, contratos, PDFs, apresentações, pesquisas, designs e outros arquivos digitais.",
           },
+          {
+            q: "O arquivo original é enviado para a plataforma?",
+            a: "Não. O arquivo original nunca é enviado. Apenas o hash criptográfico é gerado localmente no navegador e processado para fins de verificação.",
+          },
+          {
+            q: "O que eu recebo após o pagamento?",
+            a: "Após o pagamento, um certificado verificável é gerado. Esse certificado pode ser baixado e também é enviado para o email informado no checkout.",
+          },
+          {
+            q: "Quanto custa o registro?",
+            a: "O registro custa US$ 9 em pagamento único por arquivo.",
+          },
         ]
       : [
+          {
+            q: "How does GuardianChain work?",
+            a: "The process is simple: 1) you select a file, 2) the cryptographic hash is generated in the browser, 3) you complete the registration payment, 4) the platform generates a verifiable certificate and sends it to the email provided during payment.",
+          },
           {
             q: "What is GuardianChain?",
             a: "GuardianChain is a digital proof platform that allows anyone to register the existence of a file using a cryptographic hash with a verifiable timestamp.",
@@ -67,6 +87,18 @@ export default function Faq() {
           {
             q: "What can be registered?",
             a: "Documents, images, photographs, music files, videos, source code, contracts, PDFs, presentations, research, designs, and other digital files.",
+          },
+          {
+            q: "Is the original file uploaded to the platform?",
+            a: "No. The original file is never uploaded. Only the cryptographic hash is generated locally in the browser and processed for verification purposes.",
+          },
+          {
+            q: "What do I receive after payment?",
+            a: "After payment, a verifiable certificate is generated. This certificate can be downloaded and is also sent to the email provided during checkout.",
+          },
+          {
+            q: "How much does registration cost?",
+            a: "Registration costs US$ 9 as a one-time payment per file.",
           },
         ]
 
