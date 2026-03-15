@@ -9,6 +9,7 @@ import Faq from "./pages/Faq.jsx"
 import Terms from "./pages/Terms.jsx"
 import Privacy from "./pages/Privacy.jsx"
 import Support from "./pages/Support.jsx"
+import RefundPolicy from "./pages/RefundPolicy.jsx"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/refund" element={<RefundPolicy />} />
       </Routes>
     </BrowserRouter>
   )

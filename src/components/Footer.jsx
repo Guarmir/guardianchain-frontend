@@ -25,6 +25,10 @@ export default function Footer() {
           {lang === "pt" ? "Política de privacidade" : "Privacy Policy"}
         </Link>
 
+        <Link to={`/refund?lang=${lang}`} style={styles.link}>
+          {lang === "pt" ? "Reembolso" : "Refund Policy"}
+        </Link>
+
         <Link to={`/support?lang=${lang}`} style={styles.link}>
           {lang === "pt" ? "Suporte" : "Support"}
         </Link>
