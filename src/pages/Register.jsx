@@ -1,17 +1,21 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { ethers } from "ethers"
 import { useSearchParams } from "react-router-dom"
 
 export default function Register() {
+
   const [params] = useSearchParams()
   const langParam = params.get("lang")
   const lang = langParam === "pt" ? "pt" : "en"
+
+  const fileInputRef = useRef(null)
 
   const [fileHash, setFileHash] = useState("")
   const [fileName, setFileName] = useState("")
   const [loading, setLoading] = useState(false)
 
   const handleFileChange = async (event) => {
+
     const file = event.target.files[0]
     if (!file) return
 
@@ -21,12 +25,15 @@ export default function Register() {
     const hash = ethers.keccak256(new Uint8Array(buffer))
 
     setFileHash(hash.replace("0x", ""))
+
   }
 
   const handleCheckout = async () => {
+
     if (!fileHash || loading) return
 
     try {
+
       setLoading(true)
 
       const res = await fetch("/api/create-checkout-session", {
@@ -35,32 +42,38 @@ export default function Register() {
         body: JSON.stringify({
           hash: fileHash,
           language: lang,
-          fileName,
-        }),
+          fileName
+        })
       })
 
       const data = await res.json()
 
-      if (!res.ok || !data.url) {
-        throw new Error(data?.error || "Failed to create checkout session")
-      }
+      if (!data.url) throw new Error()
 
       window.location.href = data.url
-    } catch (error) {
-      console.error("Checkout error:", error)
+
+    } catch (err) {
+
       alert(
         lang === "pt"
-          ? "Não foi possível iniciar o pagamento."
-          : "Could not start payment."
+          ? "Erro ao iniciar pagamento."
+          : "Error starting payment."
       )
+
     } finally {
+
       setLoading(false)
+
     }
+
   }
 
   return (
+
     <div style={styles.page}>
+
       <div style={styles.card}>
+
         <h1>GuardianChain</h1>
 
         <p>
@@ -69,22 +82,49 @@ export default function Register() {
             : "Select a file to generate cryptographic proof."}
         </p>
 
-        <input type="file" onChange={handleFileChange} />
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
 
-        {fileName && <p>{fileName}</p>}
+        <button
+          onClick={() => fileInputRef.current.click()}
+          style={styles.uploadButton}
+        >
+          {lang === "pt"
+            ? "Selecionar arquivo"
+            : "Select file"}
+        </button>
+
+        <p style={{ marginTop: "10px", fontSize: "14px" }}>
+          {fileName ||
+            (lang === "pt"
+              ? "Nenhum arquivo selecionado"
+              : "No file selected")}
+        </p>
 
         {fileHash && (
-          <textarea style={styles.hash} value={fileHash} readOnly />
+          <textarea
+            style={styles.hash}
+            value={fileHash}
+            readOnly
+          />
         )}
 
         <p style={styles.legal}>
           {lang === "pt"
             ? "Ao continuar você concorda com nossos "
             : "By continuing you agree to our "}
-          <a href={`/terms?lang=${lang}`}>{lang === "pt" ? "Termos" : "Terms"}</a>{" "}
+          <a href={`/terms?lang=${lang}`}>
+            {lang === "pt" ? "Termos" : "Terms"}
+          </a>{" "}
           &{" "}
           <a href={`/refund?lang=${lang}`}>
-            {lang === "pt" ? "Política de Reembolso" : "Refund Policy"}
+            {lang === "pt"
+              ? "Política de Reembolso"
+              : "Refund Policy"}
           </a>
         </p>
 
@@ -101,18 +141,23 @@ export default function Register() {
             ? "Pagar & Registrar"
             : "Pay & Register"}
         </button>
+
       </div>
+
     </div>
+
   )
+
 }
 
 const styles = {
+
   page: {
     minHeight: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(180deg,#5a60d1,#3b3fa3)",
+    background: "linear-gradient(180deg,#5a60d1,#3b3fa3)"
   },
 
   card: {
@@ -120,19 +165,28 @@ const styles = {
     padding: "40px",
     borderRadius: "14px",
     textAlign: "center",
-    width: "420px",
+    width: "420px"
+  },
+
+  uploadButton: {
+    marginTop: "10px",
+    padding: "10px 18px",
+    background: "#ddd",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer"
   },
 
   hash: {
     width: "100%",
     height: "80px",
-    marginTop: "10px",
+    marginTop: "10px"
   },
 
   legal: {
     fontSize: "13px",
     marginTop: "15px",
-    opacity: 0.8,
+    opacity: 0.8
   },
 
   button: {
@@ -143,6 +197,7 @@ const styles = {
     border: "none",
     color: "white",
     borderRadius: "8px",
-    cursor: "pointer",
-  },
+    cursor: "pointer"
+  }
+
 }
