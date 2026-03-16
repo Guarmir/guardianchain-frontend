@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-import sendEmail from "./send-certificate.js"
+import sendEmail from "./send-email.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 

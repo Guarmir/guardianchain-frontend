@@ -1,7 +1,11 @@
 import PDFDocument from "pdfkit"
 import QRCode from "qrcode"
 
-export default async function generateCertificate({ hash, language, fileName = "" }) {
+export default async function generateCertificate({
+  hash,
+  language,
+  fileName = "",
+}) {
   return await new Promise(async (resolve, reject) => {
     try {
       if (!hash) {
@@ -20,7 +24,8 @@ export default async function generateCertificate({ hash, language, fileName = "
           brazilTime: "Brazil time",
           network: "Network",
           verify: "Verification",
-          footer: "The original file is never uploaded. Only its cryptographic hash is registered.",
+          footer:
+            "The original file is never uploaded. Only its cryptographic hash is registered.",
         },
         pt: {
           title: "Certificado GuardianChain",
@@ -31,7 +36,8 @@ export default async function generateCertificate({ hash, language, fileName = "
           brazilTime: "Horário do Brasil",
           network: "Rede",
           verify: "Verificação",
-          footer: "O arquivo original nunca é enviado. Apenas seu hash criptográfico é registrado.",
+          footer:
+            "O arquivo original nunca é enviado. Apenas seu hash criptográfico é registrado.",
         },
       }
 
@@ -50,7 +56,9 @@ export default async function generateCertificate({ hash, language, fileName = "
         second: "2-digit",
       }).format(now)
 
-      const verificationUrl = `https://guardianchain.online/verify?hash=${encodeURIComponent(hash)}&lang=${lang}`
+      const verificationUrl = `https://guardianchain.online/verify?hash=${encodeURIComponent(
+        hash
+      )}&lang=${lang}`
 
       const doc = new PDFDocument({
         margin: 50,
@@ -72,7 +80,7 @@ export default async function generateCertificate({ hash, language, fileName = "
 
       doc.moveDown(2)
 
-      doc.fontSize(11).text(`${t.hash}:`, { continued: false })
+      doc.fontSize(11).text(`${t.hash}:`)
       doc.fontSize(10).text(hash, {
         width: 500,
       })

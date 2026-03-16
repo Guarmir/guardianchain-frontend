@@ -24,19 +24,38 @@ export default function Register() {
   }
 
   const handleCheckout = async () => {
-    if (!fileHash) return
+    if (!fileHash || loading) return
 
-    setLoading(true)
+    try {
+      setLoading(true)
 
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ hash: fileHash }),
-    })
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          hash: fileHash,
+          language: lang,
+          fileName,
+        }),
+      })
 
-    const data = await res.json()
+      const data = await res.json()
 
-    window.location.href = data.url
+      if (!res.ok || !data.url) {
+        throw new Error(data?.error || "Failed to create checkout session")
+      }
+
+      window.location.href = data.url
+    } catch (error) {
+      console.error("Checkout error:", error)
+      alert(
+        lang === "pt"
+          ? "Não foi possível iniciar o pagamento."
+          : "Could not start payment."
+      )
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -62,8 +81,11 @@ export default function Register() {
           {lang === "pt"
             ? "Ao continuar você concorda com nossos "
             : "By continuing you agree to our "}
-          <a href={`/terms?lang=${lang}`}>Terms</a> {" "}
-          & <a href={`/refund?lang=${lang}`}>Refund Policy</a>
+          <a href={`/terms?lang=${lang}`}>{lang === "pt" ? "Termos" : "Terms"}</a>{" "}
+          &{" "}
+          <a href={`/refund?lang=${lang}`}>
+            {lang === "pt" ? "Política de Reembolso" : "Refund Policy"}
+          </a>
         </p>
 
         <button
@@ -71,7 +93,13 @@ export default function Register() {
           disabled={!fileHash || loading}
           style={styles.button}
         >
-          {lang === "pt" ? "Pagar & Registrar" : "Pay & Register"}
+          {loading
+            ? lang === "pt"
+              ? "Processando..."
+              : "Processing..."
+            : lang === "pt"
+            ? "Pagar & Registrar"
+            : "Pay & Register"}
         </button>
       </div>
     </div>
