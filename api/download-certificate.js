@@ -4,7 +4,6 @@ import generateCertificate from "./generate-certificate.js"
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default async function handler(req, res) {
-
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" })
   }
@@ -19,26 +18,33 @@ export default async function handler(req, res) {
   let fileHash = hash || null
   let language = lang === "pt" ? "pt" : "en"
   let fileName = ""
+  let ownerName = ""
+  let ownerEmail = ""
+  let ownerType = "individual"
+  let paymentId = ""
 
   try {
-
-    // fluxo vindo da página Success (Stripe)
     if (session_id) {
-
       const session = await stripe.checkout.sessions.retrieve(session_id)
 
       fileHash = session.metadata?.hash || fileHash
       language = session.metadata?.language === "pt" ? "pt" : language
       fileName = session.metadata?.fileName || ""
+      ownerName = session.metadata?.ownerName || ""
+      ownerEmail =
+        session.metadata?.ownerEmail ||
+        session.customer_details?.email ||
+        session.customer_email ||
+        ""
+      ownerType = session.metadata?.ownerType || "individual"
+      paymentId = session.payment_intent || session.id
 
       if (!fileHash) {
         console.error("[DOWNLOAD CERTIFICATE] Hash missing in Stripe session")
         return res.status(400).json({ error: "Hash not found in session metadata" })
       }
-
     }
 
-    // fluxo vindo da página Verify
     if (!fileHash) {
       console.error("[DOWNLOAD CERTIFICATE] Hash not provided")
       return res.status(400).json({ error: "Hash not provided" })
@@ -48,31 +54,34 @@ export default async function handler(req, res) {
       hash: fileHash,
       language,
       fileName,
+      ownerName,
+      ownerEmail,
+      ownerType,
+      paymentId
     })
 
     const pdf = await generateCertificate({
       hash: fileHash,
       language,
       fileName,
+      ownerName,
+      ownerEmail,
+      ownerType,
+      paymentId
     })
 
     res.setHeader("Content-Type", "application/pdf")
-
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=guardianchain-certificate.pdf"
     )
 
     return res.send(pdf)
-
   } catch (err) {
-
     console.error("[DOWNLOAD CERTIFICATE] Error:", err)
 
     return res.status(500).json({
       error: "Certificate generation failed"
     })
-
   }
-
 }

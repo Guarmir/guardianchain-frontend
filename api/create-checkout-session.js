@@ -1,6 +1,8 @@
 import Stripe from "stripe"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -8,59 +10,105 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { hash, language, fileName } = req.body
-
-    if (!hash) {
-      return res.status(400).json({ error: "Hash not provided" })
+    if (!stripe) {
+      console.error("STRIPE_SECRET_KEY is missing")
+      return res.status(500).json({
+        error: "STRIPE_SECRET_KEY is missing on the server"
+      })
     }
 
-    const lang = language === "pt" ? "pt" : "en"
+    const {
+      hash,
+      fileName,
+      language,
+      ownerName,
+      ownerEmail,
+      ownerType,
+      ownershipDeclaration
+    } = req.body || {}
 
-    const baseUrl =
-      process.env.BASE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
-      "http://localhost:5173"
+    if (!hash || !fileName || !ownerName || !ownerEmail || !ownershipDeclaration) {
+      return res.status(400).json({
+        error: "Missing required certificate data",
+        received: {
+          hasHash: Boolean(hash),
+          hasFileName: Boolean(fileName),
+          hasOwnerName: Boolean(ownerName),
+          hasOwnerEmail: Boolean(ownerEmail),
+          hasOwnershipDeclaration: Boolean(ownershipDeclaration)
+        }
+      })
+    }
+
+    const normalizedLanguage = language === "pt" ? "pt" : "en"
+    const baseUrl = process.env.BASE_URL || "http://localhost:3000"
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
       mode: "payment",
-      locale: lang === "pt" ? "pt-BR" : "en",
+
+      payment_method_types: ["card", "pix"],
+
+      payment_method_options: {
+        pix: {
+          expires_after_seconds: 3600
+        }
+      },
+
+      customer_email: ownerEmail,
+      locale: normalizedLanguage === "pt" ? "pt-BR" : "en",
+
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/register?lang=${normalizedLanguage}`,
 
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "brl",
             product_data: {
               name:
-                lang === "pt"
-                  ? "Certificado de Prova Digital GuardianChain"
-                  : "GuardianChain Digital Proof Certificate",
+                normalizedLanguage === "pt"
+                  ? "Certificado GuardianChain"
+                  : "GuardianChain Certificate",
+              description:
+                normalizedLanguage === "pt"
+                  ? "Registro de prova digital verificável em blockchain"
+                  : "Verifiable digital proof registration on blockchain"
             },
-            unit_amount: 900,
+            unit_amount: 4900
           },
-          quantity: 1,
-        },
+          quantity: 1
+        }
       ],
-
-      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&lang=${lang}`,
-      cancel_url: `${baseUrl}/register?lang=${lang}`,
 
       metadata: {
         hash,
-        fileName: fileName || "",
-        language: lang,
-      },
+        fileName,
+        language: normalizedLanguage,
+        ownerName,
+        ownerEmail,
+        ownerType: ownerType || "individual",
+        ownershipDeclaration: "accepted",
+        declarationVersion: "1.0",
+        certificateType: "declared_owner",
+        product: "guardianchain_certificate"
+      }
     })
 
-    return res.status(200).json({
-      id: session.id,
-      url: session.url,
-    })
+    return res.status(200).json({ url: session.url })
   } catch (error) {
-    console.error("Stripe session error:", error)
+    console.error("Checkout error full:", {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      param: error.param,
+      raw: error.raw
+    })
 
     return res.status(500).json({
-      error: "Failed to create checkout session",
+      error: error.message || "Failed to create checkout session",
+      type: error.type || null,
+      code: error.code || null,
+      param: error.param || null
     })
   }
 }

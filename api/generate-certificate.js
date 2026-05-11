@@ -5,6 +5,10 @@ export default async function generateCertificate({
   hash,
   language,
   fileName = "",
+  ownerName = "",
+  ownerEmail = "",
+  ownerType = "individual",
+  paymentId = "",
 }) {
   return await new Promise(async (resolve, reject) => {
     try {
@@ -17,27 +21,51 @@ export default async function generateCertificate({
       const text = {
         en: {
           title: "GuardianChain Certificate",
-          description: "This document certifies proof of existence and authorship.",
+          description:
+            "This document certifies verifiable proof of existence, integrity, and declared ownership.",
+          declaredHolder: "Declared certificate holder",
+          name: "Name",
+          email: "Email",
+          type: "Type",
+          individual: "Individual",
+          company: "Company",
+          declarationTitle: "Ownership declaration",
+          declaration:
+            "The holder declared, under their own responsibility, that they are the author, owner, or have legitimate rights over the content represented by this cryptographic hash.",
+          technicalData: "Technical registration data",
           hash: "Hash",
           fileName: "File name",
           date: "Date (UTC)",
           brazilTime: "Brazil time",
           network: "Network",
+          payment: "Stripe payment",
           verify: "Verification",
           footer:
-            "The original file is never uploaded. Only its cryptographic hash is registered.",
+            "Notice: this certificate proves the hash existence, registration date, and holder declaration. GuardianChain does not validate the internal file content or perform documentary identity verification in this certificate.",
         },
         pt: {
           title: "Certificado GuardianChain",
-          description: "Este documento certifica prova de existência e autoria.",
+          description:
+            "Este documento certifica prova verificável de existência, integridade e titularidade declarada.",
+          declaredHolder: "Titular declarado do certificado",
+          name: "Nome",
+          email: "E-mail",
+          type: "Tipo",
+          individual: "Pessoa física",
+          company: "Empresa",
+          declarationTitle: "Declaração de titularidade",
+          declaration:
+            "O titular declarou, sob sua responsabilidade, ser autor, titular ou possuir direito legítimo sobre o conteúdo representado por este hash criptográfico.",
+          technicalData: "Dados técnicos do registro",
           hash: "Hash",
           fileName: "Nome do arquivo",
           date: "Data (UTC)",
           brazilTime: "Horário do Brasil",
           network: "Rede",
+          payment: "Pagamento Stripe",
           verify: "Verificação",
           footer:
-            "O arquivo original nunca é enviado. Apenas seu hash criptográfico é registrado.",
+            "Aviso: este certificado comprova a existência do hash, a data do registro e a declaração do titular. A GuardianChain não valida o conteúdo interno do arquivo nem realiza verificação documental de identidade neste certificado.",
         },
       }
 
@@ -80,6 +108,32 @@ export default async function generateCertificate({
 
       doc.moveDown(2)
 
+      doc.fontSize(15).text(t.declaredHolder)
+      doc.moveDown(0.4)
+
+      doc.fontSize(11).text(`${t.name}: ${ownerName || "-"}`)
+      doc.text(`${t.email}: ${ownerEmail || "-"}`)
+      doc.text(
+        `${t.type}: ${
+          ownerType === "company" ? t.company : t.individual
+        }`
+      )
+
+      doc.moveDown(1)
+
+      doc.fontSize(15).text(t.declarationTitle)
+      doc.moveDown(0.4)
+
+      doc.fontSize(10).text(t.declaration, {
+        width: 500,
+        align: "left",
+      })
+
+      doc.moveDown(1.2)
+
+      doc.fontSize(15).text(t.technicalData)
+      doc.moveDown(0.4)
+
       doc.fontSize(11).text(`${t.hash}:`)
       doc.fontSize(10).text(hash, {
         width: 500,
@@ -89,14 +143,17 @@ export default async function generateCertificate({
 
       if (fileName) {
         doc.fontSize(11).text(`${t.fileName}: ${fileName}`)
-        doc.moveDown()
       }
 
       doc.fontSize(11).text(`${t.date}: ${utc}`)
       doc.text(`${t.brazilTime}: ${brazil}`)
       doc.text(`${t.network}: Polygon`)
 
-      doc.moveDown(2)
+      if (paymentId) {
+        doc.text(`${t.payment}: ${paymentId}`)
+      }
+
+      doc.moveDown(1.5)
 
       doc.fontSize(11).text(`${t.verify}:`)
       doc.fontSize(10).fillColor("blue").text(verificationUrl, {
@@ -117,8 +174,10 @@ export default async function generateCertificate({
       })
 
       doc.moveDown(2)
-      doc.fontSize(10).text(t.footer, {
+
+      doc.fontSize(8).fillColor("#555").text(t.footer, {
         align: "left",
+        width: 500,
       })
 
       doc.end()
