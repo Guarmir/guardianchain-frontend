@@ -41,18 +41,14 @@ export default async function handler(req, res) {
     }
 
     const normalizedLanguage = language === "pt" ? "pt" : "en"
-    const baseUrl = process.env.BASE_URL || "http://localhost:3000"
+    const baseUrl = process.env.BASE_URL || "https://guardianchain.online"
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
 
-      payment_method_types: ["card", "pix"],
-
-      payment_method_options: {
-        pix: {
-          expires_after_seconds: 3600
-        }
-      },
+      // Pix desativado temporariamente até a Stripe liberar Pix na conta.
+      // Quando Pix estiver habilitado, trocar para: ["card", "pix"]
+      payment_method_types: ["card"],
 
       customer_email: ownerEmail,
       locale: normalizedLanguage === "pt" ? "pt-BR" : "en",
