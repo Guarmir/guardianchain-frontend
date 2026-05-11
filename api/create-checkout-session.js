@@ -70,7 +70,7 @@ export default async function handler(req, res) {
                   ? "Registro de prova digital verificável em blockchain"
                   : "Verifiable digital proof registration on blockchain"
             },
-            unit_amount: 4900
+            unit_amount: 1990
           },
           quantity: 1
         }
