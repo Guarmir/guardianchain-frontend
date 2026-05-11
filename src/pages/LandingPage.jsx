@@ -18,6 +18,7 @@ export default function LandingPage() {
       feature3: "Prova verificável",
       feature4: "Certificado de comprovação",
       priceTitle: "Registro único",
+      price: "R$ 19,90",
       pay: "pagamento único",
       register: "Registrar prova",
       verify: "Verificar certificado",
@@ -36,6 +37,7 @@ export default function LandingPage() {
       feature3: "Verifiable proof",
       feature4: "Proof certificate",
       priceTitle: "One-time registration",
+      price: "US$ 4",
       pay: "one-time payment",
       register: "Register proof",
       verify: "Verify certificate",
@@ -91,7 +93,7 @@ export default function LandingPage() {
       <div style={styles.card}>
         <p style={styles.priceTitle}>{t.priceTitle}</p>
 
-        <h2 style={styles.price}>US$ 9</h2>
+        <h2 style={styles.price}>{t.price}</h2>
 
         <p>{t.pay}</p>
 

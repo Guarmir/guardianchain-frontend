@@ -1,7 +1,6 @@
 import Stripe from "stripe"
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null
 
 export default async function handler(req, res) {
@@ -11,7 +10,6 @@ export default async function handler(req, res) {
 
   try {
     if (!stripe) {
-      console.error("STRIPE_SECRET_KEY is missing")
       return res.status(500).json({
         error: "STRIPE_SECRET_KEY is missing on the server"
       })
@@ -28,30 +26,24 @@ export default async function handler(req, res) {
     } = req.body || {}
 
     if (!hash || !fileName || !ownerName || !ownerEmail || !ownershipDeclaration) {
-      return res.status(400).json({
-        error: "Missing required certificate data",
-        received: {
-          hasHash: Boolean(hash),
-          hasFileName: Boolean(fileName),
-          hasOwnerName: Boolean(ownerName),
-          hasOwnerEmail: Boolean(ownerEmail),
-          hasOwnershipDeclaration: Boolean(ownershipDeclaration)
-        }
-      })
+      return res.status(400).json({ error: "Missing required certificate data" })
     }
 
     const normalizedLanguage = language === "pt" ? "pt" : "en"
     const baseUrl = process.env.BASE_URL || "https://guardianchain.online"
 
+    const isPt = normalizedLanguage === "pt"
+
+    const currency = isPt ? "brl" : "usd"
+    const unitAmount = isPt ? 1990 : 400
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
 
-      // Pix desativado temporariamente até a Stripe liberar Pix na conta.
-      // Quando Pix estiver habilitado, trocar para: ["card", "pix"]
       payment_method_types: ["card"],
 
       customer_email: ownerEmail,
-      locale: normalizedLanguage === "pt" ? "pt-BR" : "en",
+      locale: isPt ? "pt-BR" : "en",
 
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/register?lang=${normalizedLanguage}`,
@@ -59,18 +51,16 @@ export default async function handler(req, res) {
       line_items: [
         {
           price_data: {
-            currency: "brl",
+            currency,
             product_data: {
-              name:
-                normalizedLanguage === "pt"
-                  ? "Certificado GuardianChain"
-                  : "GuardianChain Certificate",
-              description:
-                normalizedLanguage === "pt"
-                  ? "Registro de prova digital verificável em blockchain"
-                  : "Verifiable digital proof registration on blockchain"
+              name: isPt
+                ? "Certificado GuardianChain"
+                : "GuardianChain Certificate",
+              description: isPt
+                ? "Registro de prova digital verificável em blockchain"
+                : "Verifiable digital proof registration on blockchain"
             },
-            unit_amount: 1990
+            unit_amount: unitAmount
           },
           quantity: 1
         }
@@ -86,7 +76,9 @@ export default async function handler(req, res) {
         ownershipDeclaration: "accepted",
         declarationVersion: "1.0",
         certificateType: "declared_owner",
-        product: "guardianchain_certificate"
+        product: "guardianchain_certificate",
+        currency,
+        price: isPt ? "19.90 BRL" : "4.00 USD"
       }
     })
 
