@@ -247,10 +247,14 @@ const styles = {
   },
 
   certificateImage: {
-    width: "100%",
-    maxWidth: "900px",
-    borderRadius: "18px",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
-    border: "1px solid rgba(255,255,255,0.15)",
-  },
+     width: "100%",
+  maxWidth: "620px",
+  maxHeight: "520px",
+  objectFit: "cover",
+  objectPosition: "top",
+  borderRadius: "18px",
+  boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+  border: "1px solid rgba(255,255,255,0.15)",
+  background: "#ffffff",
+},
 }
