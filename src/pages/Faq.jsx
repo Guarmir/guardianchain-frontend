@@ -56,7 +56,7 @@ export default function Faq() {
           },
           {
             q: "Quanto custa o registro?",
-            a: "O registro custa US$ 9 em pagamento único por arquivo.",
+            a: "O registro custa R$ 19,90 em pagamento único por arquivo.",
           },
         ]
       : [
@@ -98,7 +98,7 @@ export default function Faq() {
           },
           {
             q: "How much does registration cost?",
-            a: "Registration costs US$ 9 as a one-time payment per file.",
+            a: "Registration costs US$ 4 as a one-time payment per file.",
           },
         ]
 
