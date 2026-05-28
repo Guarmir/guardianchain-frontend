@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom"
 import Footer from "../components/Footer.jsx"
+import certificatePreview from "../assets/certificate-preview.png"
 
 export default function LandingPage() {
   const [params] = useSearchParams()
@@ -10,8 +11,7 @@ export default function LandingPage() {
   const t = {
     pt: {
       title: "Proteja seu trabalho antes que alguém reivindique autoria.",
-      subtitle:
-        "Crie uma prova imutável de propriedade em menos de 1 minuto.",
+      subtitle: "Crie uma prova imutável de propriedade em menos de 1 minuto.",
       note: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
       feature1: "Proteção de autoria",
       feature2: "Prova imutável",
@@ -25,6 +25,9 @@ export default function LandingPage() {
       secure1: "Pagamento seguro via Stripe",
       secure2: "Certificado gerado imediatamente após o pagamento",
       secure3: "Seu arquivo nunca é enviado para nossos servidores",
+      certificateTitle: "Veja o certificado que você recebe",
+      certificateText:
+        "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -44,6 +47,9 @@ export default function LandingPage() {
       secure1: "Secure payment powered by Stripe",
       secure2: "Certificate generated immediately after payment",
       secure3: "Your file is never uploaded to our servers",
+      certificateTitle: "See the certificate you receive",
+      certificateText:
+        "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -108,6 +114,18 @@ export default function LandingPage() {
         <Link to={`/verify?lang=${lang}`}>
           <button style={styles.buttonSecondary}>{t.verify}</button>
         </Link>
+      </div>
+
+      <div style={styles.certificateSection}>
+        <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
+
+        <p style={styles.certificateText}>{t.certificateText}</p>
+
+        <img
+          src={certificatePreview}
+          alt="GuardianChain Certificate Preview"
+          style={styles.certificateImage}
+        />
       </div>
 
       <Footer />
@@ -209,5 +227,30 @@ const styles = {
     color: "white",
     borderRadius: "8px",
     cursor: "pointer",
+  },
+
+  certificateSection: {
+    marginTop: "80px",
+    textAlign: "center",
+  },
+
+  certificateTitle: {
+    fontSize: "32px",
+    marginBottom: "14px",
+  },
+
+  certificateText: {
+    maxWidth: "760px",
+    margin: "0 auto 30px",
+    opacity: 0.92,
+    lineHeight: "1.6",
+  },
+
+  certificateImage: {
+    width: "100%",
+    maxWidth: "900px",
+    borderRadius: "18px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+    border: "1px solid rgba(255,255,255,0.15)",
   },
 }
