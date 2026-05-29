@@ -24,7 +24,7 @@ export default function LandingPage() {
       price: "R$ 19,90",
       pay: "pagamento único",
 
-      register: "Registrar prova",
+      register: "Criar prova agora",
       verify: "Verificar certificado",
 
       secure1: "Pagamento seguro via Stripe",
@@ -96,7 +96,7 @@ export default function LandingPage() {
       price: "US$ 4",
       pay: "one-time payment",
 
-      register: "Register proof",
+      register: "Create proof now",
       verify: "Verify certificate",
 
       secure1: "Secure payment powered by Stripe",
