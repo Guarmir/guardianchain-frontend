@@ -28,6 +28,19 @@ export default function LandingPage() {
       certificateTitle: "Veja o certificado que você recebe",
       certificateText:
         "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
+      useCasesTitle: "Ideal para proteger",
+      useCasesText:
+        "Use o GuardianChain para criar prova de existência, autoria e integridade de arquivos digitais importantes.",
+      useCases: [
+        "Conteúdo gerado por IA",
+        "Artes e Design",
+        "Música e Áudio",
+        "Contratos e Documentos",
+        "Fotografia",
+        "Pesquisas e Ideias",
+        "Desenvolvedores e Arquivos-fonte",
+        "Propostas e entregas profissionais",
+      ],
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -50,6 +63,19 @@ export default function LandingPage() {
       certificateTitle: "See the certificate you receive",
       certificateText:
         "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
+      useCasesTitle: "Perfect for protecting",
+      useCasesText:
+        "Use GuardianChain to create proof of existence, authorship and integrity for important digital files.",
+      useCases: [
+        "AI-generated content",
+        "Artwork & Design",
+        "Music & Audio",
+        "Contracts & Documents",
+        "Photography",
+        "Research & Ideas",
+        "Developers & Source Files",
+        "Professional proposals & deliveries",
+      ],
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -127,6 +153,25 @@ export default function LandingPage() {
           style={styles.certificateImage}
         />
       </div>
+
+      <section style={styles.useCasesSection}>
+        <h2 style={styles.useCasesTitle}>{t.useCasesTitle}</h2>
+
+        <p style={styles.useCasesText}>{t.useCasesText}</p>
+
+        <div style={styles.useCasesGrid}>
+          {t.useCases.map((item) => (
+            <div key={item} style={styles.useCaseCard}>
+              <span style={styles.useCaseCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+
+        <Link to={`/register?lang=${lang}`}>
+          <button style={styles.finalCta}>{t.register}</button>
+        </Link>
+      </section>
 
       <Footer />
     </div>
@@ -247,14 +292,80 @@ const styles = {
   },
 
   certificateImage: {
-     width: "100%",
-  maxWidth: "620px",
-  maxHeight: "520px",
-  objectFit: "cover",
-  objectPosition: "top",
-  borderRadius: "18px",
-  boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
-  border: "1px solid rgba(255,255,255,0.15)",
-  background: "#ffffff",
-},
+    width: "100%",
+    maxWidth: "620px",
+    maxHeight: "520px",
+    objectFit: "cover",
+    objectPosition: "top",
+    borderRadius: "18px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+    border: "1px solid rgba(255,255,255,0.15)",
+    background: "#ffffff",
+  },
+
+  useCasesSection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "34px 22px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+  },
+
+  useCasesTitle: {
+    fontSize: "32px",
+    margin: "0 0 12px",
+  },
+
+  useCasesText: {
+    maxWidth: "720px",
+    margin: "0 auto 28px",
+    opacity: 0.92,
+    lineHeight: "1.6",
+  },
+
+  useCasesGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "12px",
+    marginBottom: "28px",
+  },
+
+  useCaseCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    textAlign: "left",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "14px",
+    color: "#ffffff",
+    fontSize: "15px",
+  },
+
+  useCaseCheck: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4b4fbf",
+    fontWeight: "800",
+    flexShrink: 0,
+  },
+
+  finalCta: {
+    padding: "15px 24px",
+    background: "#ffffff",
+    color: "#4338ca",
+    border: "none",
+    borderRadius: "12px",
+    cursor: "pointer",
+    fontWeight: "800",
+    fontSize: "15px",
+  },
 }
