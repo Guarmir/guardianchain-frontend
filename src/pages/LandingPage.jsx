@@ -12,25 +12,57 @@ export default function LandingPage() {
     pt: {
       title: "Proteja seu trabalho antes que alguém reivindique autoria.",
       subtitle: "Crie uma prova imutável de propriedade em menos de 1 minuto.",
-      note: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
+      note:
+        "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
+
       feature1: "Proteção de autoria",
       feature2: "Prova imutável",
       feature3: "Verificação pública",
       feature4: "Protegido por blockchain",
+
       priceTitle: "Registro único",
       price: "R$ 19,90",
       pay: "pagamento único",
+
       register: "Registrar prova",
       verify: "Verificar certificado",
+
       secure1: "Pagamento seguro via Stripe",
       secure2: "Certificado gerado imediatamente após o pagamento",
       secure3: "Seu arquivo nunca é enviado para nossos servidores",
+
       certificateTitle: "Veja o certificado que você recebe",
       certificateText:
         "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
+
+      howTitle: "Como funciona",
+
+      howText:
+        "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
+
+      howSteps: [
+        {
+          icon: "📁",
+          title: "Escolha seu arquivo",
+          text: "Seu arquivo permanece no seu dispositivo. Nenhum upload é realizado.",
+        },
+        {
+          icon: "🔐",
+          title: "Geramos a prova criptográfica",
+          text: "Um hash único é criado e vinculado a um registro verificável.",
+        },
+        {
+          icon: "📄",
+          title: "Receba seu certificado",
+          text: "Baixe o certificado PDF com QR Code e verificação pública.",
+        },
+      ],
+
       useCasesTitle: "Ideal para proteger",
+
       useCasesText:
         "Use o GuardianChain para criar prova de existência, autoria e integridade de arquivos digitais importantes.",
+
       useCases: [
         "Conteúdo gerado por IA",
         "Artes e Design",
@@ -41,31 +73,69 @@ export default function LandingPage() {
         "Desenvolvedores e Arquivos-fonte",
         "Propostas e entregas profissionais",
       ],
+
       switchToPt: "PT",
       switchToEn: "EN",
     },
+
     en: {
       title: "Protect your work before someone claims it.",
-      subtitle: "Create immutable proof of ownership in less than 1 minute.",
-      note: "Your file is never uploaded. Only the cryptographic hash is recorded.",
+
+      subtitle:
+        "Create immutable proof of ownership in less than 1 minute.",
+
+      note:
+        "Your file is never uploaded. Only the cryptographic hash is recorded.",
+
       feature1: "Protect authorship",
       feature2: "Immutable proof",
       feature3: "Public verification",
       feature4: "Blockchain secured",
+
       priceTitle: "One-time registration",
       price: "US$ 4",
       pay: "one-time payment",
+
       register: "Register proof",
       verify: "Verify certificate",
+
       secure1: "Secure payment powered by Stripe",
       secure2: "Certificate generated immediately after payment",
       secure3: "Your file is never uploaded to our servers",
+
       certificateTitle: "See the certificate you receive",
+
       certificateText:
         "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
+
+      howTitle: "How it works",
+
+      howText:
+        "In a few steps, you create verifiable proof without uploading your file.",
+
+      howSteps: [
+        {
+          icon: "📁",
+          title: "Choose your file",
+          text: "Your file stays on your device. No upload is performed.",
+        },
+        {
+          icon: "🔐",
+          title: "Generate cryptographic proof",
+          text: "A unique hash is created and linked to a verifiable record.",
+        },
+        {
+          icon: "📄",
+          title: "Receive your certificate",
+          text: "Download the PDF certificate with QR Code and public verification.",
+        },
+      ],
+
       useCasesTitle: "Perfect for protecting",
+
       useCasesText:
         "Use GuardianChain to create proof of existence, authorship and integrity for important digital files.",
+
       useCases: [
         "AI-generated content",
         "Artwork & Design",
@@ -76,6 +146,7 @@ export default function LandingPage() {
         "Developers & Source Files",
         "Professional proposals & deliveries",
       ],
+
       switchToPt: "PT",
       switchToEn: "EN",
     },
@@ -142,10 +213,34 @@ export default function LandingPage() {
         </Link>
       </div>
 
-      <div style={styles.certificateSection}>
-        <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
+      <section style={styles.howSection}>
+        <h2 style={styles.howTitle}>{t.howTitle}</h2>
 
-        <p style={styles.certificateText}>{t.certificateText}</p>
+        <p style={styles.howText}>{t.howText}</p>
+
+        <div style={styles.howGrid}>
+          {t.howSteps.map((step, index) => (
+            <div key={step.title} style={styles.howCard}>
+              <div style={styles.howNumber}>{index + 1}</div>
+
+              <div style={styles.howIcon}>{step.icon}</div>
+
+              <h3 style={styles.howCardTitle}>{step.title}</h3>
+
+              <p style={styles.howCardText}>{step.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div style={styles.certificateSection}>
+        <h2 style={styles.certificateTitle}>
+          {t.certificateTitle}
+        </h2>
+
+        <p style={styles.certificateText}>
+          {t.certificateText}
+        </p>
 
         <img
           src={certificatePreview}
@@ -155,9 +250,13 @@ export default function LandingPage() {
       </div>
 
       <section style={styles.useCasesSection}>
-        <h2 style={styles.useCasesTitle}>{t.useCasesTitle}</h2>
+        <h2 style={styles.useCasesTitle}>
+          {t.useCasesTitle}
+        </h2>
 
-        <p style={styles.useCasesText}>{t.useCasesText}</p>
+        <p style={styles.useCasesText}>
+          {t.useCasesText}
+        </p>
 
         <div style={styles.useCasesGrid}>
           {t.useCases.map((item) => (
@@ -169,7 +268,9 @@ export default function LandingPage() {
         </div>
 
         <Link to={`/register?lang=${lang}`}>
-          <button style={styles.finalCta}>{t.register}</button>
+          <button style={styles.finalCta}>
+            {t.register}
+          </button>
         </Link>
       </section>
 
@@ -274,6 +375,69 @@ const styles = {
     cursor: "pointer",
   },
 
+  howSection: {
+    maxWidth: "1100px",
+    margin: "80px auto 0",
+    padding: "20px",
+  },
+
+  howTitle: {
+    fontSize: "32px",
+    marginBottom: "12px",
+  },
+
+  howText: {
+    maxWidth: "720px",
+    margin: "0 auto 40px",
+    opacity: 0.92,
+    lineHeight: "1.6",
+  },
+
+  howGrid: {
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: "20px",
+  },
+
+  howCard: {
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "20px",
+    padding: "28px 22px",
+    backdropFilter: "blur(10px)",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+  },
+
+  howNumber: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4b4fbf",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "800",
+    margin: "0 auto 16px",
+  },
+
+  howIcon: {
+    fontSize: "32px",
+    marginBottom: "14px",
+  },
+
+  howCardTitle: {
+    fontSize: "20px",
+    marginBottom: "10px",
+  },
+
+  howCardText: {
+    opacity: 0.92,
+    lineHeight: "1.6",
+    fontSize: "15px",
+  },
+
   certificateSection: {
     marginTop: "80px",
     textAlign: "center",
@@ -327,7 +491,8 @@ const styles = {
 
   useCasesGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "12px",
     marginBottom: "28px",
   },
