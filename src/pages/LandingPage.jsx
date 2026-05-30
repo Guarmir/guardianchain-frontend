@@ -2,6 +2,16 @@ import { Link, useSearchParams } from "react-router-dom"
 import Footer from "../components/Footer.jsx"
 import certificatePreview from "../assets/certificate-preview.png"
 
+const trackCreateProofClick = () => {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", "create_proof_click", {
+      event_category: "CTA",
+      event_label: "Landing Page Button",
+      value: 1,
+    })
+  }
+}
+
 export default function LandingPage() {
   const [params] = useSearchParams()
 
@@ -36,7 +46,6 @@ export default function LandingPage() {
         "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
 
       howTitle: "Como funciona",
-
       howText:
         "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
 
@@ -59,7 +68,6 @@ export default function LandingPage() {
       ],
 
       useCasesTitle: "Ideal para proteger",
-
       useCasesText:
         "Use o GuardianChain para criar prova de existência, autoria e integridade de arquivos digitais importantes.",
 
@@ -80,10 +88,7 @@ export default function LandingPage() {
 
     en: {
       title: "Protect your work before someone claims it.",
-
-      subtitle:
-        "Create immutable proof of ownership in less than 1 minute.",
-
+      subtitle: "Create immutable proof of ownership in less than 1 minute.",
       note:
         "Your file is never uploaded. Only the cryptographic hash is recorded.",
 
@@ -104,12 +109,10 @@ export default function LandingPage() {
       secure3: "Your file is never uploaded to our servers",
 
       certificateTitle: "See the certificate you receive",
-
       certificateText:
         "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
 
       howTitle: "How it works",
-
       howText:
         "In a few steps, you create verifiable proof without uploading your file.",
 
@@ -132,7 +135,6 @@ export default function LandingPage() {
       ],
 
       useCasesTitle: "Perfect for protecting",
-
       useCasesText:
         "Use GuardianChain to create proof of existence, authorship and integrity for important digital files.",
 
@@ -205,7 +207,12 @@ export default function LandingPage() {
         <p style={styles.secure}>{t.secure3}</p>
 
         <Link to={`/register?lang=${lang}`}>
-          <button style={styles.buttonPrimary}>{t.register}</button>
+          <button
+            style={styles.buttonPrimary}
+            onClick={trackCreateProofClick}
+          >
+            {t.register}
+          </button>
         </Link>
 
         <Link to={`/verify?lang=${lang}`}>
@@ -234,13 +241,9 @@ export default function LandingPage() {
       </section>
 
       <div style={styles.certificateSection}>
-        <h2 style={styles.certificateTitle}>
-          {t.certificateTitle}
-        </h2>
+        <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
 
-        <p style={styles.certificateText}>
-          {t.certificateText}
-        </p>
+        <p style={styles.certificateText}>{t.certificateText}</p>
 
         <img
           src={certificatePreview}
@@ -250,13 +253,9 @@ export default function LandingPage() {
       </div>
 
       <section style={styles.useCasesSection}>
-        <h2 style={styles.useCasesTitle}>
-          {t.useCasesTitle}
-        </h2>
+        <h2 style={styles.useCasesTitle}>{t.useCasesTitle}</h2>
 
-        <p style={styles.useCasesText}>
-          {t.useCasesText}
-        </p>
+        <p style={styles.useCasesText}>{t.useCasesText}</p>
 
         <div style={styles.useCasesGrid}>
           {t.useCases.map((item) => (
@@ -268,7 +267,10 @@ export default function LandingPage() {
         </div>
 
         <Link to={`/register?lang=${lang}`}>
-          <button style={styles.finalCta}>
+          <button
+            style={styles.finalCta}
+            onClick={trackCreateProofClick}
+          >
             {t.register}
           </button>
         </Link>
@@ -395,8 +397,7 @@ const styles = {
 
   howGrid: {
     display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit, minmax(240px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
     gap: "20px",
   },
 
@@ -491,8 +492,7 @@ const styles = {
 
   useCasesGrid: {
     display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit, minmax(220px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "12px",
     marginBottom: "28px",
   },
