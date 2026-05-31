@@ -1,10 +1,24 @@
 import { Link, useSearchParams } from "react-router-dom"
+import { useEffect } from "react"
 
 export default function Success() {
   const [params] = useSearchParams()
+
   const langParam = params.get("lang")
   const lang = langParam === "pt" ? "pt" : "en"
+
   const sessionId = params.get("session_id")
+
+  // Analytics - compra concluída
+  useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "purchase", {
+        transaction_id: sessionId || "unknown",
+        value: 4,
+        currency: "USD"
+      })
+    }
+  }, [sessionId])
 
   const handleDownload = () => {
     if (!sessionId) return
@@ -18,7 +32,11 @@ export default function Success() {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1>{lang === "pt" ? "Certificado criado" : "Certificate created"}</h1>
+        <h1>
+          {lang === "pt"
+            ? "Certificado criado"
+            : "Certificate created"}
+        </h1>
 
         <p>
           {lang === "pt"
@@ -32,19 +50,28 @@ export default function Success() {
             : "The certificate was sent to the email used during payment."}
         </p>
 
-        <button style={styles.buttonPrimary} onClick={handleDownload}>
-          {lang === "pt" ? "Baixar certificado" : "Download certificate"}
+        <button
+          style={styles.buttonPrimary}
+          onClick={handleDownload}
+        >
+          {lang === "pt"
+            ? "Baixar certificado"
+            : "Download certificate"}
         </button>
 
         <Link to={`/register?lang=${lang}`}>
           <button style={styles.buttonSecondary}>
-            {lang === "pt" ? "Registrar outro arquivo" : "Register another file"}
+            {lang === "pt"
+              ? "Registrar outro arquivo"
+              : "Register another file"}
           </button>
         </Link>
 
         <Link to={`/?lang=${lang}`}>
           <button style={styles.buttonSecondary}>
-            {lang === "pt" ? "Página inicial" : "Home"}
+            {lang === "pt"
+              ? "Página inicial"
+              : "Home"}
           </button>
         </Link>
       </div>
