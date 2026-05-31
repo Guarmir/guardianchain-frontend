@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ethers } from "ethers"
 import { Link, useSearchParams } from "react-router-dom"
 
@@ -29,6 +29,13 @@ export default function Register() {
   const [ownerType, setOwnerType] = useState("individual")
   const [acceptedDeclaration, setAcceptedDeclaration] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  // Analytics - entrada na página register
+  useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "register_page_view")
+    }
+  }, [])
 
   const text = {
     pt: {
@@ -114,6 +121,16 @@ export default function Register() {
       return
     }
 
+    // Analytics - clique no CTA
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "create_proof_click")
+    }
+
+    // Analytics - início do checkout
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "begin_checkout")
+    }
+
     setLoading(true)
 
     try {
@@ -176,22 +193,6 @@ export default function Register() {
             <div style={styles.privacyBox}>
               <span style={styles.privacyIcon}>🔒</span>
               <span>{t.privacy}</span>
-            </div>
-
-            <div style={styles.trustBox}>
-              <h3 style={styles.trustTitle}>{t.trustTitle}</h3>
-              <div style={styles.trustGrid}>
-                <div style={styles.trustItem}>📄 {t.trust1}</div>
-                <div style={styles.trustItem}>🌐 {t.trust2}</div>
-                <div style={styles.trustItem}>#️⃣ {t.trust3}</div>
-                <div style={styles.trustItem}>🛡 {t.trust4}</div>
-              </div>
-            </div>
-
-            <div style={styles.priceBox}>
-              <strong style={styles.price}>{t.price}</strong>
-              <span style={styles.priceNote}>{t.priceNote}</span>
-              <span style={styles.securePayment}>{t.securePayment}</span>
             </div>
           </div>
 
@@ -273,216 +274,5 @@ const styles = {
       "radial-gradient(circle at top left, rgba(129,140,248,0.35), transparent 32%), linear-gradient(180deg,#111827,#312e81 55%,#4338ca)",
     color: "#ffffff",
     padding: "24px 18px 56px",
-  },
-
-  hero: {
-    width: "100%",
-    maxWidth: "1120px",
-    margin: "0 auto",
-  },
-
-  topBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "48px",
-  },
-
-  homeLink: {
-    color: "#e0e7ff",
-    textDecoration: "none",
-    fontSize: "14px",
-  },
-
-  langPill: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    padding: "8px 12px",
-    background: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.18)",
-    borderRadius: "999px",
-  },
-
-  langLink: {
-    color: "#ffffff",
-    textDecoration: "none",
-    fontSize: "14px",
-    fontWeight: "700",
-  },
-
-  langDivider: {
-    opacity: 0.65,
-  },
-
-  heroContent: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "34px",
-    alignItems: "start",
-  },
-
-  left: {
-    paddingTop: "24px",
-  },
-
-  badge: {
-    display: "inline-block",
-    padding: "8px 12px",
-    background: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.18)",
-    borderRadius: "999px",
-    fontSize: "14px",
-    marginBottom: "18px",
-  },
-
-  title: {
-    fontSize: "44px",
-    lineHeight: "1.05",
-    margin: "0 0 16px",
-    letterSpacing: "-1px",
-  },
-
-  subtitle: {
-    fontSize: "18px",
-    lineHeight: "1.55",
-    color: "#e0e7ff",
-    marginBottom: "20px",
-  },
-
-  privacyBox: {
-    display: "flex",
-    gap: "10px",
-    alignItems: "flex-start",
-    padding: "14px",
-    background: "rgba(15,23,42,0.55)",
-    border: "1px solid rgba(255,255,255,0.14)",
-    borderRadius: "14px",
-    color: "#eef2ff",
-    lineHeight: "1.45",
-  },
-
-  privacyIcon: {
-    flexShrink: 0,
-  },
-
-  trustBox: {
-    marginTop: "22px",
-    padding: "18px",
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.14)",
-    borderRadius: "18px",
-  },
-
-  trustTitle: {
-    margin: "0 0 14px",
-    fontSize: "18px",
-  },
-
-  trustGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "10px",
-  },
-
-  trustItem: {
-    fontSize: "14px",
-    color: "#f8fafc",
-    lineHeight: "1.4",
-  },
-
-  priceBox: {
-    marginTop: "22px",
-    display: "grid",
-    gap: "4px",
-  },
-
-  price: {
-    fontSize: "34px",
-  },
-
-  priceNote: {
-    color: "#e0e7ff",
-  },
-
-  securePayment: {
-    color: "#c7d2fe",
-    fontSize: "14px",
-  },
-
-  card: {
-    width: "100%",
-    background: "rgba(255,255,255,0.96)",
-    color: "#111827",
-    borderRadius: "24px",
-    padding: "30px",
-    boxShadow: "0 24px 80px rgba(0,0,0,0.28)",
-    border: "1px solid rgba(255,255,255,0.4)",
-  },
-
-  fileLabel: {
-    display: "inline-block",
-    padding: "13px 18px",
-    background: "#111827",
-    color: "#fff",
-    borderRadius: "12px",
-    cursor: "pointer",
-    marginBottom: "10px",
-    fontWeight: "700",
-  },
-
-  fileText: {
-    color: "#4b5563",
-    marginBottom: "14px",
-  },
-
-  hashBox: {
-    marginTop: "16px",
-    padding: "14px",
-    background: "#eef2ff",
-    border: "1px solid #c7d2fe",
-    borderRadius: "14px",
-    wordBreak: "break-all",
-    display: "grid",
-    gap: "6px",
-    color: "#1e1b4b",
-  },
-
-  sectionTitle: {
-    fontSize: "20px",
-    marginTop: "28px",
-    marginBottom: "14px",
-  },
-
-  input: {
-    boxSizing: "border-box",
-    width: "100%",
-    padding: "14px",
-    marginBottom: "12px",
-    borderRadius: "12px",
-    border: "1px solid #d1d5db",
-    fontSize: "15px",
-    outlineColor: "#6366f1",
-    background: "#ffffff",
-  },
-
-  checkboxRow: {
-    display: "flex",
-    gap: "10px",
-    alignItems: "flex-start",
-    margin: "14px 0 22px",
-    color: "#374151",
-    lineHeight: "1.45",
-  },
-
-  button: {
-    width: "100%",
-    padding: "15px",
-    background: "linear-gradient(90deg,#4f46e5,#6366f1)",
-    color: "#fff",
-    border: "none",
-    borderRadius: "14px",
-    fontSize: "16px",
-    fontWeight: "800",
   },
 }
