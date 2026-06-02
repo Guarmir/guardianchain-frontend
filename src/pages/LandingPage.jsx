@@ -20,26 +20,29 @@ export default function LandingPage() {
 
   const t = {
     pt: {
-      title: "Proteja seu trabalho antes que alguém reivindique autoria.",
-      subtitle: "Crie uma prova imutável de propriedade em menos de 1 minuto.",
+      title: "Antes que alguém copie seu trabalho... prove que ele já era seu primeiro.",
+      subtitle:
+        "Crie uma prova verificável de propriedade para arquivos, designs, ideias e documentos em menos de 1 minuto.",
+      emotional:
+        "Se alguém copiar seu trabalho amanhã, você pode precisar provar que ele já existia hoje.",
       note:
         "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
 
-      feature1: "Proteção de autoria",
-      feature2: "Prova imutável",
+      feature1: "Arquivo nunca enviado",
+      feature2: "Registro em blockchain",
       feature3: "Verificação pública",
-      feature4: "Protegido por blockchain",
+      feature4: "Certificado PDF incluído",
 
       priceTitle: "Registro único",
       price: "R$ 19,90",
       pay: "pagamento único",
 
-      register: "Criar prova agora",
+      register: "Proteger meu arquivo agora",
       verify: "Verificar certificado",
 
       secure1: "Pagamento seguro via Stripe",
       secure2: "Certificado gerado imediatamente após o pagamento",
-      secure3: "Seu arquivo nunca é enviado para nossos servidores",
+      secure3: "Sem assinatura. Sem mensalidade.",
 
       certificateTitle: "Veja o certificado que você recebe",
       certificateText:
@@ -87,26 +90,29 @@ export default function LandingPage() {
     },
 
     en: {
-      title: "Protect your work before someone claims it.",
-      subtitle: "Create immutable proof of ownership in less than 1 minute.",
+      title: "Before someone copies your work... prove it was yours first.",
+      subtitle:
+        "Create verifiable proof of ownership for your files, designs, ideas and documents in less than 1 minute.",
+      emotional:
+        "If someone copies your work tomorrow, you may need proof that it existed today.",
       note:
         "Your file is never uploaded. Only the cryptographic hash is recorded.",
 
-      feature1: "Protect authorship",
-      feature2: "Immutable proof",
+      feature1: "File never uploaded",
+      feature2: "Blockchain timestamp",
       feature3: "Public verification",
-      feature4: "Blockchain secured",
+      feature4: "PDF certificate included",
 
       priceTitle: "One-time registration",
       price: "US$ 4",
       pay: "one-time payment",
 
-      register: "Create proof now",
+      register: "Protect My File Now",
       verify: "Verify certificate",
 
       secure1: "Secure payment powered by Stripe",
       secure2: "Certificate generated immediately after payment",
-      secure3: "Your file is never uploaded to our servers",
+      secure3: "No subscription. No monthly fees.",
 
       certificateTitle: "See the certificate you receive",
       certificateText:
@@ -186,6 +192,8 @@ export default function LandingPage() {
 
       <p style={styles.subtitle}>{t.subtitle}</p>
 
+      <p style={styles.emotional}>{t.emotional}</p>
+
       <p style={styles.note}>{t.note}</p>
 
       <div style={styles.features}>
@@ -202,9 +210,9 @@ export default function LandingPage() {
 
         <p>{t.pay}</p>
 
-        <p style={styles.secure}>{t.secure1}</p>
-        <p style={styles.secure}>{t.secure2}</p>
-        <p style={styles.secure}>{t.secure3}</p>
+        <p style={styles.secure}>✓ {t.secure1}</p>
+        <p style={styles.secure}>✓ {t.secure2}</p>
+        <p style={styles.secure}>✓ {t.secure3}</p>
 
         <Link to={`/register?lang=${lang}`}>
           <button
@@ -241,9 +249,13 @@ export default function LandingPage() {
       </section>
 
       <div style={styles.certificateSection}>
-        <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
+        <h2 style={styles.certificateTitle}>
+          {t.certificateTitle}
+        </h2>
 
-        <p style={styles.certificateText}>{t.certificateText}</p>
+        <p style={styles.certificateText}>
+          {t.certificateText}
+        </p>
 
         <img
           src={certificatePreview}
@@ -253,9 +265,13 @@ export default function LandingPage() {
       </div>
 
       <section style={styles.useCasesSection}>
-        <h2 style={styles.useCasesTitle}>{t.useCasesTitle}</h2>
+        <h2 style={styles.useCasesTitle}>
+          {t.useCasesTitle}
+        </h2>
 
-        <p style={styles.useCasesText}>{t.useCasesText}</p>
+        <p style={styles.useCasesText}>
+          {t.useCasesText}
+        </p>
 
         <div style={styles.useCasesGrid}>
           {t.useCases.map((item) => (
@@ -318,6 +334,15 @@ const styles = {
     marginBottom: "10px",
   },
 
+  emotional: {
+    maxWidth: "760px",
+    margin: "0 auto 14px",
+    fontSize: "18px",
+    lineHeight: "1.6",
+    fontWeight: "700",
+    color: "#ffffff",
+  },
+
   note: {
     opacity: 0.9,
     marginBottom: "20px",
@@ -364,6 +389,7 @@ const styles = {
     color: "white",
     borderRadius: "8px",
     cursor: "pointer",
+    fontWeight: "800",
   },
 
   buttonSecondary: {
@@ -397,7 +423,8 @@ const styles = {
 
   howGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(240px, 1fr))",
     gap: "20px",
   },
 
@@ -492,7 +519,8 @@ const styles = {
 
   useCasesGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "12px",
     marginBottom: "28px",
   },
