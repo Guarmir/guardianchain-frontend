@@ -30,7 +30,6 @@ export default function Register() {
   const [acceptedDeclaration, setAcceptedDeclaration] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // Analytics - entrada na página register
   useEffect(() => {
     if (typeof window.gtag === "function") {
       window.gtag("event", "register_page_view")
@@ -44,7 +43,8 @@ export default function Register() {
       title: "Registrar prova digital",
       subtitle:
         "Gere uma prova criptográfica do seu arquivo, vinculada ao titular declarado e entregue em certificado PDF.",
-      privacy: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é gerado no seu navegador.",
+      privacy:
+        "Seu arquivo nunca é enviado. Apenas o hash criptográfico é gerado no seu navegador.",
       choose: "Escolher arquivo",
       selected: "Arquivo selecionado",
       noFile: "Nenhum arquivo escolhido",
@@ -59,7 +59,8 @@ export default function Register() {
         "Declaro, sob minha responsabilidade, que sou o autor, titular ou possuo direito legítimo sobre o conteúdo representado por este hash.",
       pay: "Gerar certificado e pagar",
       loading: "Redirecionando para pagamento...",
-      required: "Preencha todos os dados, escolha um arquivo e aceite a declaração.",
+      required:
+        "Preencha todos os dados, escolha um arquivo e aceite a declaração.",
       trustTitle: "O que você recebe",
       trust1: "Certificado PDF com titular declarado",
       trust2: "QR Code para verificação pública",
@@ -75,7 +76,8 @@ export default function Register() {
       title: "Register digital proof",
       subtitle:
         "Generate cryptographic proof for your file, linked to the declared holder and delivered as a PDF certificate.",
-      privacy: "Your file is never uploaded. Only the cryptographic hash is generated in your browser.",
+      privacy:
+        "Your file is never uploaded. Only the cryptographic hash is generated in your browser.",
       choose: "Choose file",
       selected: "Selected file",
       noFile: "No file selected",
@@ -99,7 +101,7 @@ export default function Register() {
       price: "US$ 4",
       priceNote: "one-time payment",
       securePayment: "Secure payment powered by Stripe",
-    }
+    },
   }
 
   const t = text[lang]
@@ -116,18 +118,19 @@ export default function Register() {
   }
 
   const handleCheckout = async () => {
-    if (!fileHash || !fileName || !ownerName || !ownerEmail || !acceptedDeclaration) {
+    if (
+      !fileHash ||
+      !fileName ||
+      !ownerName ||
+      !ownerEmail ||
+      !acceptedDeclaration
+    ) {
       alert(t.required)
       return
     }
 
-    // Analytics - clique no CTA
     if (typeof window.gtag === "function") {
       window.gtag("event", "create_proof_click")
-    }
-
-    // Analytics - início do checkout
-    if (typeof window.gtag === "function") {
       window.gtag("event", "begin_checkout")
     }
 
@@ -137,7 +140,7 @@ export default function Register() {
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           hash: fileHash,
@@ -146,8 +149,8 @@ export default function Register() {
           ownerName,
           ownerEmail,
           ownerType,
-          ownershipDeclaration: acceptedDeclaration
-        })
+          ownershipDeclaration: acceptedDeclaration,
+        }),
       })
 
       const data = await response.json()
@@ -166,7 +169,7 @@ export default function Register() {
 
   return (
     <main style={styles.page}>
-      <section style={styles.hero}>
+      <section style={styles.wrapper}>
         <div style={styles.topBar}>
           <Link to={`/?lang=${lang}`} style={styles.homeLink}>
             ← {t.home}
@@ -183,23 +186,44 @@ export default function Register() {
           </div>
         </div>
 
-        <div style={styles.heroContent}>
+        <div style={styles.grid}>
           <div style={styles.left}>
             <div style={styles.badge}>⛓ {t.badge}</div>
 
             <h1 style={styles.title}>{t.title}</h1>
+
             <p style={styles.subtitle}>{t.subtitle}</p>
 
             <div style={styles.privacyBox}>
               <span style={styles.privacyIcon}>🔒</span>
               <span>{t.privacy}</span>
             </div>
+
+            <div style={styles.trustBox}>
+              <h2 style={styles.trustTitle}>{t.trustTitle}</h2>
+
+              <div style={styles.trustItem}>✓ {t.trust1}</div>
+              <div style={styles.trustItem}>✓ {t.trust2}</div>
+              <div style={styles.trustItem}>✓ {t.trust3}</div>
+              <div style={styles.trustItem}>✓ {t.trust4}</div>
+            </div>
           </div>
 
           <section style={styles.card}>
+            <div style={styles.priceBox}>
+              <span style={styles.price}>{t.price}</span>
+              <span style={styles.priceNote}>{t.priceNote}</span>
+            </div>
+
+            <p style={styles.securePayment}>🔐 {t.securePayment}</p>
+
             <label style={styles.fileLabel}>
               {t.choose}
-              <input type="file" onChange={handleFileChange} style={{ display: "none" }} />
+              <input
+                type="file"
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
             </label>
 
             <p style={styles.fileText}>
@@ -253,7 +277,7 @@ export default function Register() {
               style={{
                 ...styles.button,
                 opacity: loading ? 0.75 : 1,
-                cursor: loading ? "not-allowed" : "pointer"
+                cursor: loading ? "not-allowed" : "pointer",
               }}
               onClick={handleCheckout}
               disabled={loading}
@@ -274,5 +298,224 @@ const styles = {
       "radial-gradient(circle at top left, rgba(129,140,248,0.35), transparent 32%), linear-gradient(180deg,#111827,#312e81 55%,#4338ca)",
     color: "#ffffff",
     padding: "24px 18px 56px",
+  },
+
+  wrapper: {
+    maxWidth: "1120px",
+    margin: "0 auto",
+  },
+
+  topBar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "42px",
+  },
+
+  homeLink: {
+    color: "#ffffff",
+    textDecoration: "none",
+    fontWeight: "700",
+  },
+
+  langPill: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "8px 14px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    borderRadius: "999px",
+  },
+
+  langLink: {
+    color: "#ffffff",
+    textDecoration: "none",
+    fontWeight: "700",
+    fontSize: "14px",
+  },
+
+  langDivider: {
+    opacity: 0.7,
+  },
+
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 460px",
+    gap: "44px",
+    alignItems: "start",
+  },
+
+  left: {
+    paddingTop: "26px",
+  },
+
+  badge: {
+    display: "inline-block",
+    padding: "8px 14px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    borderRadius: "999px",
+    fontSize: "14px",
+    fontWeight: "700",
+    marginBottom: "24px",
+  },
+
+  title: {
+    fontSize: "46px",
+    lineHeight: "1.08",
+    margin: "0 0 18px",
+    maxWidth: "620px",
+  },
+
+  subtitle: {
+    fontSize: "18px",
+    lineHeight: "1.6",
+    opacity: 0.94,
+    maxWidth: "620px",
+    marginBottom: "22px",
+  },
+
+  privacyBox: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "10px",
+    maxWidth: "620px",
+    padding: "16px 18px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "16px",
+    lineHeight: "1.5",
+  },
+
+  privacyIcon: {
+    flexShrink: 0,
+  },
+
+  trustBox: {
+    marginTop: "28px",
+    maxWidth: "620px",
+    padding: "24px",
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "20px",
+  },
+
+  trustTitle: {
+    margin: "0 0 16px",
+    fontSize: "22px",
+  },
+
+  trustItem: {
+    marginBottom: "10px",
+    fontSize: "15px",
+    opacity: 0.95,
+  },
+
+  card: {
+    background: "#ffffff",
+    color: "#111827",
+    borderRadius: "24px",
+    padding: "30px",
+    boxShadow: "0 28px 70px rgba(0,0,0,0.35)",
+  },
+
+  priceBox: {
+    display: "flex",
+    alignItems: "baseline",
+    gap: "10px",
+    justifyContent: "center",
+    marginBottom: "8px",
+  },
+
+  price: {
+    fontSize: "38px",
+    fontWeight: "900",
+    color: "#312e81",
+  },
+
+  priceNote: {
+    fontSize: "14px",
+    color: "#6b7280",
+  },
+
+  securePayment: {
+    textAlign: "center",
+    color: "#4b5563",
+    fontSize: "14px",
+    marginBottom: "22px",
+  },
+
+  fileLabel: {
+    display: "block",
+    width: "100%",
+    textAlign: "center",
+    padding: "15px",
+    background: "#4b4fbf",
+    color: "#ffffff",
+    borderRadius: "12px",
+    cursor: "pointer",
+    fontWeight: "800",
+    marginBottom: "12px",
+  },
+
+  fileText: {
+    fontSize: "14px",
+    color: "#4b5563",
+    textAlign: "center",
+    marginBottom: "18px",
+    wordBreak: "break-word",
+  },
+
+  hashBox: {
+    padding: "14px",
+    background: "#f3f4f6",
+    border: "1px solid #e5e7eb",
+    borderRadius: "14px",
+    marginBottom: "22px",
+    fontSize: "13px",
+    wordBreak: "break-all",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+
+  sectionTitle: {
+    fontSize: "22px",
+    margin: "22px 0 16px",
+    color: "#111827",
+  },
+
+  input: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "14px 15px",
+    borderRadius: "12px",
+    border: "1px solid #d1d5db",
+    marginBottom: "12px",
+    fontSize: "15px",
+    outline: "none",
+  },
+
+  checkboxRow: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "10px",
+    fontSize: "14px",
+    lineHeight: "1.5",
+    color: "#374151",
+    margin: "10px 0 20px",
+  },
+
+  button: {
+    width: "100%",
+    padding: "16px",
+    background: "#4338ca",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "14px",
+    fontSize: "16px",
+    fontWeight: "900",
+    cursor: "pointer",
   },
 }
