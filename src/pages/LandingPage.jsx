@@ -67,6 +67,16 @@ export default function LandingPage() {
         "Pagamento seguro via Stripe",
       ],
 
+      independentTitle: "Verificação independente",
+      independentText:
+        "Sua prova não depende apenas do GuardianChain. Cada registro é vinculado a uma blockchain pública e pode ser verificado independentemente utilizando o hash, QR Code e dados do certificado.",
+      independentItems: [
+        "Registros públicos em blockchain",
+        "QR Code verificável",
+        "Hash auditável",
+        "Verificação independente",
+      ],
+
       certificateTitle: "Veja o certificado que você recebe",
       certificateText:
         "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
@@ -145,6 +155,16 @@ export default function LandingPage() {
         "Independent verification",
         "Public blockchain records",
         "Secure payment via Stripe",
+      ],
+
+      independentTitle: "Independent verification",
+      independentText:
+        "Your proof does not depend only on GuardianChain. Each record is linked to a public blockchain and can be independently verified using the hash, QR Code and certificate data.",
+      independentItems: [
+        "Public blockchain records",
+        "Verifiable QR Code",
+        "Auditable hash",
+        "Independent verification",
       ],
 
       certificateTitle: "See the certificate you receive",
@@ -260,6 +280,21 @@ export default function LandingPage() {
           {t.trustItems.map((item) => (
             <div key={item} style={styles.trustCard}>
               <span style={styles.trustCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section style={styles.independentSection}>
+        <h2 style={styles.independentTitle}>{t.independentTitle}</h2>
+
+        <p style={styles.independentText}>{t.independentText}</p>
+
+        <div style={styles.independentGrid}>
+          {t.independentItems.map((item) => (
+            <div key={item} style={styles.independentCard}>
+              <span style={styles.independentCheck}>✓</span>
               <span>{item}</span>
             </div>
           ))}
@@ -504,6 +539,58 @@ const styles = {
   },
 
   trustCheck: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4338ca",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "800",
+    flexShrink: 0,
+  },
+
+  independentSection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "40px 24px",
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+  },
+
+  independentTitle: {
+    fontSize: "32px",
+    marginBottom: "18px",
+  },
+
+  independentText: {
+    maxWidth: "760px",
+    margin: "0 auto 30px",
+    lineHeight: "1.7",
+    opacity: 0.94,
+  },
+
+  independentGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "14px",
+  },
+
+  independentCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "14px",
+    textAlign: "left",
+  },
+
+  independentCheck: {
     width: "22px",
     height: "22px",
     borderRadius: "999px",
