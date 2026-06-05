@@ -2,16 +2,6 @@ import { Link, useSearchParams } from "react-router-dom"
 import Footer from "../components/Footer.jsx"
 import certificatePreview from "../assets/certificate-preview.png"
 
-const trackCreateProofClick = () => {
-  if (typeof window !== "undefined" && typeof window.gtag === "function") {
-    window.gtag("event", "create_proof_click", {
-      event_category: "CTA",
-      event_label: "Landing Page Button",
-      value: 1,
-    })
-  }
-}
-
 export default function LandingPage() {
   const [params] = useSearchParams()
 
@@ -20,38 +10,28 @@ export default function LandingPage() {
 
   const t = {
     pt: {
-      title: "Antes que alguém copie seu trabalho... prove que ele já era seu primeiro.",
-      subtitle:
-        "Crie uma prova verificável de propriedade para arquivos, designs, ideias e documentos em menos de 1 minuto.",
-      emotional:
-        "Se alguém copiar seu trabalho amanhã, você pode precisar provar que ele já existia hoje.",
-      note:
-        "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
+      title: "Proteja seu trabalho antes que alguém reivindique autoria.",
+      subtitle: "Crie uma prova imutável de propriedade em menos de 1 minuto.",
+      note: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
 
-      feature1: "Arquivo nunca enviado",
-      feature2: "Registro em blockchain",
+      feature1: "Proteção de autoria",
+      feature2: "Prova imutável",
       feature3: "Verificação pública",
-      feature4: "Certificado PDF incluído",
+      feature4: "Protegido por blockchain",
 
       priceTitle: "Registro único",
       price: "R$ 19,90",
       pay: "pagamento único",
 
-      register: "Proteger meu arquivo agora",
+      register: "Criar prova agora",
       verify: "Verificar certificado",
 
       secure1: "Pagamento seguro via Stripe",
       secure2: "Certificado gerado imediatamente após o pagamento",
-      secure3: "Sem assinatura. Sem mensalidade.",
-
-      certificateTitle: "Veja o certificado que você recebe",
-      certificateText:
-        "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
+      secure3: "Seu arquivo nunca é enviado para nossos servidores",
 
       howTitle: "Como funciona",
-      howText:
-        "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
-
+      howText: "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
       howSteps: [
         {
           icon: "📁",
@@ -70,10 +50,30 @@ export default function LandingPage() {
         },
       ],
 
+      aboutTitle: "Quem está por trás do GuardianChain?",
+      aboutText:
+        "O GuardianChain foi criado para fornecer uma infraestrutura acessível, focada em privacidade e verificação independente de provas digitais para criadores, desenvolvedores, profissionais e empresas em todo o mundo.",
+      aboutText2:
+        "A plataforma foi construída com um princípio simples: seus arquivos devem permanecer sob seu controle.",
+      aboutText3:
+        "O GuardianChain nunca faz upload ou armazena o arquivo original. Apenas a impressão digital criptográfica (hash) é registrada e vinculada a registros públicos em blockchain.",
+      aboutText4:
+        "Nosso objetivo é tornar a evidência digital mais acessível, transparente e verificável para a internet moderna.",
+      trustItems: [
+        "Arquitetura focada em privacidade",
+        "Sem upload de arquivos",
+        "Verificação independente",
+        "Registros públicos em blockchain",
+        "Pagamento seguro via Stripe",
+      ],
+
+      certificateTitle: "Veja o certificado que você recebe",
+      certificateText:
+        "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
+
       useCasesTitle: "Ideal para proteger",
       useCasesText:
         "Use o GuardianChain para criar prova de existência, autoria e integridade de arquivos digitais importantes.",
-
       useCases: [
         "Conteúdo gerado por IA",
         "Artes e Design",
@@ -90,38 +90,28 @@ export default function LandingPage() {
     },
 
     en: {
-      title: "Before someone copies your work... prove it was yours first.",
-      subtitle:
-        "Create verifiable proof of ownership for your files, designs, ideas and documents in less than 1 minute.",
-      emotional:
-        "If someone copies your work tomorrow, you may need proof that it existed today.",
-      note:
-        "Your file is never uploaded. Only the cryptographic hash is recorded.",
+      title: "Protect your work before someone claims it.",
+      subtitle: "Create immutable proof of ownership in less than 1 minute.",
+      note: "Your file is never uploaded. Only the cryptographic hash is recorded.",
 
-      feature1: "File never uploaded",
-      feature2: "Blockchain timestamp",
+      feature1: "Protect authorship",
+      feature2: "Immutable proof",
       feature3: "Public verification",
-      feature4: "PDF certificate included",
+      feature4: "Blockchain secured",
 
       priceTitle: "One-time registration",
       price: "US$ 4",
       pay: "one-time payment",
 
-      register: "Protect My File Now",
+      register: "Create proof now",
       verify: "Verify certificate",
 
       secure1: "Secure payment powered by Stripe",
       secure2: "Certificate generated immediately after payment",
-      secure3: "No subscription. No monthly fees.",
-
-      certificateTitle: "See the certificate you receive",
-      certificateText:
-        "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
+      secure3: "Your file is never uploaded to our servers",
 
       howTitle: "How it works",
-      howText:
-        "In a few steps, you create verifiable proof without uploading your file.",
-
+      howText: "In a few steps, you create verifiable proof without uploading your file.",
       howSteps: [
         {
           icon: "📁",
@@ -140,10 +130,30 @@ export default function LandingPage() {
         },
       ],
 
+      aboutTitle: "Who is behind GuardianChain?",
+      aboutText:
+        "GuardianChain was created to provide accessible, privacy-first and independently verifiable digital proof infrastructure for creators, developers, professionals and businesses worldwide.",
+      aboutText2:
+        "The platform was designed around a simple principle: your files should remain under your control.",
+      aboutText3:
+        "GuardianChain never uploads or stores the original file. Only the cryptographic fingerprint (hash) is registered and anchored to public blockchain records.",
+      aboutText4:
+        "Our goal is to make digital evidence more accessible, transparent and independently verifiable for the modern internet.",
+      trustItems: [
+        "Privacy-first architecture",
+        "No file upload",
+        "Independent verification",
+        "Public blockchain records",
+        "Secure payment via Stripe",
+      ],
+
+      certificateTitle: "See the certificate you receive",
+      certificateText:
+        "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
+
       useCasesTitle: "Perfect for protecting",
       useCasesText:
         "Use GuardianChain to create proof of existence, authorship and integrity for important digital files.",
-
       useCases: [
         "AI-generated content",
         "Artwork & Design",
@@ -192,8 +202,6 @@ export default function LandingPage() {
 
       <p style={styles.subtitle}>{t.subtitle}</p>
 
-      <p style={styles.emotional}>{t.emotional}</p>
-
       <p style={styles.note}>{t.note}</p>
 
       <div style={styles.features}>
@@ -210,17 +218,12 @@ export default function LandingPage() {
 
         <p>{t.pay}</p>
 
-        <p style={styles.secure}>✓ {t.secure1}</p>
-        <p style={styles.secure}>✓ {t.secure2}</p>
-        <p style={styles.secure}>✓ {t.secure3}</p>
+        <p style={styles.secure}>{t.secure1}</p>
+        <p style={styles.secure}>{t.secure2}</p>
+        <p style={styles.secure}>{t.secure3}</p>
 
         <Link to={`/register?lang=${lang}`}>
-          <button
-            style={styles.buttonPrimary}
-            onClick={trackCreateProofClick}
-          >
-            {t.register}
-          </button>
+          <button style={styles.buttonPrimary}>{t.register}</button>
         </Link>
 
         <Link to={`/verify?lang=${lang}`}>
@@ -237,25 +240,36 @@ export default function LandingPage() {
           {t.howSteps.map((step, index) => (
             <div key={step.title} style={styles.howCard}>
               <div style={styles.howNumber}>{index + 1}</div>
-
               <div style={styles.howIcon}>{step.icon}</div>
-
               <h3 style={styles.howCardTitle}>{step.title}</h3>
-
               <p style={styles.howCardText}>{step.text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <div style={styles.certificateSection}>
-        <h2 style={styles.certificateTitle}>
-          {t.certificateTitle}
-        </h2>
+      <section style={styles.aboutSection}>
+        <h2 style={styles.aboutTitle}>{t.aboutTitle}</h2>
 
-        <p style={styles.certificateText}>
-          {t.certificateText}
-        </p>
+        <p style={styles.aboutText}>{t.aboutText}</p>
+        <p style={styles.aboutText}>{t.aboutText2}</p>
+        <p style={styles.aboutText}>{t.aboutText3}</p>
+        <p style={styles.aboutText}>{t.aboutText4}</p>
+
+        <div style={styles.trustGrid}>
+          {t.trustItems.map((item) => (
+            <div key={item} style={styles.trustCard}>
+              <span style={styles.trustCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div style={styles.certificateSection}>
+        <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
+
+        <p style={styles.certificateText}>{t.certificateText}</p>
 
         <img
           src={certificatePreview}
@@ -265,13 +279,9 @@ export default function LandingPage() {
       </div>
 
       <section style={styles.useCasesSection}>
-        <h2 style={styles.useCasesTitle}>
-          {t.useCasesTitle}
-        </h2>
+        <h2 style={styles.useCasesTitle}>{t.useCasesTitle}</h2>
 
-        <p style={styles.useCasesText}>
-          {t.useCasesText}
-        </p>
+        <p style={styles.useCasesText}>{t.useCasesText}</p>
 
         <div style={styles.useCasesGrid}>
           {t.useCases.map((item) => (
@@ -283,12 +293,7 @@ export default function LandingPage() {
         </div>
 
         <Link to={`/register?lang=${lang}`}>
-          <button
-            style={styles.finalCta}
-            onClick={trackCreateProofClick}
-          >
-            {t.register}
-          </button>
+          <button style={styles.finalCta}>{t.register}</button>
         </Link>
       </section>
 
@@ -332,15 +337,6 @@ const styles = {
   subtitle: {
     fontSize: "20px",
     marginBottom: "10px",
-  },
-
-  emotional: {
-    maxWidth: "760px",
-    margin: "0 auto 14px",
-    fontSize: "18px",
-    lineHeight: "1.6",
-    fontWeight: "700",
-    color: "#ffffff",
   },
 
   note: {
@@ -389,7 +385,7 @@ const styles = {
     color: "white",
     borderRadius: "8px",
     cursor: "pointer",
-    fontWeight: "800",
+    fontWeight: "700",
   },
 
   buttonSecondary: {
@@ -401,6 +397,7 @@ const styles = {
     color: "white",
     borderRadius: "8px",
     cursor: "pointer",
+    fontWeight: "700",
   },
 
   howSection: {
@@ -423,8 +420,7 @@ const styles = {
 
   howGrid: {
     display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit, minmax(240px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
     gap: "20px",
   },
 
@@ -464,6 +460,60 @@ const styles = {
     opacity: 0.92,
     lineHeight: "1.6",
     fontSize: "15px",
+  },
+
+  aboutSection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "40px 24px",
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+  },
+
+  aboutTitle: {
+    fontSize: "32px",
+    marginBottom: "24px",
+  },
+
+  aboutText: {
+    maxWidth: "820px",
+    margin: "0 auto 18px",
+    lineHeight: "1.7",
+    opacity: 0.94,
+    fontSize: "16px",
+  },
+
+  trustGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "14px",
+    marginTop: "36px",
+  },
+
+  trustCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "14px",
+    textAlign: "left",
+  },
+
+  trustCheck: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4338ca",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "800",
+    flexShrink: 0,
   },
 
   certificateSection: {
@@ -519,8 +569,7 @@ const styles = {
 
   useCasesGrid: {
     display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit, minmax(220px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "12px",
     marginBottom: "28px",
   },
