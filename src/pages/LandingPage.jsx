@@ -8,6 +8,8 @@ export default function LandingPage() {
   const langParam = params.get("lang")
   const lang = langParam === "pt" ? "pt" : "en"
 
+  const linkedinUrl = "https://www.linkedin.com/in/guardianchain/"
+
   const t = {
     pt: {
       title: "Proteja seu trabalho antes que alguém reivindique autoria.",
@@ -66,6 +68,13 @@ export default function LandingPage() {
         "Registros públicos em blockchain",
         "Pagamento seguro via Stripe",
       ],
+
+      founderTitle: "Presença pública do fundador",
+      founderText:
+        "O GuardianChain é desenvolvido por Valderi Miranda, fundador do projeto, com foco em prova digital verificável, blockchain, privacidade e proteção de arquivos digitais.",
+      founderText2:
+        "Você pode ver a presença pública do fundador no LinkedIn, acompanhar publicações sobre o projeto e verificar que existe uma pessoa real construindo a plataforma.",
+      founderButton: "Ver perfil no LinkedIn",
 
       independentTitle: "Verificação independente",
       independentText:
@@ -156,6 +165,13 @@ export default function LandingPage() {
         "Public blockchain records",
         "Secure payment via Stripe",
       ],
+
+      founderTitle: "Public founder presence",
+      founderText:
+        "GuardianChain is developed by Valderi Miranda, founder of the project, focused on verifiable digital proof, blockchain, privacy and digital file protection.",
+      founderText2:
+        "You can view the founder’s public LinkedIn profile, follow project updates and verify that there is a real person building the platform.",
+      founderButton: "View LinkedIn profile",
 
       independentTitle: "Independent verification",
       independentText:
@@ -284,6 +300,22 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section style={styles.founderSection}>
+        <h2 style={styles.founderTitle}>{t.founderTitle}</h2>
+
+        <p style={styles.founderText}>{t.founderText}</p>
+        <p style={styles.founderText}>{t.founderText2}</p>
+
+        <a
+          href={linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.linkedinButton}
+        >
+          {t.founderButton}
+        </a>
       </section>
 
       <section style={styles.independentSection}>
@@ -549,6 +581,40 @@ const styles = {
     justifyContent: "center",
     fontWeight: "800",
     flexShrink: 0,
+  },
+
+  founderSection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "40px 24px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+  },
+
+  founderTitle: {
+    fontSize: "32px",
+    marginBottom: "18px",
+  },
+
+  founderText: {
+    maxWidth: "780px",
+    margin: "0 auto 18px",
+    lineHeight: "1.7",
+    opacity: 0.94,
+    fontSize: "16px",
+  },
+
+  linkedinButton: {
+    display: "inline-block",
+    marginTop: "18px",
+    padding: "14px 22px",
+    background: "#ffffff",
+    color: "#4338ca",
+    borderRadius: "12px",
+    textDecoration: "none",
+    fontWeight: "800",
   },
 
   independentSection: {
