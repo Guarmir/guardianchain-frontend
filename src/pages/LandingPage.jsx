@@ -32,6 +32,28 @@ export default function LandingPage() {
       secure2: "Certificado gerado imediatamente após o pagamento",
       secure3: "Seu arquivo nunca é enviado para nossos servidores",
 
+      riskTitle: "O que pode acontecer sem uma prova?",
+      riskText:
+        "Na internet, arquivos são copiados, reenviados e contestados rapidamente. Sem uma prova independente, pode ser difícil demonstrar quando aquele conteúdo já existia.",
+      riskItems: [
+        "Conteúdo de IA repostado sem crédito",
+        "Disputas sobre código-fonte antes do lançamento",
+        "Clientes questionando datas de entrega",
+        "Prints rejeitados como evidência fraca",
+        "Perda de comprovação de autoria",
+      ],
+
+      socialTitle: "Criado para profissionais digitais",
+      socialText:
+        "GuardianChain foi pensado para criadores, desenvolvedores, freelancers, designers e profissionais que precisam preservar evidências digitais de forma simples.",
+      socialItems: [
+        "Criadores de conteúdo",
+        "Desenvolvedores",
+        "Designers",
+        "Freelancers",
+        "Profissionais e empresas",
+      ],
+
       howTitle: "Como funciona",
       howText: "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
       howSteps: [
@@ -142,6 +164,28 @@ export default function LandingPage() {
       secure1: "Secure payment powered by Stripe",
       secure2: "Certificate generated immediately after payment",
       secure3: "Your file is never uploaded to our servers",
+
+      riskTitle: "What can happen without proof?",
+      riskText:
+        "On the internet, files are copied, reposted and disputed quickly. Without independent proof, it can be difficult to show when that content already existed.",
+      riskItems: [
+        "AI-generated content reposted without attribution",
+        "Source code disputes before launch",
+        "Clients questioning delivery dates",
+        "Screenshots rejected as weak evidence",
+        "Lost authorship claims",
+      ],
+
+      socialTitle: "Built for digital professionals",
+      socialText:
+        "GuardianChain is designed for creators, developers, freelancers, designers and professionals who need to preserve digital evidence in a simple way.",
+      socialItems: [
+        "Content creators",
+        "Developers",
+        "Designers",
+        "Freelancers",
+        "Professionals and businesses",
+      ],
 
       howTitle: "How it works",
       howText: "In a few steps, you create verifiable proof without uploading your file.",
@@ -294,6 +338,38 @@ export default function LandingPage() {
           <button style={styles.buttonSecondary}>{t.verify}</button>
         </Link>
       </div>
+
+      <section style={styles.riskSection}>
+        <h2 style={styles.riskTitle}>{t.riskTitle}</h2>
+        <p style={styles.riskText}>{t.riskText}</p>
+
+        <div style={styles.riskGrid}>
+          {t.riskItems.map((item) => (
+            <div key={item} style={styles.riskCard}>
+              <span style={styles.riskIcon}>!</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+
+        <Link to={`/register?lang=${lang}`}>
+          <button style={styles.riskCta}>{t.register}</button>
+        </Link>
+      </section>
+
+      <section style={styles.socialSection}>
+        <h2 style={styles.socialTitle}>{t.socialTitle}</h2>
+        <p style={styles.socialText}>{t.socialText}</p>
+
+        <div style={styles.socialGrid}>
+          {t.socialItems.map((item) => (
+            <div key={item} style={styles.socialCard}>
+              <span style={styles.socialCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section style={styles.howSection}>
         <h2 style={styles.howTitle}>{t.howTitle}</h2>
@@ -510,6 +586,127 @@ const styles = {
     borderRadius: "8px",
     cursor: "pointer",
     fontWeight: "700",
+  },
+
+  riskSection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "40px 24px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.2)",
+  },
+
+  riskTitle: {
+    fontSize: "32px",
+    marginBottom: "14px",
+  },
+
+  riskText: {
+    maxWidth: "760px",
+    margin: "0 auto 30px",
+    opacity: 0.94,
+    lineHeight: "1.7",
+    fontSize: "16px",
+  },
+
+  riskGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+    gap: "14px",
+    marginBottom: "28px",
+  },
+
+  riskCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    textAlign: "left",
+    padding: "15px 16px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "14px",
+    color: "#ffffff",
+    fontSize: "15px",
+  },
+
+  riskIcon: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#dc2626",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "900",
+    flexShrink: 0,
+  },
+
+  riskCta: {
+    padding: "15px 24px",
+    background: "#ffffff",
+    color: "#4338ca",
+    border: "none",
+    borderRadius: "12px",
+    cursor: "pointer",
+    fontWeight: "900",
+    fontSize: "15px",
+  },
+
+  socialSection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "34px 22px",
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+  },
+
+  socialTitle: {
+    fontSize: "32px",
+    marginBottom: "12px",
+  },
+
+  socialText: {
+    maxWidth: "760px",
+    margin: "0 auto 28px",
+    opacity: 0.94,
+    lineHeight: "1.7",
+  },
+
+  socialGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "12px",
+  },
+
+  socialCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    textAlign: "left",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "14px",
+    color: "#ffffff",
+    fontSize: "15px",
+  },
+
+  socialCheck: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4b4fbf",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "900",
+    flexShrink: 0,
   },
 
   howSection: {
