@@ -12,8 +12,8 @@ export default function LandingPage() {
 
   const t = {
     pt: {
-      title: "Proteja seu trabalho antes que alguém reivindique autoria.",
-      subtitle: "Crie uma prova imutável de propriedade em menos de 1 minuto.",
+      title: "Comprove que seu arquivo existia antes que outra pessoa reivindique autoria.",
+      subtitle: "Prova digital independente para criadores, desenvolvedores e profissionais.",
       note: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
 
       feature1: "Proteção de autoria",
@@ -86,6 +86,20 @@ export default function LandingPage() {
         "Verificação independente",
       ],
 
+      integrityTitle: "Integridade da prova",
+      integrityText:
+        "O GuardianChain cria uma camada adicional de evidência verificável utilizando hash criptográfico, timestamp, certificado e registro em blockchain pública.",
+      integrityText2:
+        "O sistema comprova que um arquivo específico, com aquele hash exato, existia em determinado momento e pode ser verificado posteriormente.",
+      integrityText3:
+        "O GuardianChain não substitui cartório, perícia técnica ou validação judicial formal. Ele funciona como uma camada independente de evidência digital para reforçar autoria, existência e integridade.",
+      integrityItems: [
+        "Comprova existência do arquivo em uma data",
+        "Comprova integridade pelo hash SHA-256",
+        "Permite verificação pública posterior",
+        "Funciona como camada adicional de evidência",
+      ],
+
       certificateTitle: "Veja o certificado que você recebe",
       certificateText:
         "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
@@ -109,8 +123,8 @@ export default function LandingPage() {
     },
 
     en: {
-      title: "Protect your work before someone claims it.",
-      subtitle: "Create immutable proof of ownership in less than 1 minute.",
+      title: "Prove your file existed before anyone else could claim it.",
+      subtitle: "Independent digital proof for creators, developers and professionals.",
       note: "Your file is never uploaded. Only the cryptographic hash is recorded.",
 
       feature1: "Protect authorship",
@@ -181,6 +195,20 @@ export default function LandingPage() {
         "Verifiable QR Code",
         "Auditable hash",
         "Independent verification",
+      ],
+
+      integrityTitle: "Proof integrity",
+      integrityText:
+        "GuardianChain creates an additional layer of verifiable evidence using cryptographic hashing, timestamping, certificates and public blockchain records.",
+      integrityText2:
+        "The system proves that a specific file, with that exact hash, existed at a specific point in time and can be verified later.",
+      integrityText3:
+        "GuardianChain does not replace notarization, forensic analysis or formal judicial validation. It works as an independent digital evidence layer to strengthen authorship, existence and integrity.",
+      integrityItems: [
+        "Proves file existence at a specific date",
+        "Proves integrity through SHA-256 hash",
+        "Allows future public verification",
+        "Works as an additional evidence layer",
       ],
 
       certificateTitle: "See the certificate you receive",
@@ -327,6 +355,23 @@ export default function LandingPage() {
           {t.independentItems.map((item) => (
             <div key={item} style={styles.independentCard}>
               <span style={styles.independentCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section style={styles.integritySection}>
+        <h2 style={styles.integrityTitle}>{t.integrityTitle}</h2>
+
+        <p style={styles.integrityText}>{t.integrityText}</p>
+        <p style={styles.integrityText}>{t.integrityText2}</p>
+        <p style={styles.integrityText}>{t.integrityText3}</p>
+
+        <div style={styles.integrityGrid}>
+          {t.integrityItems.map((item) => (
+            <div key={item} style={styles.integrityCard}>
+              <span style={styles.integrityCheck}>✓</span>
               <span>{item}</span>
             </div>
           ))}
@@ -657,6 +702,60 @@ const styles = {
   },
 
   independentCheck: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4338ca",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "800",
+    flexShrink: 0,
+  },
+
+  integritySection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "40px 24px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+  },
+
+  integrityTitle: {
+    fontSize: "32px",
+    marginBottom: "18px",
+  },
+
+  integrityText: {
+    maxWidth: "820px",
+    margin: "0 auto 18px",
+    lineHeight: "1.7",
+    opacity: 0.94,
+    fontSize: "16px",
+  },
+
+  integrityGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "14px",
+    marginTop: "34px",
+  },
+
+  integrityCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "14px",
+    textAlign: "left",
+  },
+
+  integrityCheck: {
     width: "22px",
     height: "22px",
     borderRadius: "999px",
