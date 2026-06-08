@@ -16,11 +16,11 @@ export default async function generateCertificate({
 
       const lang = language === "pt" ? "pt" : "en"
       const now = new Date()
-
-      const shortHash = hash.replace("0x", "").substring(0, 12).toUpperCase()
+      const shortHash = hash.replace("0x", "").slice(0, 12).toUpperCase()
       const evidenceId = `GC-${now.getUTCFullYear()}-${shortHash}`
 
-      const utc = now.toISOString().replace("T", " ").substring(0, 19) + " UTC"
+      const utc =
+        now.toISOString().replace("T", " ").substring(0, 19) + " UTC"
 
       const brazil = new Intl.DateTimeFormat("pt-BR", {
         timeZone: "America/Sao_Paulo",
@@ -105,99 +105,123 @@ export default async function generateCertificate({
 
       const doc = new PDFDocument({
         size: "A4",
-        margin: 42,
+        margin: 0,
       })
 
       const buffers = []
       doc.on("data", (chunk) => buffers.push(chunk))
       doc.on("end", () => resolve(Buffer.concat(buffers)))
-      doc.on("error", (err) => reject(err))
+      doc.on("error", reject)
 
       const pageWidth = doc.page.width
-      const left = 50
-      const width = pageWidth - 100
+      const left = 56
+      const right = 56
+      const contentWidth = pageWidth - left - right
+      let y = 0
 
-      doc.rect(0, 0, pageWidth, 105).fill("#1f2a6d")
+      doc.rect(0, 0, pageWidth, 112).fill("#1f2a6d")
 
       doc
         .fillColor("#ffffff")
-        .fontSize(22)
-        .text(t.title, left, 28, {
-          width,
+        .fontSize(21)
+        .text(t.title, left, 32, {
+          width: contentWidth,
           align: "center",
         })
 
       doc
         .fontSize(11)
-        .text(t.subtitle, left, 62, {
-          width,
+        .text(t.subtitle, left, 66, {
+          width: contentWidth,
           align: "center",
         })
 
-      doc.y = 130
+      y = 138
 
       doc
         .fillColor("#111827")
-        .fontSize(9.5)
-        .text(t.description, left, doc.y, {
-          width,
-          align: "center",
+        .fontSize(9.2)
+        .text(t.description, left, y, {
+          width: contentWidth,
+          align: "left",
           lineGap: 2,
         })
 
-      doc.moveDown(1)
+      y += 36
 
-      box(doc, left, doc.y, width, 38)
+      doc
+        .roundedRect(left, y, contentWidth, 30, 8)
+        .fillAndStroke("#f3f4f6", "#d1d5db")
+
       doc
         .fillColor("#111827")
-        .fontSize(10.5)
-        .text(`${t.evidenceId}: ${evidenceId}`, left + 14, doc.y - 26, {
-          width: width - 28,
+        .fontSize(10)
+        .text(`${t.evidenceId}: ${evidenceId}`, left + 12, y + 9, {
+          width: contentWidth - 24,
         })
 
-      doc.moveDown(1.5)
+      y += 48
 
-      title(doc, t.holder)
-      field(doc, t.name, ownerName || "-")
-      field(doc, t.email, ownerEmail || "-")
-      field(doc, t.type, ownerType === "company" ? t.company : t.individual)
+      drawTitle(doc, t.holder, left, y)
+      y += 22
 
-      doc.moveDown(0.6)
+      y = drawLine(doc, `${t.name}: ${ownerName || "-"}`, left, y)
+      y = drawLine(doc, `${t.email}: ${ownerEmail || "-"}`, left, y)
+      y = drawLine(
+        doc,
+        `${t.type}: ${ownerType === "company" ? t.company : t.individual}`,
+        left,
+        y
+      )
 
-      title(doc, t.declarationTitle)
-      paragraph(doc, t.declaration)
+      y += 12
 
-      doc.moveDown(0.6)
+      drawTitle(doc, t.declarationTitle, left, y)
+      y += 22
 
-      title(doc, t.technicalTitle)
-      field(doc, t.fileName, fileName || "-")
-      field(doc, t.utc, utc)
-      field(doc, t.brazil, brazil)
-      field(doc, t.network, "Polygon")
-      field(doc, t.payment, paymentId || "-")
-
-      doc.moveDown(0.4)
-
-      title(doc, t.hash)
       doc
         .fillColor("#374151")
-        .fontSize(8.5)
-        .text(hash, {
-          width,
-          lineGap: 1,
+        .fontSize(8.8)
+        .text(t.declaration, left, y, {
+          width: contentWidth,
+          lineGap: 2,
         })
 
-      doc.moveDown(0.7)
+      y += 46
 
-      title(doc, t.verify)
+      drawTitle(doc, t.technicalTitle, left, y)
+      y += 22
+
+      y = drawLine(doc, `${t.fileName}: ${fileName || "-"}`, left, y)
+      y = drawLine(doc, `${t.utc}: ${utc}`, left, y)
+      y = drawLine(doc, `${t.brazil}: ${brazil}`, left, y)
+      y = drawLine(doc, `${t.network}: Polygon`, left, y)
+      y = drawLine(doc, `${t.payment}: ${paymentId || "-"}`, left, y)
+
+      y += 10
+
+      drawTitle(doc, t.hash, left, y)
+      y += 20
+
+      doc
+        .fillColor("#374151")
+        .fontSize(8)
+        .text(hash, left, y, {
+          width: contentWidth,
+        })
+
+      y += 30
+
+      drawTitle(doc, t.verify, left, y)
+      y += 22
 
       const qr = await QRCode.toDataURL(verificationUrl)
       const qrImage = qr.replace(/^data:image\/png;base64,/, "")
       const qrBuffer = Buffer.from(qrImage, "base64")
 
-      const qrSize = 96
-      const qrX = pageWidth - left - qrSize
-      const qrY = doc.y
+      const qrSize = 92
+      const qrX = pageWidth - right - qrSize
+      const qrY = y
 
       doc.image(qrBuffer, qrX, qrY, {
         fit: [qrSize, qrSize],
@@ -205,39 +229,55 @@ export default async function generateCertificate({
 
       doc
         .fillColor("#1d4ed8")
-        .fontSize(8.5)
-        .text(verificationUrl, left, qrY + 4, {
-          width: width - qrSize - 24,
+        .fontSize(7.8)
+        .text(verificationUrl, left, y, {
+          width: contentWidth - qrSize - 24,
           link: verificationUrl,
           underline: true,
           lineGap: 1,
         })
 
-      doc.y = qrY + qrSize + 18
+      y += 108
 
-      title(doc, t.independentTitle)
-      paragraph(doc, t.independent)
-
-      doc.moveDown(0.5)
-
-      title(doc, t.limitationTitle)
-      paragraph(doc, t.limitation)
-
-      doc.moveDown(0.8)
+      drawTitle(doc, t.independentTitle, left, y)
+      y += 20
 
       doc
-        .moveTo(left, doc.y)
-        .lineTo(pageWidth - left, doc.y)
+        .fillColor("#374151")
+        .fontSize(8.5)
+        .text(t.independent, left, y, {
+          width: contentWidth,
+          lineGap: 2,
+        })
+
+      y += 52
+
+      drawTitle(doc, t.limitationTitle, left, y)
+      y += 20
+
+      doc
+        .fillColor("#374151")
+        .fontSize(8.3)
+        .text(t.limitation, left, y, {
+          width: contentWidth,
+          lineGap: 2,
+        })
+
+      y += 58
+
+      doc
+        .moveTo(left, y)
+        .lineTo(pageWidth - right, y)
         .strokeColor("#d1d5db")
         .stroke()
 
-      doc.moveDown(0.5)
+      y += 12
 
       doc
         .fillColor("#6b7280")
-        .fontSize(8)
-        .text(t.footer, left, doc.y, {
-          width,
+        .fontSize(7.5)
+        .text(t.footer, left, y, {
+          width: contentWidth,
           align: "center",
         })
 
@@ -248,47 +288,17 @@ export default async function generateCertificate({
   })
 }
 
-function title(doc, text) {
-  doc
-    .fillColor("#1f2a6d")
-    .fontSize(12.5)
-    .text(text, {
-      width: 500,
-    })
-
-  doc.moveDown(0.25)
+function drawTitle(doc, text, x, y) {
+  doc.fillColor("#1f2a6d").fontSize(12).text(text, x, y)
 }
 
-function field(doc, label, value) {
+function drawLine(doc, text, x, y) {
   doc
     .fillColor("#111827")
-    .fontSize(9.5)
-    .text(`${label}: `, {
-      continued: true,
+    .fontSize(8.8)
+    .text(text, x, y, {
+      width: 480,
     })
 
-  doc
-    .fillColor("#374151")
-    .fontSize(9.5)
-    .text(String(value), {
-      width: 420,
-    })
-
-  doc.moveDown(0.18)
-}
-
-function paragraph(doc, text) {
-  doc
-    .fillColor("#374151")
-    .fontSize(9)
-    .text(text, {
-      width: 500,
-      lineGap: 2,
-    })
-}
-
-function box(doc, x, y, w, h) {
-  doc
-    .roundedRect(x, y, w, h, 8)
-    .fillAndStroke("#f3f4f6", "#d1d5db")
+  return y + 16
 }
