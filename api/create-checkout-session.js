@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   try {
     if (!stripe) {
       return res.status(500).json({
-        error: "STRIPE_SECRET_KEY is missing on the server"
+        error: "STRIPE_SECRET_KEY is missing on the server",
       })
     }
 
@@ -22,16 +22,17 @@ export default async function handler(req, res) {
       ownerName,
       ownerEmail,
       ownerType,
-      ownershipDeclaration
+      ownershipDeclaration,
     } = req.body || {}
 
     if (!hash || !fileName || !ownerName || !ownerEmail || !ownershipDeclaration) {
-      return res.status(400).json({ error: "Missing required certificate data" })
+      return res.status(400).json({
+        error: "Missing required certificate data",
+      })
     }
 
     const normalizedLanguage = language === "pt" ? "pt" : "en"
     const baseUrl = process.env.BASE_URL || "https://guardianchain.online"
-
     const isPt = normalizedLanguage === "pt"
 
     const currency = isPt ? "brl" : "usd"
@@ -39,13 +40,11 @@ export default async function handler(req, res) {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-
       payment_method_types: ["card"],
-
       customer_email: ownerEmail,
       locale: isPt ? "pt-BR" : "en",
 
-      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&lang=${normalizedLanguage}`,
       cancel_url: `${baseUrl}/register?lang=${normalizedLanguage}`,
 
       line_items: [
@@ -58,12 +57,12 @@ export default async function handler(req, res) {
                 : "GuardianChain Certificate",
               description: isPt
                 ? "Registro de prova digital verificável em blockchain"
-                : "Verifiable digital proof registration on blockchain"
+                : "Verifiable digital proof registration on blockchain",
             },
-            unit_amount: unitAmount
+            unit_amount: unitAmount,
           },
-          quantity: 1
-        }
+          quantity: 1,
+        },
       ],
 
       metadata: {
@@ -78,25 +77,16 @@ export default async function handler(req, res) {
         certificateType: "declared_owner",
         product: "guardianchain_certificate",
         currency,
-        price: isPt ? "19.90 BRL" : "8.00 USD"
-      }
+        price: isPt ? "19.90 BRL" : "8.00 USD",
+      },
     })
 
     return res.status(200).json({ url: session.url })
   } catch (error) {
-    console.error("Checkout error full:", {
-      message: error.message,
-      type: error.type,
-      code: error.code,
-      param: error.param,
-      raw: error.raw
-    })
+    console.error("Checkout error full:", error)
 
     return res.status(500).json({
       error: error.message || "Failed to create checkout session",
-      type: error.type || null,
-      code: error.code || null,
-      param: error.param || null
     })
   }
 }

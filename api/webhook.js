@@ -1,6 +1,5 @@
 import Stripe from "stripe"
-import generateCertificate from "./generate-certificate.js"
-import nodemailer from "nodemailer"
+import sendEmail from "./send-certificate.js"
 
 export const config = {
   api: {
@@ -19,90 +18,10 @@ async function getRequestBody(req) {
 
   const rawBuffer = Buffer.concat(chunks)
 
-  if (rawBuffer.length > 0) {
-    return {
-      rawBuffer,
-      rawText: rawBuffer.toString("utf8"),
-    }
-  }
-
-  if (req.body) {
-    if (typeof req.body === "string") {
-      return {
-        rawBuffer: Buffer.from(req.body),
-        rawText: req.body,
-      }
-    }
-
-    const bodyText = JSON.stringify(req.body)
-
-    return {
-      rawBuffer: Buffer.from(bodyText),
-      rawText: bodyText,
-    }
-  }
-
   return {
-    rawBuffer: Buffer.from(""),
-    rawText: "",
+    rawBuffer,
+    rawText: rawBuffer.toString("utf8"),
   }
-}
-
-async function sendCertificateEmail({
-  to,
-  ownerName,
-  language,
-  pdfBuffer,
-  verificationUrl,
-}) {
-  const isPt = language === "pt"
-
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  })
-
-  await transporter.sendMail({
-    from: `"GuardianChain" <${process.env.GMAIL_USER}>`,
-    to,
-    subject: isPt
-      ? "Seu certificado GuardianChain"
-      : "Your GuardianChain certificate",
-    html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.5;">
-        <h2>${isPt ? "Certificado GuardianChain gerado" : "GuardianChain certificate generated"}</h2>
-        <p>${isPt ? "Olá" : "Hello"} ${ownerName || ""},</p>
-        <p>
-          ${
-            isPt
-              ? "Seu certificado de prova digital foi gerado com vínculo ao titular declarado."
-              : "Your digital proof certificate has been generated with declared holder binding."
-          }
-        </p>
-        <p>
-          ${isPt ? "Link de verificação:" : "Verification link:"}<br />
-          <a href="${verificationUrl}">${verificationUrl}</a>
-        </p>
-        <p>
-          ${
-            isPt
-              ? "O arquivo original não foi enviado nem armazenado pela GuardianChain."
-              : "The original file was not uploaded or stored by GuardianChain."
-          }
-        </p>
-      </div>
-    `,
-    attachments: [
-      {
-        filename: "guardianchain-certificate.pdf",
-        content: pdfBuffer,
-        contentType: "application/pdf",
-      },
-    ],
-  })
 }
 
 export default async function handler(req, res) {
@@ -122,7 +41,6 @@ export default async function handler(req, res) {
 
     if (isLocal) {
       if (!rawText) {
-        console.error("[WEBHOOK] Empty request body")
         return res.status(200).json({
           received: true,
           skipped: "empty_body_local_event",
@@ -155,6 +73,7 @@ export default async function handler(req, res) {
     const fileName = metadata.fileName || "registered-file"
     const language = metadata.language === "pt" ? "pt" : "en"
     const ownerName = metadata.ownerName || "Declared holder"
+
     const ownerEmail =
       metadata.ownerEmail ||
       session.customer_details?.email ||
@@ -175,28 +94,15 @@ export default async function handler(req, res) {
       })
     }
 
-    const baseUrl = process.env.BASE_URL || "https://guardianchain.online"
-
-    const verificationUrl = `${baseUrl}/verify?hash=${encodeURIComponent(
-      hash
-    )}&lang=${language}`
-
-    const pdfBuffer = await generateCertificate({
+    await sendEmail({
       hash,
       language,
+      email: ownerEmail,
       fileName,
       ownerName,
       ownerEmail,
       ownerType,
       paymentId,
-    })
-
-    await sendCertificateEmail({
-      to: ownerEmail,
-      ownerName,
-      language,
-      pdfBuffer,
-      verificationUrl,
     })
 
     console.log("[WEBHOOK] Certificate email sent", {
