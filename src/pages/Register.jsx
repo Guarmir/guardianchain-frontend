@@ -98,7 +98,7 @@ export default function Register() {
       trust2: "QR Code for public verification",
       trust3: "Cryptographic file hash",
       trust4: "Verifiable permanent record",
-      price: "US$ 4",
+      price: "US$ 8",
       priceNote: "one-time payment",
       securePayment: "Secure payment powered by Stripe",
     },

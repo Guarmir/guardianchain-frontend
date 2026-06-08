@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     const isPt = normalizedLanguage === "pt"
 
     const currency = isPt ? "brl" : "usd"
-    const unitAmount = isPt ? 1990 : 400
+    const unitAmount = isPt ? 1990 : 800
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
         certificateType: "declared_owner",
         product: "guardianchain_certificate",
         currency,
-        price: isPt ? "19.90 BRL" : "4.00 USD"
+        price: isPt ? "19.90 BRL" : "8.00 USD"
       }
     })
 

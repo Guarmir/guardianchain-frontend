@@ -155,7 +155,7 @@ export default function LandingPage() {
       feature4: "Blockchain secured",
 
       priceTitle: "One-time registration",
-      price: "US$ 4",
+      price: "US$ 8",
       pay: "one-time payment",
 
       register: "Create proof now",
