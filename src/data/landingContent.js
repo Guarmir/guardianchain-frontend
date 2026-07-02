@@ -1,20 +1,29 @@
 export const landingContent = {
   pt: {
-    title: "Proteja seu trabalho antes de compartilhar.",
+    title: "Prove que o que você criou é seu — antes que alguém diga o contrário.",
     subtitle:
-      "Gere uma prova permanente de autoria para arquivos, ideias, código-fonte e criações digitais — sem enviar o arquivo original.",
-    note: "Seu arquivo original nunca sai do seu dispositivo.",
+      "Crie uma prova digital independente que ajuda a demonstrar a autoria, a existência e a integridade do seu trabalho.",
+    note:
+      "Apenas uma impressão digital exclusiva do seu arquivo é registrada. Seu arquivo original nunca sai do seu dispositivo.",
 
     feature1: "Seu arquivo permanece privado",
-    feature2: "Prova permanente de autoria",
+    feature2: "Registro permanente e verificável",
     feature3: "Verificação pública por QR Code",
     feature4: "Sem carteira cripto",
+
+    problemTitle: "Você já passou por alguma dessas situações?",
+    problemItems: [
+      "Alguém copiou seu trabalho?",
+      "Um cliente disse que você enviou depois?",
+      "Publicaram seu conteúdo sem crédito?",
+      "Você precisava provar quando criou um arquivo?",
+    ],
 
     priceTitle: "Certificado digital de prova permanente",
     price: "R$ 19,90",
     pay: "pagamento único",
 
-    register: "Gerar meu certificado",
+    register: "Criar minha prova digital",
     verify: "Verificar certificado",
 
     secure1: "Gerado imediatamente após o pagamento",
@@ -35,7 +44,7 @@ export const landingContent = {
 
     socialTitle: "Criado para profissionais digitais",
     socialText:
-      "GuardianChain foi pensado para criadores, desenvolvedores, freelancers, designers e profissionais que precisam preservar evidências digitais de forma simples.",
+      "GuardianChain é uma plataforma criada para proteger a autoria, a integridade e a existência de arquivos digitais de profissionais e empresas.",
     socialItems: [
       "Criadores de conteúdo",
       "Desenvolvedores",
@@ -90,11 +99,11 @@ export const landingContent = {
 
     independentTitle: "Verificação independente",
     independentText:
-      "Sua prova não depende apenas do GuardianChain. Cada registro pode ser verificado de forma independente usando o hash, QR Code e dados do certificado.",
+      "Sua prova não depende apenas do GuardianChain. Cada registro pode ser verificado de forma independente usando a impressão digital do arquivo, QR Code e dados do certificado.",
     independentItems: [
       "Registros públicos verificáveis",
       "QR Code verificável",
-      "Hash auditável",
+      "Impressão digital auditável",
       "Verificação independente",
     ],
 
@@ -104,6 +113,8 @@ export const landingContent = {
     integrityText2:
       "Se o arquivo for alterado depois, a verificação muda também — tornando alterações detectáveis.",
     integrityText3:
+      "Seu registro continua verificável mesmo que a plataforma deixe de existir.",
+    integrityText4:
       "O GuardianChain não substitui cartório, perícia técnica ou validação judicial formal. Ele funciona como uma camada independente de evidência digital para reforçar autoria, existência e integridade.",
     integrityItems: [
       "Comprova existência do arquivo em uma data",
@@ -145,21 +156,30 @@ export const landingContent = {
   },
 
   en: {
-    title: "Protect your work before sharing it.",
+    title: "Prove what you created is yours — before someone says otherwise.",
     subtitle:
-      "Generate permanent proof of authorship for files, ideas, source code and digital creations — without uploading your original file.",
-    note: "Your original file never leaves your device.",
+      "Create independent digital proof that helps demonstrate the authorship, existence and integrity of your work.",
+    note:
+      "Only a unique digital fingerprint of your file is registered. Your original file never leaves your device.",
 
     feature1: "Your file stays private",
-    feature2: "Permanent proof of authorship",
+    feature2: "Permanent verifiable record",
     feature3: "Public QR Code verification",
     feature4: "No crypto wallet required",
+
+    problemTitle: "Have you ever faced one of these situations?",
+    problemItems: [
+      "Someone copied your work?",
+      "A client said you delivered it later?",
+      "Your content was published without credit?",
+      "You needed to prove when you created a file?",
+    ],
 
     priceTitle: "Permanent digital proof certificate",
     price: "US$ 8",
     pay: "one-time payment",
 
-    register: "Generate My Certificate",
+    register: "Create My Digital Proof",
     verify: "Verify certificate",
 
     secure1: "Generated instantly after payment",
@@ -180,7 +200,7 @@ export const landingContent = {
 
     socialTitle: "Built for digital professionals",
     socialText:
-      "GuardianChain is designed for creators, developers, freelancers, designers and professionals who need to preserve digital evidence in a simple way.",
+      "GuardianChain is a platform created to protect the authorship, integrity and existence of digital files for professionals and businesses.",
     socialItems: [
       "Content creators",
       "Developers",
@@ -235,11 +255,11 @@ export const landingContent = {
 
     independentTitle: "Independent verification",
     independentText:
-      "Your proof does not depend only on GuardianChain. Each record can be independently verified using the hash, QR Code and certificate data.",
+      "Your proof does not depend only on GuardianChain. Each record can be independently verified using the file fingerprint, QR Code and certificate data.",
     independentItems: [
       "Public verification records",
       "Verifiable QR Code",
-      "Auditable hash",
+      "Auditable file fingerprint",
       "Independent verification",
     ],
 
@@ -249,6 +269,8 @@ export const landingContent = {
     integrityText2:
       "If the file changes later, the verification changes too — making alterations detectable.",
     integrityText3:
+      "Your record remains verifiable even if the platform stops operating in the future.",
+    integrityText4:
       "GuardianChain does not replace notarization, forensic analysis or formal judicial validation. It works as an independent digital evidence layer to strengthen authorship, existence and integrity.",
     integrityItems: [
       "Proves file existence at a specific date",

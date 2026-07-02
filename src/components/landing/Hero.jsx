@@ -11,10 +11,27 @@ export default function Hero({ t, lang }) {
 
       <div style={styles.features}>
         <span>🔒 {t.feature1}</span>
-        <span>🛡️ {t.feature2}</span>
+        <span>✅ {t.feature2}</span>
         <span>🌐 {t.feature3}</span>
-        <span>✅ {t.feature4}</span>
+        <span>🛡️ {t.feature4}</span>
       </div>
+
+      <section style={styles.problemBox}>
+        <h2 style={styles.problemTitle}>{t.problemTitle}</h2>
+
+        <div style={styles.problemGrid}>
+          {t.problemItems.map((item) => (
+            <div key={item} style={styles.problemItem}>
+              <span style={styles.problemCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+
+        <Link to={`/register?lang=${lang}`} style={styles.heroCtaLink}>
+          <button style={styles.heroCta}>{t.register}</button>
+        </Link>
+      </section>
 
       <div style={styles.card}>
         <p style={styles.priceTitle}>{t.priceTitle}</p>
@@ -68,7 +85,71 @@ const styles = {
     justifyContent: "center",
     gap: "20px",
     flexWrap: "wrap",
-    marginBottom: "40px",
+    marginBottom: "34px",
+  },
+
+  problemBox: {
+    maxWidth: "900px",
+    margin: "0 auto 44px",
+    padding: "30px 24px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 45px rgba(0,0,0,0.18)",
+  },
+
+  problemTitle: {
+    fontSize: "28px",
+    margin: "0 0 22px",
+  },
+
+  problemGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: "14px",
+    marginBottom: "24px",
+  },
+
+  problemItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    textAlign: "left",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "14px",
+    fontSize: "15px",
+  },
+
+  problemCheck: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4338ca",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "900",
+    flexShrink: 0,
+  },
+
+  heroCtaLink: {
+    display: "inline-block",
+    textDecoration: "none",
+  },
+
+  heroCta: {
+    padding: "15px 28px",
+    background: "#ffffff",
+    color: "#4338ca",
+    border: "none",
+    borderRadius: "12px",
+    cursor: "pointer",
+    fontWeight: "900",
+    fontSize: "16px",
+    boxShadow: "0 12px 30px rgba(0,0,0,0.18)",
   },
 
   card: {
