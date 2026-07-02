@@ -1,6 +1,8 @@
 import { Link, useSearchParams } from "react-router-dom"
 import Footer from "../components/Footer.jsx"
+import Hero from "../components/landing/Hero.jsx"
 import certificatePreview from "../assets/certificate-preview.png"
+import { landingContent } from "../data/landingContent.js"
 
 export default function LandingPage() {
   const [params] = useSearchParams()
@@ -9,342 +11,37 @@ export default function LandingPage() {
   const lang = langParam === "pt" ? "pt" : "en"
 
   const linkedinUrl = "https://www.linkedin.com/in/guardianchain/"
-
-  const t = {
-    pt: {
-      title: "Proteja seu trabalho antes de compartilhar.",
-      subtitle:
-        "Gere uma prova permanente de autoria para arquivos, ideias, código-fonte e criações digitais — sem enviar o arquivo original.",
-      note: "Seu arquivo original nunca sai do seu dispositivo.",
-
-      feature1: "Seu arquivo permanece privado",
-      feature2: "Prova permanente de autoria",
-      feature3: "Verificação pública por QR Code",
-      feature4: "Sem carteira cripto",
-
-      priceTitle: "Certificado digital de prova permanente",
-      price: "R$ 19,90",
-      pay: "pagamento único",
-
-      register: "Gerar meu certificado",
-      verify: "Verificar certificado",
-
-      secure1: "Gerado imediatamente após o pagamento",
-      secure2: "Certificado verificável publicamente",
-      secure3: "Verificação por QR Code incluída",
-      secure4: "Seu arquivo original nunca é enviado",
-
-      riskTitle: "O que pode acontecer sem uma prova?",
-      riskText:
-        "Na internet, arquivos são copiados, reenviados e contestados rapidamente. Sem uma prova independente, pode ser difícil demonstrar quando aquele conteúdo já existia.",
-      riskItems: [
-        "Conteúdo de IA repostado sem crédito",
-        "Disputas sobre código-fonte antes do lançamento",
-        "Clientes questionando datas de entrega",
-        "Prints rejeitados como evidência fraca",
-        "Perda de comprovação de autoria",
-      ],
-
-      socialTitle: "Criado para profissionais digitais",
-      socialText:
-        "GuardianChain foi pensado para criadores, desenvolvedores, freelancers, designers e profissionais que precisam preservar evidências digitais de forma simples.",
-      socialItems: [
-        "Criadores de conteúdo",
-        "Desenvolvedores",
-        "Designers",
-        "Freelancers",
-        "Profissionais e empresas",
-      ],
-
-      howTitle: "Como funciona",
-      howText: "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
-      howSteps: [
-        {
-          icon: "📁",
-          title: "Escolha seu arquivo",
-          text: "Seu arquivo permanece no seu dispositivo. Nenhum upload é realizado.",
-        },
-        {
-          icon: "🔐",
-          title: "Crie uma prova permanente",
-          text: "Uma impressão digital única do arquivo é criada e vinculada a um registro verificável.",
-        },
-        {
-          icon: "📄",
-          title: "Receba seu certificado",
-          text: "Baixe o certificado PDF com QR Code e verificação pública.",
-        },
-      ],
-
-      aboutTitle: "Quem está por trás do GuardianChain?",
-      aboutText:
-        "O GuardianChain foi criado para fornecer uma infraestrutura acessível, focada em privacidade e verificação independente de provas digitais para criadores, desenvolvedores, profissionais e empresas em todo o mundo.",
-      aboutText2:
-        "A plataforma foi construída com um princípio simples: seus arquivos devem permanecer sob seu controle.",
-      aboutText3:
-        "O GuardianChain nunca faz upload ou armazena o arquivo original. Apenas a impressão digital criptográfica do arquivo é registrada e vinculada a registros públicos.",
-      aboutText4:
-        "Nosso objetivo é tornar a evidência digital mais acessível, transparente e verificável para a internet moderna.",
-      trustItems: [
-        "Arquitetura focada em privacidade",
-        "Sem upload de arquivos",
-        "Verificação independente",
-        "Registros públicos verificáveis",
-        "Pagamento seguro via Stripe",
-      ],
-
-      founderTitle: "Presença pública do fundador",
-      founderText:
-        "O GuardianChain é desenvolvido por Valderi Miranda, fundador do projeto, com foco em prova digital verificável, privacidade e proteção de arquivos digitais.",
-      founderText2:
-        "Você pode ver a presença pública do fundador no LinkedIn, acompanhar publicações sobre o projeto e verificar que existe uma pessoa real construindo a plataforma.",
-      founderButton: "Ver perfil no LinkedIn",
-
-      independentTitle: "Verificação independente",
-      independentText:
-        "Sua prova não depende apenas do GuardianChain. Cada registro pode ser verificado de forma independente usando o hash, QR Code e dados do certificado.",
-      independentItems: [
-        "Registros públicos verificáveis",
-        "QR Code verificável",
-        "Hash auditável",
-        "Verificação independente",
-      ],
-
-      integrityTitle: "Integridade da prova",
-      integrityText:
-        "O GuardianChain cria uma prova permanente de que um arquivo específico existia em um momento específico.",
-      integrityText2:
-        "Se o arquivo for alterado depois, a verificação muda também — tornando alterações detectáveis.",
-      integrityText3:
-        "O GuardianChain não substitui cartório, perícia técnica ou validação judicial formal. Ele funciona como uma camada independente de evidência digital para reforçar autoria, existência e integridade.",
-      integrityItems: [
-        "Comprova existência do arquivo em uma data",
-        "Comprova integridade por impressão digital do arquivo",
-        "Permite verificação pública posterior",
-        "Funciona como camada adicional de evidência",
-      ],
-
-      securityTitle: "Domínio oficial e aviso de segurança",
-      securityText:
-        "O domínio oficial do GuardianChain é guardianchain.online. A plataforma nunca solicita investimentos, transferências de criptomoedas, pagamentos para recuperação de fundos ou acesso à sua carteira cripto.",
-      securityItems: [
-        "Domínio oficial: guardianchain.online",
-        "Não solicitamos investimentos",
-        "Não fazemos recuperação de fundos",
-        "Não pedimos acesso à carteira cripto",
-      ],
-
-      certificateTitle: "Veja o certificado que você recebe",
-      certificateText:
-        "Cada registro gera um certificado verificável com impressão digital do arquivo, QR Code e validação pública.",
-
-      useCasesTitle: "Ideal para proteger",
-      useCasesText:
-        "Use o GuardianChain para criar prova de existência, autoria e integridade de arquivos digitais importantes.",
-      useCases: [
-        "Conteúdo gerado por IA",
-        "Artes e Design",
-        "Música e Áudio",
-        "Contratos e Documentos",
-        "Fotografia",
-        "Pesquisas e Ideias",
-        "Desenvolvedores e Arquivos-fonte",
-        "Propostas e entregas profissionais",
-      ],
-
-      switchToPt: "PT",
-      switchToEn: "EN",
-    },
-
-    en: {
-      title: "Protect your work before sharing it.",
-      subtitle:
-        "Generate permanent proof of authorship for files, ideas, source code and digital creations — without uploading your original file.",
-      note: "Your original file never leaves your device.",
-
-      feature1: "Your file stays private",
-      feature2: "Permanent proof of authorship",
-      feature3: "Public QR Code verification",
-      feature4: "No crypto wallet required",
-
-      priceTitle: "Permanent digital proof certificate",
-      price: "US$ 8",
-      pay: "one-time payment",
-
-      register: "Generate My Certificate",
-      verify: "Verify certificate",
-
-      secure1: "Generated instantly after payment",
-      secure2: "Publicly verifiable certificate",
-      secure3: "QR Code verification included",
-      secure4: "Your original file is never uploaded",
-
-      riskTitle: "What can happen without proof?",
-      riskText:
-        "On the internet, files are copied, reposted and disputed quickly. Without independent proof, it can be difficult to show when that content already existed.",
-      riskItems: [
-        "AI-generated content reposted without attribution",
-        "Source code disputes before launch",
-        "Clients questioning delivery dates",
-        "Screenshots rejected as weak evidence",
-        "Lost authorship claims",
-      ],
-
-      socialTitle: "Built for digital professionals",
-      socialText:
-        "GuardianChain is designed for creators, developers, freelancers, designers and professionals who need to preserve digital evidence in a simple way.",
-      socialItems: [
-        "Content creators",
-        "Developers",
-        "Designers",
-        "Freelancers",
-        "Professionals and businesses",
-      ],
-
-      howTitle: "How it works",
-      howText: "In a few steps, you create verifiable proof without uploading your file.",
-      howSteps: [
-        {
-          icon: "📁",
-          title: "Choose your file",
-          text: "Your file stays on your device. No upload is performed.",
-        },
-        {
-          icon: "🔐",
-          title: "Create permanent proof",
-          text: "A unique digital fingerprint is created and linked to a permanent verification record.",
-        },
-        {
-          icon: "📄",
-          title: "Receive your certificate",
-          text: "Download the PDF certificate with QR Code and public verification.",
-        },
-      ],
-
-      aboutTitle: "Who is behind GuardianChain?",
-      aboutText:
-        "GuardianChain was created to provide accessible, privacy-first and independently verifiable digital proof infrastructure for creators, developers, professionals and businesses worldwide.",
-      aboutText2:
-        "The platform was designed around a simple principle: your files should remain under your control.",
-      aboutText3:
-        "GuardianChain never uploads or stores the original file. Only the file’s digital fingerprint is registered and linked to public verification records.",
-      aboutText4:
-        "Our goal is to make digital evidence more accessible, transparent and independently verifiable for the modern internet.",
-      trustItems: [
-        "Privacy-first architecture",
-        "No file upload",
-        "Independent verification",
-        "Public verification records",
-        "Secure payment via Stripe",
-      ],
-
-      founderTitle: "Public founder presence",
-      founderText:
-        "GuardianChain is developed by Valderi Miranda, founder of the project, focused on verifiable digital proof, privacy and digital file protection.",
-      founderText2:
-        "You can view the founder’s public LinkedIn profile, follow project updates and verify that there is a real person building the platform.",
-      founderButton: "View LinkedIn profile",
-
-      independentTitle: "Independent verification",
-      independentText:
-        "Your proof does not depend only on GuardianChain. Each record can be independently verified using the hash, QR Code and certificate data.",
-      independentItems: [
-        "Public verification records",
-        "Verifiable QR Code",
-        "Auditable hash",
-        "Independent verification",
-      ],
-
-      integrityTitle: "Proof integrity",
-      integrityText:
-        "GuardianChain creates permanent proof that a specific file existed at a specific moment in time.",
-      integrityText2:
-        "If the file changes later, the verification changes too — making alterations detectable.",
-      integrityText3:
-        "GuardianChain does not replace notarization, forensic analysis or formal judicial validation. It works as an independent digital evidence layer to strengthen authorship, existence and integrity.",
-      integrityItems: [
-        "Proves file existence at a specific date",
-        "Proves integrity through the file fingerprint",
-        "Allows future public verification",
-        "Works as an additional evidence layer",
-      ],
-
-      securityTitle: "Official domain and security notice",
-      securityText:
-        "The official GuardianChain domain is guardianchain.online. The platform never asks for investments, crypto transfers, fund recovery payments or access to your crypto wallet.",
-      securityItems: [
-        "Official domain: guardianchain.online",
-        "We do not request investments",
-        "We do not offer fund recovery",
-        "We do not ask for wallet access",
-      ],
-
-      certificateTitle: "See the certificate you receive",
-      certificateText:
-        "Each registration generates a verifiable certificate with the file fingerprint, QR Code and public validation.",
-
-      useCasesTitle: "Perfect for protecting",
-      useCasesText:
-        "Use GuardianChain to create proof of existence, authorship and integrity for important digital files.",
-      useCases: [
-        "AI-generated content",
-        "Artwork & Design",
-        "Music & Audio",
-        "Contracts & Documents",
-        "Photography",
-        "Research & Ideas",
-        "Developers & Source Files",
-        "Professional proposals & deliveries",
-      ],
-
-      switchToPt: "PT",
-      switchToEn: "EN",
-    },
-  }[lang]
+  const t = landingContent[lang]
 
   return (
     <div style={styles.page}>
       <div style={styles.langSwitch}>
-        <Link to="/?lang=pt" style={{ ...styles.langLink, opacity: lang === "pt" ? 1 : 0.7, fontWeight: lang === "pt" ? "700" : "400" }}>
+        <Link
+          to="/?lang=pt"
+          style={{
+            ...styles.langLink,
+            opacity: lang === "pt" ? 1 : 0.7,
+            fontWeight: lang === "pt" ? "700" : "400",
+          }}
+        >
           {t.switchToPt}
         </Link>
 
         <span style={styles.langDivider}>|</span>
 
-        <Link to="/?lang=en" style={{ ...styles.langLink, opacity: lang === "en" ? 1 : 0.7, fontWeight: lang === "en" ? "700" : "400" }}>
+        <Link
+          to="/?lang=en"
+          style={{
+            ...styles.langLink,
+            opacity: lang === "en" ? 1 : 0.7,
+            fontWeight: lang === "en" ? "700" : "400",
+          }}
+        >
           {t.switchToEn}
         </Link>
       </div>
 
-      <h1 style={styles.title}>{t.title}</h1>
-      <p style={styles.subtitle}>{t.subtitle}</p>
-      <p style={styles.note}>{t.note}</p>
-
-      <div style={styles.features}>
-        <span>🔒 {t.feature1}</span>
-        <span>🛡️ {t.feature2}</span>
-        <span>🌐 {t.feature3}</span>
-        <span>✅ {t.feature4}</span>
-      </div>
-
-      <div style={styles.card}>
-        <p style={styles.priceTitle}>{t.priceTitle}</p>
-        <h2 style={styles.price}>{t.price}</h2>
-        <p>{t.pay}</p>
-
-        <p style={styles.secure}>✓ {t.secure1}</p>
-        <p style={styles.secure}>✓ {t.secure2}</p>
-        <p style={styles.secure}>✓ {t.secure3}</p>
-        <p style={styles.secure}>✓ {t.secure4}</p>
-
-        <Link to={`/register?lang=${lang}`}>
-          <button style={styles.buttonPrimary}>{t.register}</button>
-        </Link>
-
-        <Link to={`/verify?lang=${lang}`}>
-          <button style={styles.buttonSecondary}>{t.verify}</button>
-        </Link>
-      </div>
+      <Hero t={t} lang={lang} />
 
       <section style={styles.riskSection}>
         <h2 style={styles.riskTitle}>{t.riskTitle}</h2>
@@ -416,7 +113,12 @@ export default function LandingPage() {
         <p style={styles.founderText}>{t.founderText}</p>
         <p style={styles.founderText}>{t.founderText2}</p>
 
-        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" style={styles.linkedinButton}>
+        <a
+          href={linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.linkedinButton}
+        >
           {t.founderButton}
         </a>
       </section>
@@ -469,7 +171,11 @@ export default function LandingPage() {
         <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
         <p style={styles.certificateText}>{t.certificateText}</p>
 
-        <img src={certificatePreview} alt="GuardianChain Certificate Preview" style={styles.certificateImage} />
+        <img
+          src={certificatePreview}
+          alt="GuardianChain Certificate Preview"
+          style={styles.certificateImage}
+        />
       </div>
 
       <section style={styles.useCasesSection}>
@@ -500,7 +206,8 @@ const styles = {
     minHeight: "100vh",
     textAlign: "center",
     padding: "60px 20px 80px",
-    background: "linear-gradient(180deg,#6366f1 0%, #4f46e5 45%, #312e81 100%)",
+    background:
+      "linear-gradient(180deg,#6366f1 0%, #4f46e5 45%, #312e81 100%)",
     color: "white",
   },
 
@@ -520,90 +227,6 @@ const styles = {
 
   langDivider: {
     opacity: 0.8,
-  },
-
-  title: {
-    fontSize: "54px",
-    fontWeight: "800",
-    lineHeight: "1.1",
-    marginBottom: "20px",
-  },
-
-  subtitle: {
-    fontSize: "18px",
-    marginBottom: "10px",
-    maxWidth: "900px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    lineHeight: "1.5",
-  },
-
-  note: {
-    opacity: 0.95,
-    marginBottom: "20px",
-    fontWeight: "600",
-  },
-
-  features: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "20px",
-    flexWrap: "wrap",
-    marginBottom: "40px",
-  },
-
-  card: {
-    background: "#ffffff",
-    color: "#111",
-    maxWidth: "480px",
-    margin: "0 auto",
-    padding: "30px",
-    borderRadius: "14px",
-    boxShadow: "0 25px 60px rgba(0,0,0,0.25)",
-    border: "1px solid rgba(255,255,255,0.2)",
-  },
-
-  priceTitle: {
-    opacity: 0.9,
-    fontWeight: "700",
-  },
-
-  price: {
-    fontSize: "42px",
-    margin: "10px 0",
-  },
-
-  secure: {
-    fontSize: "14px",
-    marginTop: "6px",
-    opacity: 0.9,
-  },
-
-  buttonPrimary: {
-    width: "100%",
-    marginTop: "20px",
-    padding: "14px",
-    background: "#4b4fbf",
-    border: "none",
-    color: "white",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "700",
-    fontSize: "16px",
-    boxShadow: "0 10px 25px rgba(75,79,191,0.4)",
-    transition: "0.2s",
-  },
-
-  buttonSecondary: {
-    width: "100%",
-    marginTop: "10px",
-    padding: "14px",
-    background: "#6366f1",
-    border: "none",
-    color: "white",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "700",
   },
 
   riskSection: {
