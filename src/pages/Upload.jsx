@@ -1,139 +1,187 @@
-import { useState } from "react";
+import { useState } from "react"
 
-const BACKEND_URL = "https://guardianchain-backend.onrender.com";
+const BACKEND_URL = "https://guardianchain-backend.onrender.com"
 
 async function generateHash(file) {
-  const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+  const buffer = await file.arrayBuffer()
+  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
+
   return Array.from(new Uint8Array(hashBuffer))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
 }
 
 export default function Upload() {
-  const [file, setFile] = useState(null);
-  const [msg, setMsg] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null)
+  const [msg, setMsg] = useState("")
+  const [loading, setLoading] = useState(false)
 
   async function payWithStripe() {
     if (!file) {
-      setMsg("Selecione um arquivo primeiro.");
-      return;
+      setMsg("Selecione um arquivo primeiro.")
+      return
     }
 
     try {
-      setLoading(true);
-      setMsg("Gerando hash do arquivo...");
+      setLoading(true)
+      setMsg("Gerando prova do arquivo...")
 
-      const proofHash = await generateHash(file);
+      const proofHash = await generateHash(file)
 
-      setMsg("Redirecionando para pagamento seguro (Pix / Cartão)...");
+      setMsg("Redirecionando para pagamento seguro...")
 
       const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ proofHash })
-      });
+        body: JSON.stringify({
+          proofHash,
+          fileName: file.name,
+        }),
+      })
 
-      const data = await res.json();
-      window.location.href = data.url;
+      const data = await res.json()
 
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || "Erro ao criar sessão de pagamento.")
+      }
+
+      window.location.href = data.url
     } catch (err) {
-      console.error(err);
-      setMsg("Erro ao iniciar pagamento.");
+      console.error(err)
+      setMsg("Erro ao iniciar pagamento. Tente novamente.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }
-
-  function payWithCrypto() {
-    if (!file) {
-      setMsg("Selecione um arquivo primeiro.");
-      return;
-    }
-
-    setMsg("Pagamento com Cripto será ativado em breve.");
-    // aqui entra MetaMask no próximo passo
   }
 
   return (
     <div style={styles.container}>
-      <h1>Register Digital Proof</h1>
+      <h1 style={styles.title}>Register Digital Proof</h1>
+
+      <p style={styles.subtitle}>
+        Create a permanent digital proof certificate without uploading your original file.
+      </p>
 
       <input
         type="file"
-        onChange={(e) => setFile(e.target.files[0])}
-        style={{ marginBottom: 10 }}
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
+        style={styles.fileInput}
       />
 
       <p style={styles.status}>
         {file ? (
-          <>Arquivo selecionado: <b>{file.name}</b></>
+          <>
+            Selected file: <b>{file.name}</b>
+          </>
         ) : (
-          "Nenhum arquivo escolhido"
+          "No file selected"
         )}
       </p>
 
-      <div style={styles.buttons}>
-        <button
-          onClick={payWithStripe}
-          style={styles.stripeButton}
-          disabled={loading}
-        >
-          {loading ? "Processando..." : "Pagar com Pix / Cartão – $3"}
-        </button>
-
-        <button
-          onClick={payWithCrypto}
-          style={styles.cryptoButton}
-          disabled={loading}
-        >
-          Pagar com Cripto – $3
-        </button>
+      <div style={styles.priceBox}>
+        <p style={styles.priceTitle}>Permanent digital proof certificate</p>
+        <h2 style={styles.price}>US$ 8</h2>
+        <p style={styles.priceNote}>one-time payment</p>
       </div>
+
+      <button
+        onClick={payWithStripe}
+        style={{
+          ...styles.stripeButton,
+          opacity: loading ? 0.7 : 1,
+          cursor: loading ? "not-allowed" : "pointer",
+        }}
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Pay securely with Card / Pix"}
+      </button>
+
+      <p style={styles.trustText}>
+        Your original file never leaves your device.
+      </p>
 
       {msg && <p style={styles.msg}>{msg}</p>}
     </div>
-  );
+  )
 }
 
 const styles = {
   container: {
     maxWidth: 520,
     margin: "80px auto",
+    padding: "30px 20px",
     textAlign: "center",
-    fontFamily: "Arial, sans-serif"
+    fontFamily: "Arial, sans-serif",
   },
+
+  title: {
+    fontSize: 32,
+    marginBottom: 12,
+    color: "#111827",
+  },
+
+  subtitle: {
+    fontSize: 16,
+    lineHeight: 1.6,
+    color: "#4b5563",
+    marginBottom: 24,
+  },
+
+  fileInput: {
+    marginBottom: 10,
+  },
+
   status: {
     margin: "12px 0",
-    color: "#444"
+    color: "#444",
   },
-  buttons: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-    marginTop: 16
+
+  priceBox: {
+    margin: "22px 0",
+    padding: "20px",
+    borderRadius: 12,
+    background: "#f3f4f6",
+    border: "1px solid #e5e7eb",
   },
+
+  priceTitle: {
+    margin: 0,
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#374151",
+  },
+
+  price: {
+    margin: "8px 0",
+    fontSize: 38,
+    color: "#111827",
+  },
+
+  priceNote: {
+    margin: 0,
+    color: "#6b7280",
+  },
+
   stripeButton: {
+    width: "100%",
     padding: "14px 22px",
     fontSize: 16,
-    borderRadius: 6,
+    borderRadius: 8,
     border: "none",
-    background: "#1e40af",
+    background: "#4b4fbf",
     color: "#fff",
-    cursor: "pointer"
+    fontWeight: "700",
   },
-  cryptoButton: {
-    padding: "14px 22px",
-    fontSize: 16,
-    borderRadius: 6,
-    border: "none",
-    background: "#065f46",
-    color: "#fff",
-    cursor: "pointer"
+
+  trustText: {
+    marginTop: 14,
+    fontSize: 14,
+    color: "#4b5563",
   },
+
   msg: {
     marginTop: 16,
-    fontWeight: "bold"
-  }
-};
+    fontWeight: "bold",
+    color: "#111827",
+  },
+}

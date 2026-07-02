@@ -12,25 +12,27 @@ export default function LandingPage() {
 
   const t = {
     pt: {
-      title: "Comprove que seu arquivo existia antes que outra pessoa reivindique autoria.",
-      subtitle: "Prova digital independente para criadores, desenvolvedores e profissionais.",
-      note: "Seu arquivo nunca é enviado. Apenas o hash criptográfico é registrado.",
+      title: "Proteja seu trabalho antes de compartilhar.",
+      subtitle:
+        "Gere uma prova permanente de autoria para arquivos, ideias, código-fonte e criações digitais — sem enviar o arquivo original.",
+      note: "Seu arquivo original nunca sai do seu dispositivo.",
 
-      feature1: "Proteção de autoria",
-      feature2: "Prova imutável",
-      feature3: "Verificação pública",
-      feature4: "Protegido por blockchain",
+      feature1: "Seu arquivo permanece privado",
+      feature2: "Prova permanente de autoria",
+      feature3: "Verificação pública por QR Code",
+      feature4: "Sem carteira cripto",
 
-      priceTitle: "Registro único",
+      priceTitle: "Certificado digital de prova permanente",
       price: "R$ 19,90",
       pay: "pagamento único",
 
-      register: "Criar prova agora",
+      register: "Gerar meu certificado",
       verify: "Verificar certificado",
 
-      secure1: "Pagamento seguro via Stripe",
-      secure2: "Certificado gerado imediatamente após o pagamento",
-      secure3: "Seu arquivo nunca é enviado para nossos servidores",
+      secure1: "Gerado imediatamente após o pagamento",
+      secure2: "Certificado verificável publicamente",
+      secure3: "Verificação por QR Code incluída",
+      secure4: "Seu arquivo original nunca é enviado",
 
       riskTitle: "O que pode acontecer sem uma prova?",
       riskText:
@@ -64,8 +66,8 @@ export default function LandingPage() {
         },
         {
           icon: "🔐",
-          title: "Geramos a prova criptográfica",
-          text: "Um hash único é criado e vinculado a um registro verificável.",
+          title: "Crie uma prova permanente",
+          text: "Uma impressão digital única do arquivo é criada e vinculada a um registro verificável.",
         },
         {
           icon: "📄",
@@ -80,29 +82,29 @@ export default function LandingPage() {
       aboutText2:
         "A plataforma foi construída com um princípio simples: seus arquivos devem permanecer sob seu controle.",
       aboutText3:
-        "O GuardianChain nunca faz upload ou armazena o arquivo original. Apenas a impressão digital criptográfica (hash) é registrada e vinculada a registros públicos em blockchain.",
+        "O GuardianChain nunca faz upload ou armazena o arquivo original. Apenas a impressão digital criptográfica do arquivo é registrada e vinculada a registros públicos.",
       aboutText4:
         "Nosso objetivo é tornar a evidência digital mais acessível, transparente e verificável para a internet moderna.",
       trustItems: [
         "Arquitetura focada em privacidade",
         "Sem upload de arquivos",
         "Verificação independente",
-        "Registros públicos em blockchain",
+        "Registros públicos verificáveis",
         "Pagamento seguro via Stripe",
       ],
 
       founderTitle: "Presença pública do fundador",
       founderText:
-        "O GuardianChain é desenvolvido por Valderi Miranda, fundador do projeto, com foco em prova digital verificável, blockchain, privacidade e proteção de arquivos digitais.",
+        "O GuardianChain é desenvolvido por Valderi Miranda, fundador do projeto, com foco em prova digital verificável, privacidade e proteção de arquivos digitais.",
       founderText2:
         "Você pode ver a presença pública do fundador no LinkedIn, acompanhar publicações sobre o projeto e verificar que existe uma pessoa real construindo a plataforma.",
       founderButton: "Ver perfil no LinkedIn",
 
       independentTitle: "Verificação independente",
       independentText:
-        "Sua prova não depende apenas do GuardianChain. Cada registro é vinculado a uma blockchain pública e pode ser verificado independentemente utilizando o hash, QR Code e dados do certificado.",
+        "Sua prova não depende apenas do GuardianChain. Cada registro pode ser verificado de forma independente usando o hash, QR Code e dados do certificado.",
       independentItems: [
-        "Registros públicos em blockchain",
+        "Registros públicos verificáveis",
         "QR Code verificável",
         "Hash auditável",
         "Verificação independente",
@@ -110,21 +112,31 @@ export default function LandingPage() {
 
       integrityTitle: "Integridade da prova",
       integrityText:
-        "O GuardianChain cria uma camada adicional de evidência verificável utilizando hash criptográfico, timestamp, certificado e registro em blockchain pública.",
+        "O GuardianChain cria uma prova permanente de que um arquivo específico existia em um momento específico.",
       integrityText2:
-        "O sistema comprova que um arquivo específico, com aquele hash exato, existia em determinado momento e pode ser verificado posteriormente.",
+        "Se o arquivo for alterado depois, a verificação muda também — tornando alterações detectáveis.",
       integrityText3:
         "O GuardianChain não substitui cartório, perícia técnica ou validação judicial formal. Ele funciona como uma camada independente de evidência digital para reforçar autoria, existência e integridade.",
       integrityItems: [
         "Comprova existência do arquivo em uma data",
-        "Comprova integridade pelo hash SHA-256",
+        "Comprova integridade por impressão digital do arquivo",
         "Permite verificação pública posterior",
         "Funciona como camada adicional de evidência",
       ],
 
+      securityTitle: "Domínio oficial e aviso de segurança",
+      securityText:
+        "O domínio oficial do GuardianChain é guardianchain.online. A plataforma nunca solicita investimentos, transferências de criptomoedas, pagamentos para recuperação de fundos ou acesso à sua carteira cripto.",
+      securityItems: [
+        "Domínio oficial: guardianchain.online",
+        "Não solicitamos investimentos",
+        "Não fazemos recuperação de fundos",
+        "Não pedimos acesso à carteira cripto",
+      ],
+
       certificateTitle: "Veja o certificado que você recebe",
       certificateText:
-        "Cada registro gera um certificado verificável com hash criptográfico, QR Code e validação pública.",
+        "Cada registro gera um certificado verificável com impressão digital do arquivo, QR Code e validação pública.",
 
       useCasesTitle: "Ideal para proteger",
       useCasesText:
@@ -145,25 +157,27 @@ export default function LandingPage() {
     },
 
     en: {
-      title: "Prove your file existed before anyone else could claim it.",
-      subtitle: "Independent digital proof for creators, developers and professionals.",
-      note: "Your file is never uploaded. Only the cryptographic hash is recorded.",
+      title: "Protect your work before sharing it.",
+      subtitle:
+        "Generate permanent proof of authorship for files, ideas, source code and digital creations — without uploading your original file.",
+      note: "Your original file never leaves your device.",
 
-      feature1: "Protect authorship",
-      feature2: "Immutable proof",
-      feature3: "Public verification",
-      feature4: "Blockchain secured",
+      feature1: "Your file stays private",
+      feature2: "Permanent proof of authorship",
+      feature3: "Public QR Code verification",
+      feature4: "No crypto wallet required",
 
-      priceTitle: "One-time registration",
+      priceTitle: "Permanent digital proof certificate",
       price: "US$ 8",
       pay: "one-time payment",
 
-      register: "Create proof now",
+      register: "Generate My Certificate",
       verify: "Verify certificate",
 
-      secure1: "Secure payment powered by Stripe",
-      secure2: "Certificate generated immediately after payment",
-      secure3: "Your file is never uploaded to our servers",
+      secure1: "Generated instantly after payment",
+      secure2: "Publicly verifiable certificate",
+      secure3: "QR Code verification included",
+      secure4: "Your original file is never uploaded",
 
       riskTitle: "What can happen without proof?",
       riskText:
@@ -197,8 +211,8 @@ export default function LandingPage() {
         },
         {
           icon: "🔐",
-          title: "Generate cryptographic proof",
-          text: "A unique hash is created and linked to a verifiable record.",
+          title: "Create permanent proof",
+          text: "A unique digital fingerprint is created and linked to a permanent verification record.",
         },
         {
           icon: "📄",
@@ -213,29 +227,29 @@ export default function LandingPage() {
       aboutText2:
         "The platform was designed around a simple principle: your files should remain under your control.",
       aboutText3:
-        "GuardianChain never uploads or stores the original file. Only the cryptographic fingerprint (hash) is registered and anchored to public blockchain records.",
+        "GuardianChain never uploads or stores the original file. Only the file’s digital fingerprint is registered and linked to public verification records.",
       aboutText4:
         "Our goal is to make digital evidence more accessible, transparent and independently verifiable for the modern internet.",
       trustItems: [
         "Privacy-first architecture",
         "No file upload",
         "Independent verification",
-        "Public blockchain records",
+        "Public verification records",
         "Secure payment via Stripe",
       ],
 
       founderTitle: "Public founder presence",
       founderText:
-        "GuardianChain is developed by Valderi Miranda, founder of the project, focused on verifiable digital proof, blockchain, privacy and digital file protection.",
+        "GuardianChain is developed by Valderi Miranda, founder of the project, focused on verifiable digital proof, privacy and digital file protection.",
       founderText2:
         "You can view the founder’s public LinkedIn profile, follow project updates and verify that there is a real person building the platform.",
       founderButton: "View LinkedIn profile",
 
       independentTitle: "Independent verification",
       independentText:
-        "Your proof does not depend only on GuardianChain. Each record is linked to a public blockchain and can be independently verified using the hash, QR Code and certificate data.",
+        "Your proof does not depend only on GuardianChain. Each record can be independently verified using the hash, QR Code and certificate data.",
       independentItems: [
-        "Public blockchain records",
+        "Public verification records",
         "Verifiable QR Code",
         "Auditable hash",
         "Independent verification",
@@ -243,21 +257,31 @@ export default function LandingPage() {
 
       integrityTitle: "Proof integrity",
       integrityText:
-        "GuardianChain creates an additional layer of verifiable evidence using cryptographic hashing, timestamping, certificates and public blockchain records.",
+        "GuardianChain creates permanent proof that a specific file existed at a specific moment in time.",
       integrityText2:
-        "The system proves that a specific file, with that exact hash, existed at a specific point in time and can be verified later.",
+        "If the file changes later, the verification changes too — making alterations detectable.",
       integrityText3:
         "GuardianChain does not replace notarization, forensic analysis or formal judicial validation. It works as an independent digital evidence layer to strengthen authorship, existence and integrity.",
       integrityItems: [
         "Proves file existence at a specific date",
-        "Proves integrity through SHA-256 hash",
+        "Proves integrity through the file fingerprint",
         "Allows future public verification",
         "Works as an additional evidence layer",
       ],
 
+      securityTitle: "Official domain and security notice",
+      securityText:
+        "The official GuardianChain domain is guardianchain.online. The platform never asks for investments, crypto transfers, fund recovery payments or access to your crypto wallet.",
+      securityItems: [
+        "Official domain: guardianchain.online",
+        "We do not request investments",
+        "We do not offer fund recovery",
+        "We do not ask for wallet access",
+      ],
+
       certificateTitle: "See the certificate you receive",
       certificateText:
-        "Each registration generates a verifiable certificate with cryptographic hash, QR Code and public validation.",
+        "Each registration generates a verifiable certificate with the file fingerprint, QR Code and public validation.",
 
       useCasesTitle: "Perfect for protecting",
       useCasesText:
@@ -281,54 +305,37 @@ export default function LandingPage() {
   return (
     <div style={styles.page}>
       <div style={styles.langSwitch}>
-        <Link
-          to="/?lang=pt"
-          style={{
-            ...styles.langLink,
-            opacity: lang === "pt" ? 1 : 0.7,
-            fontWeight: lang === "pt" ? "700" : "400",
-          }}
-        >
+        <Link to="/?lang=pt" style={{ ...styles.langLink, opacity: lang === "pt" ? 1 : 0.7, fontWeight: lang === "pt" ? "700" : "400" }}>
           {t.switchToPt}
         </Link>
 
         <span style={styles.langDivider}>|</span>
 
-        <Link
-          to="/?lang=en"
-          style={{
-            ...styles.langLink,
-            opacity: lang === "en" ? 1 : 0.7,
-            fontWeight: lang === "en" ? "700" : "400",
-          }}
-        >
+        <Link to="/?lang=en" style={{ ...styles.langLink, opacity: lang === "en" ? 1 : 0.7, fontWeight: lang === "en" ? "700" : "400" }}>
           {t.switchToEn}
         </Link>
       </div>
 
       <h1 style={styles.title}>{t.title}</h1>
-
       <p style={styles.subtitle}>{t.subtitle}</p>
-
       <p style={styles.note}>{t.note}</p>
 
       <div style={styles.features}>
         <span>🔒 {t.feature1}</span>
-        <span>⛓ {t.feature2}</span>
+        <span>🛡️ {t.feature2}</span>
         <span>🌐 {t.feature3}</span>
-        <span>📄 {t.feature4}</span>
+        <span>✅ {t.feature4}</span>
       </div>
 
       <div style={styles.card}>
         <p style={styles.priceTitle}>{t.priceTitle}</p>
-
         <h2 style={styles.price}>{t.price}</h2>
-
         <p>{t.pay}</p>
 
-        <p style={styles.secure}>{t.secure1}</p>
-        <p style={styles.secure}>{t.secure2}</p>
-        <p style={styles.secure}>{t.secure3}</p>
+        <p style={styles.secure}>✓ {t.secure1}</p>
+        <p style={styles.secure}>✓ {t.secure2}</p>
+        <p style={styles.secure}>✓ {t.secure3}</p>
+        <p style={styles.secure}>✓ {t.secure4}</p>
 
         <Link to={`/register?lang=${lang}`}>
           <button style={styles.buttonPrimary}>{t.register}</button>
@@ -373,7 +380,6 @@ export default function LandingPage() {
 
       <section style={styles.howSection}>
         <h2 style={styles.howTitle}>{t.howTitle}</h2>
-
         <p style={styles.howText}>{t.howText}</p>
 
         <div style={styles.howGrid}>
@@ -390,7 +396,6 @@ export default function LandingPage() {
 
       <section style={styles.aboutSection}>
         <h2 style={styles.aboutTitle}>{t.aboutTitle}</h2>
-
         <p style={styles.aboutText}>{t.aboutText}</p>
         <p style={styles.aboutText}>{t.aboutText2}</p>
         <p style={styles.aboutText}>{t.aboutText3}</p>
@@ -408,23 +413,16 @@ export default function LandingPage() {
 
       <section style={styles.founderSection}>
         <h2 style={styles.founderTitle}>{t.founderTitle}</h2>
-
         <p style={styles.founderText}>{t.founderText}</p>
         <p style={styles.founderText}>{t.founderText2}</p>
 
-        <a
-          href={linkedinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={styles.linkedinButton}
-        >
+        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" style={styles.linkedinButton}>
           {t.founderButton}
         </a>
       </section>
 
       <section style={styles.independentSection}>
         <h2 style={styles.independentTitle}>{t.independentTitle}</h2>
-
         <p style={styles.independentText}>{t.independentText}</p>
 
         <div style={styles.independentGrid}>
@@ -439,7 +437,6 @@ export default function LandingPage() {
 
       <section style={styles.integritySection}>
         <h2 style={styles.integrityTitle}>{t.integrityTitle}</h2>
-
         <p style={styles.integrityText}>{t.integrityText}</p>
         <p style={styles.integrityText}>{t.integrityText2}</p>
         <p style={styles.integrityText}>{t.integrityText3}</p>
@@ -454,21 +451,29 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section style={styles.securitySection}>
+        <h2 style={styles.securityTitle}>{t.securityTitle}</h2>
+        <p style={styles.securityText}>{t.securityText}</p>
+
+        <div style={styles.securityGrid}>
+          {t.securityItems.map((item) => (
+            <div key={item} style={styles.securityCard}>
+              <span style={styles.securityCheck}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <div style={styles.certificateSection}>
         <h2 style={styles.certificateTitle}>{t.certificateTitle}</h2>
-
         <p style={styles.certificateText}>{t.certificateText}</p>
 
-        <img
-          src={certificatePreview}
-          alt="GuardianChain Certificate Preview"
-          style={styles.certificateImage}
-        />
+        <img src={certificatePreview} alt="GuardianChain Certificate Preview" style={styles.certificateImage} />
       </div>
 
       <section style={styles.useCasesSection}>
         <h2 style={styles.useCasesTitle}>{t.useCasesTitle}</h2>
-
         <p style={styles.useCasesText}>{t.useCasesText}</p>
 
         <div style={styles.useCasesGrid}>
@@ -494,8 +499,8 @@ const styles = {
   page: {
     minHeight: "100vh",
     textAlign: "center",
-    padding: "30px 20px 60px",
-    background: "linear-gradient(180deg,#5a60d1,#3b3fa3)",
+    padding: "60px 20px 80px",
+    background: "linear-gradient(180deg,#6366f1 0%, #4f46e5 45%, #312e81 100%)",
     color: "white",
   },
 
@@ -518,18 +523,25 @@ const styles = {
   },
 
   title: {
-    fontSize: "42px",
+    fontSize: "54px",
+    fontWeight: "800",
+    lineHeight: "1.1",
     marginBottom: "20px",
   },
 
   subtitle: {
-    fontSize: "20px",
+    fontSize: "18px",
     marginBottom: "10px",
+    maxWidth: "900px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    lineHeight: "1.5",
   },
 
   note: {
-    opacity: 0.9,
+    opacity: 0.95,
     marginBottom: "20px",
+    fontWeight: "600",
   },
 
   features: {
@@ -541,16 +553,19 @@ const styles = {
   },
 
   card: {
-    background: "#f3f3f3",
+    background: "#ffffff",
     color: "#111",
     maxWidth: "480px",
     margin: "0 auto",
     padding: "30px",
     borderRadius: "14px",
+    boxShadow: "0 25px 60px rgba(0,0,0,0.25)",
+    border: "1px solid rgba(255,255,255,0.2)",
   },
 
   priceTitle: {
-    opacity: 0.8,
+    opacity: 0.9,
+    fontWeight: "700",
   },
 
   price: {
@@ -574,6 +589,9 @@ const styles = {
     borderRadius: "8px",
     cursor: "pointer",
     fontWeight: "700",
+    fontSize: "16px",
+    boxShadow: "0 10px 25px rgba(75,79,191,0.4)",
+    transition: "0.2s",
   },
 
   buttonSecondary: {
@@ -953,6 +971,59 @@ const styles = {
   },
 
   integrityCheck: {
+    width: "22px",
+    height: "22px",
+    borderRadius: "999px",
+    background: "#ffffff",
+    color: "#4338ca",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "800",
+    flexShrink: 0,
+  },
+
+  securitySection: {
+    maxWidth: "980px",
+    margin: "80px auto 0",
+    padding: "40px 24px",
+    background: "rgba(255,255,255,0.12)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    borderRadius: "22px",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.2)",
+  },
+
+  securityTitle: {
+    fontSize: "32px",
+    marginBottom: "18px",
+  },
+
+  securityText: {
+    maxWidth: "820px",
+    margin: "0 auto 30px",
+    lineHeight: "1.7",
+    opacity: 0.95,
+    fontSize: "16px",
+  },
+
+  securityGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "14px",
+  },
+
+  securityCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "14px 16px",
+    background: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: "14px",
+    textAlign: "left",
+  },
+
+  securityCheck: {
     width: "22px",
     height: "22px",
     borderRadius: "999px",

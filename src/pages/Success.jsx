@@ -12,10 +12,20 @@ export default function Success() {
   // Analytics - compra concluída
   useEffect(() => {
     if (typeof window.gtag === "function") {
+
+      // Evento padrão purchase
       window.gtag("event", "purchase", {
         transaction_id: sessionId || "unknown",
-        value: 4,
+        value: 8,
         currency: "USD"
+      })
+
+      // Conversão Google Ads
+      window.gtag("event", "conversion", {
+        send_to: "AW-18086374211/9ucuCKWmhKEcEMPWoLBD",
+        value: 8.0,
+        currency: "USD",
+        transaction_id: sessionId || ""
       })
     }
   }, [sessionId])
@@ -23,10 +33,13 @@ export default function Success() {
   const handleDownload = () => {
     if (!sessionId) return
 
-    window.open(
-      `/api/download-certificate?session_id=${encodeURIComponent(sessionId)}&lang=${lang}`,
-      "_blank"
-    )
+    const url =
+      "/api/download-certificate?session_id=" +
+      encodeURIComponent(sessionId) +
+      "&lang=" +
+      lang
+
+    window.open(url, "_blank")
   }
 
   return (

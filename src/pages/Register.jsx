@@ -39,16 +39,16 @@ export default function Register() {
   const text = {
     pt: {
       home: "Início",
-      badge: "Registro verificável em blockchain",
+      badge: "Registro verificável permanente",
       title: "Registrar prova digital",
       subtitle:
-        "Gere uma prova criptográfica do seu arquivo, vinculada ao titular declarado e entregue em certificado PDF.",
+        "Gere uma prova permanente do seu arquivo, vinculada ao titular declarado e entregue em certificado PDF.",
       privacy:
-        "Seu arquivo nunca é enviado. Apenas o hash criptográfico é gerado no seu navegador.",
+        "Seu arquivo nunca é enviado. Apenas a impressão digital criptográfica é gerada no seu navegador.",
       choose: "Escolher arquivo",
       selected: "Arquivo selecionado",
       noFile: "Nenhum arquivo escolhido",
-      hashGenerated: "Hash gerado com segurança",
+      hashGenerated: "Prova gerada com segurança",
       holder: "Titular do certificado",
       name: "Nome completo ou razão social",
       email: "E-mail do titular",
@@ -56,15 +56,17 @@ export default function Register() {
       individual: "Pessoa física",
       company: "Empresa",
       declaration:
-        "Declaro, sob minha responsabilidade, que sou o autor, titular ou possuo direito legítimo sobre o conteúdo representado por este hash.",
+        "Declaro, sob minha responsabilidade, que sou o autor, titular ou possuo direito legítimo sobre o conteúdo representado por esta prova.",
       pay: "Gerar certificado e pagar",
       loading: "Redirecionando para pagamento...",
       required:
         "Preencha todos os dados, escolha um arquivo e aceite a declaração.",
+      checkoutError:
+        "Erro ao iniciar pagamento. Se estiver testando localmente, faça o teste final no site publicado ou usando vercel dev.",
       trustTitle: "O que você recebe",
       trust1: "Certificado PDF com titular declarado",
       trust2: "QR Code para verificação pública",
-      trust3: "Hash criptográfico do arquivo",
+      trust3: "Impressão digital criptográfica do arquivo",
       trust4: "Registro verificável e permanente",
       price: "R$ 19,90",
       priceNote: "pagamento único",
@@ -72,16 +74,16 @@ export default function Register() {
     },
     en: {
       home: "Home",
-      badge: "Verifiable blockchain record",
+      badge: "Permanent verifiable record",
       title: "Register digital proof",
       subtitle:
-        "Generate cryptographic proof for your file, linked to the declared holder and delivered as a PDF certificate.",
+        "Generate permanent proof for your file, linked to the declared holder and delivered as a PDF certificate.",
       privacy:
-        "Your file is never uploaded. Only the cryptographic hash is generated in your browser.",
+        "Your file is never uploaded. Only the cryptographic fingerprint is generated in your browser.",
       choose: "Choose file",
       selected: "Selected file",
       noFile: "No file selected",
-      hashGenerated: "Hash securely generated",
+      hashGenerated: "Proof securely generated",
       holder: "Certificate holder",
       name: "Full name or company name",
       email: "Holder email",
@@ -89,14 +91,16 @@ export default function Register() {
       individual: "Individual",
       company: "Company",
       declaration:
-        "I declare, under my own responsibility, that I am the author, owner, or have legitimate rights over the content represented by this hash.",
+        "I declare, under my own responsibility, that I am the author, owner, or have legitimate rights over the content represented by this proof.",
       pay: "Generate certificate and pay",
       loading: "Redirecting to payment...",
       required: "Fill in all details, choose a file, and accept the declaration.",
+      checkoutError:
+        "Error starting payment. If you are testing locally, run the final checkout test on the published site or using vercel dev.",
       trustTitle: "What you receive",
       trust1: "PDF certificate with declared holder",
       trust2: "QR Code for public verification",
-      trust3: "Cryptographic file hash",
+      trust3: "Cryptographic file fingerprint",
       trust4: "Verifiable permanent record",
       price: "US$ 8",
       priceNote: "one-time payment",
@@ -107,7 +111,7 @@ export default function Register() {
   const t = text[lang]
 
   const handleFileChange = async (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files?.[0]
     if (!file) return
 
     setFileName(file.name)
@@ -153,16 +157,21 @@ export default function Register() {
         }),
       })
 
-      const data = await response.json()
+      const rawText = await response.text()
+      const data = rawText ? JSON.parse(rawText) : {}
 
       if (!response.ok) {
         throw new Error(data.error || "Checkout error")
       }
 
+      if (!data.url) {
+        throw new Error("Stripe checkout URL not returned")
+      }
+
       window.location.href = data.url
     } catch (error) {
-      console.error(error)
-      alert("Erro ao iniciar pagamento. Tente novamente.")
+      console.error("Checkout error:", error)
+      alert(t.checkoutError)
       setLoading(false)
     }
   }
@@ -188,7 +197,7 @@ export default function Register() {
 
         <div style={styles.grid}>
           <div style={styles.left}>
-            <div style={styles.badge}>⛓ {t.badge}</div>
+            <div style={styles.badge}>🛡️ {t.badge}</div>
 
             <h1 style={styles.title}>{t.title}</h1>
 
@@ -457,6 +466,7 @@ const styles = {
     cursor: "pointer",
     fontWeight: "800",
     marginBottom: "12px",
+    boxSizing: "border-box",
   },
 
   fileText: {
