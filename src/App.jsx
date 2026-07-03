@@ -10,6 +10,7 @@ import Terms from "./pages/Terms.jsx"
 import Privacy from "./pages/Privacy.jsx"
 import Support from "./pages/Support.jsx"
 import RefundPolicy from "./pages/RefundPolicy.jsx"
+import CertificateDemo from "./pages/CertificateDemo.jsx"
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/success" element={<Success />} />
         <Route path="/verify" element={<Verify />} />
+
+        <Route path="/certificate-demo" element={<CertificateDemo />} />
+
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/terms" element={<Terms />} />
