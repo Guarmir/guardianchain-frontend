@@ -1,25 +1,24 @@
+import crypto from "crypto"
 import Stripe from "stripe"
 import generateCertificate from "./generate-certificate.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-function generateEvidenceKey({ paymentId, language }) {
+function normalizeCode(value) {
+  return String(value || "")
+    .replace(/[^A-Z0-9]/gi, "")
+    .toUpperCase()
+}
+
+function generateEvidenceKey({ paymentId, fileHash, language }) {
   const year = new Date().getUTCFullYear()
   const market = language === "pt" ? "BR" : "EN"
 
-  const source = `${paymentId || "guardianchain"}-${language}-${year}`
-  let hash = 0
+  const paymentPart = normalizeCode(paymentId).slice(-6).padStart(6, "0")
+  const hashPart = normalizeCode(fileHash).slice(0, 6).padEnd(6, "0")
+  const randomPart = crypto.randomBytes(4).toString("hex").toUpperCase()
 
-  for (let i = 0; i < source.length; i++) {
-    hash = (hash << 5) - hash + source.charCodeAt(i)
-    hash |= 0
-  }
-
-  const base = Math.abs(hash).toString(36).toUpperCase().padStart(8, "0")
-  const part1 = base.slice(0, 4)
-  const part2 = base.slice(4, 8)
-
-  return `GC-${year}-${market}-${part1}-${part2}`
+  return `GC-${year}-${market}-${paymentPart}-${hashPart}-${randomPart}`
 }
 
 export default async function handler(req, res) {
@@ -71,6 +70,7 @@ export default async function handler(req, res) {
 
     const evidenceKey = generateEvidenceKey({
       paymentId,
+      fileHash,
       language,
     })
 
