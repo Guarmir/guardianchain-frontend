@@ -9,6 +9,7 @@ export default async function generateCertificate({
   ownerEmail = "",
   ownerType = "individual",
   paymentId = "",
+  evidenceKey = "",
 }) {
   return await new Promise(async (resolve, reject) => {
     try {
@@ -17,7 +18,8 @@ export default async function generateCertificate({
       const lang = language === "pt" ? "pt" : "en"
       const now = new Date()
       const shortHash = hash.replace("0x", "").slice(0, 12).toUpperCase()
-      const evidenceId = `GC-${now.getUTCFullYear()}-${shortHash}`
+      const fallbackEvidenceKey = `GC-${now.getUTCFullYear()}-${shortHash}`
+      const finalEvidenceKey = evidenceKey || fallbackEvidenceKey
 
       const utc =
         now.toISOString().replace("T", " ").substring(0, 19) + " UTC"
@@ -41,8 +43,10 @@ export default async function generateCertificate({
           title: "Certificado de Evidência GuardianChain",
           subtitle: "Registro de Evidência Digital Verificável",
           description:
-            "Este certificado cria uma camada adicional de evidência verificável por meio de hash criptográfico, timestamp, titularidade declarada e verificação pública.",
-          evidenceId: "ID da evidência",
+            "Este certificado cria uma camada adicional de evidência verificável por meio de hash criptográfico, timestamp, titularidade declarada, Evidence Key™ e verificação pública.",
+          evidenceKey: "Evidence Key™",
+          evidenceKeyDescription:
+            "Chave exclusiva do certificado GuardianChain para facilitar identificação, conferência e compartilhamento da prova digital.",
           holder: "Titular declarado",
           name: "Nome",
           email: "E-mail",
@@ -62,7 +66,7 @@ export default async function generateCertificate({
           verify: "URL de verificação pública",
           independentTitle: "Verificação independente",
           independent:
-            "Este registro pode ser verificado utilizando o hash criptográfico, a URL pública de verificação e os dados do certificado. O arquivo original não é enviado nem armazenado pela GuardianChain.",
+            "Este registro pode ser verificado utilizando a Evidence Key™, o hash criptográfico, a URL pública de verificação e os dados do certificado. O arquivo original não é enviado nem armazenado pela GuardianChain.",
           limitationTitle: "Limitação importante",
           limitation:
             "Este certificado comprova a existência deste hash, o timestamp do registro e a declaração do titular. A GuardianChain não valida o conteúdo interno do arquivo, não certifica como ele foi criado ou obtido e não substitui cartório, perícia técnica ou validação judicial formal.",
@@ -73,8 +77,10 @@ export default async function generateCertificate({
           title: "GuardianChain Evidence Certificate",
           subtitle: "Verifiable Digital Evidence Record",
           description:
-            "This certificate creates an additional verifiable evidence layer using cryptographic hashing, timestamping, declared ownership and public verification.",
-          evidenceId: "Evidence ID",
+            "This certificate creates an additional verifiable evidence layer using cryptographic hashing, timestamping, declared ownership, Evidence Key™ and public verification.",
+          evidenceKey: "Evidence Key™",
+          evidenceKeyDescription:
+            "Exclusive GuardianChain certificate key designed to make digital proof easier to identify, review and share.",
           holder: "Declared holder",
           name: "Name",
           email: "Email",
@@ -94,7 +100,7 @@ export default async function generateCertificate({
           verify: "Public verification URL",
           independentTitle: "Independent verification",
           independent:
-            "This record can be verified using the cryptographic hash, the public verification URL and the certificate data. The original file is never uploaded or stored by GuardianChain.",
+            "This record can be verified using the Evidence Key™, the cryptographic hash, the public verification URL and the certificate data. The original file is never uploaded or stored by GuardianChain.",
           limitationTitle: "Important limitation",
           limitation:
             "This certificate proves the existence of this hash, the registration timestamp and the holder declaration. GuardianChain does not validate the internal file content, does not certify how it was created or obtained, and does not replace notarization, forensic analysis or formal judicial validation.",
@@ -129,12 +135,10 @@ export default async function generateCertificate({
           align: "center",
         })
 
-      doc
-        .fontSize(11)
-        .text(t.subtitle, left, 66, {
-          width: contentWidth,
-          align: "center",
-        })
+      doc.fontSize(11).text(t.subtitle, left, 66, {
+        width: contentWidth,
+        align: "center",
+      })
 
       y = 138
 
@@ -147,20 +151,34 @@ export default async function generateCertificate({
           lineGap: 2,
         })
 
-      y += 36
+      y += 42
 
       doc
-        .roundedRect(left, y, contentWidth, 30, 8)
-        .fillAndStroke("#f3f4f6", "#d1d5db")
+        .roundedRect(left, y, contentWidth, 58, 10)
+        .fillAndStroke("#eef2ff", "#c7d2fe")
+
+      doc
+        .fillColor("#1f2a6d")
+        .fontSize(11)
+        .text(t.evidenceKey, left + 14, y + 10, {
+          width: contentWidth - 28,
+        })
 
       doc
         .fillColor("#111827")
-        .fontSize(10)
-        .text(`${t.evidenceId}: ${evidenceId}`, left + 12, y + 9, {
-          width: contentWidth - 24,
+        .fontSize(15)
+        .text(finalEvidenceKey, left + 14, y + 26, {
+          width: contentWidth - 28,
         })
 
-      y += 48
+      doc
+        .fillColor("#4b5563")
+        .fontSize(7.8)
+        .text(t.evidenceKeyDescription, left + 14, y + 44, {
+          width: contentWidth - 28,
+        })
+
+      y += 78
 
       drawTitle(doc, t.holder, left, y)
       y += 22
@@ -174,23 +192,20 @@ export default async function generateCertificate({
         y
       )
 
-      y += 12
+      y += 10
 
       drawTitle(doc, t.declarationTitle, left, y)
-      y += 22
+      y += 20
 
-      doc
-        .fillColor("#374151")
-        .fontSize(8.8)
-        .text(t.declaration, left, y, {
-          width: contentWidth,
-          lineGap: 2,
-        })
+      doc.fillColor("#374151").fontSize(8.5).text(t.declaration, left, y, {
+        width: contentWidth,
+        lineGap: 2,
+      })
 
-      y += 46
+      y += 42
 
       drawTitle(doc, t.technicalTitle, left, y)
-      y += 22
+      y += 20
 
       y = drawLine(doc, `${t.fileName}: ${fileName || "-"}`, left, y)
       y = drawLine(doc, `${t.utc}: ${utc}`, left, y)
@@ -198,28 +213,25 @@ export default async function generateCertificate({
       y = drawLine(doc, `${t.network}: Polygon`, left, y)
       y = drawLine(doc, `${t.payment}: ${paymentId || "-"}`, left, y)
 
-      y += 10
+      y += 8
 
       drawTitle(doc, t.hash, left, y)
-      y += 20
+      y += 18
 
-      doc
-        .fillColor("#374151")
-        .fontSize(8)
-        .text(hash, left, y, {
-          width: contentWidth,
-        })
+      doc.fillColor("#374151").fontSize(7.7).text(hash, left, y, {
+        width: contentWidth,
+      })
 
-      y += 30
+      y += 28
 
       drawTitle(doc, t.verify, left, y)
-      y += 22
+      y += 20
 
       const qr = await QRCode.toDataURL(verificationUrl)
       const qrImage = qr.replace(/^data:image\/png;base64,/, "")
       const qrBuffer = Buffer.from(qrImage, "base64")
 
-      const qrSize = 92
+      const qrSize = 88
       const qrX = pageWidth - right - qrSize
       const qrY = y
 
@@ -229,7 +241,7 @@ export default async function generateCertificate({
 
       doc
         .fillColor("#1d4ed8")
-        .fontSize(7.8)
+        .fontSize(7.4)
         .text(verificationUrl, left, y, {
           width: contentWidth - qrSize - 24,
           link: verificationUrl,
@@ -237,49 +249,36 @@ export default async function generateCertificate({
           lineGap: 1,
         })
 
-      y += 108
+      y += 102
 
       drawTitle(doc, t.independentTitle, left, y)
-      y += 20
+      y += 18
 
-      doc
-        .fillColor("#374151")
-        .fontSize(8.5)
-        .text(t.independent, left, y, {
-          width: contentWidth,
-          lineGap: 2,
-        })
+      doc.fillColor("#374151").fontSize(8.2).text(t.independent, left, y, {
+        width: contentWidth,
+        lineGap: 2,
+      })
 
-      y += 52
+      y += 48
 
       drawTitle(doc, t.limitationTitle, left, y)
-      y += 20
+      y += 18
 
-      doc
-        .fillColor("#374151")
-        .fontSize(8.3)
-        .text(t.limitation, left, y, {
-          width: contentWidth,
-          lineGap: 2,
-        })
+      doc.fillColor("#374151").fontSize(8).text(t.limitation, left, y, {
+        width: contentWidth,
+        lineGap: 2,
+      })
 
-      y += 58
+      y += 54
 
-      doc
-        .moveTo(left, y)
-        .lineTo(pageWidth - right, y)
-        .strokeColor("#d1d5db")
-        .stroke()
+      doc.moveTo(left, y).lineTo(pageWidth - right, y).strokeColor("#d1d5db").stroke()
 
       y += 12
 
-      doc
-        .fillColor("#6b7280")
-        .fontSize(7.5)
-        .text(t.footer, left, y, {
-          width: contentWidth,
-          align: "center",
-        })
+      doc.fillColor("#6b7280").fontSize(7.5).text(t.footer, left, y, {
+        width: contentWidth,
+        align: "center",
+      })
 
       doc.end()
     } catch (error) {
@@ -293,12 +292,9 @@ function drawTitle(doc, text, x, y) {
 }
 
 function drawLine(doc, text, x, y) {
-  doc
-    .fillColor("#111827")
-    .fontSize(8.8)
-    .text(text, x, y, {
-      width: 480,
-    })
+  doc.fillColor("#111827").fontSize(8.6).text(text, x, y, {
+    width: 480,
+  })
 
-  return y + 16
+  return y + 15
 }
