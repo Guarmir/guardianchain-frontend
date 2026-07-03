@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { useEffect } from "react"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 
 import Landing from "./pages/LandingPage.jsx"
 import Register from "./pages/Register.jsx"
@@ -12,9 +13,21 @@ import Support from "./pages/Support.jsx"
 import RefundPolicy from "./pages/RefundPolicy.jsx"
 import CertificateDemo from "./pages/CertificateDemo.jsx"
 
+function ScrollToTop() {
+  const { pathname, search } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname, search])
+
+  return null
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
+
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
