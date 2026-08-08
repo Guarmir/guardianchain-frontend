@@ -12,8 +12,10 @@ import SecuritySection from "../components/landing/SecuritySection.jsx"
 import CertificateSection from "../components/landing/CertificateSection.jsx"
 import UseCasesSection from "../components/landing/UseCasesSection.jsx"
 import TrustStrip from "../components/landing/TrustStrip.jsx"
+import PricingSection from "../components/landing/PricingSection.jsx"
 
 import { landingContent } from "../data/landingContent.js"
+import { getLandingProducts } from "../data/productCatalog.js"
 
 export default function LandingPage() {
   const [params] = useSearchParams()
@@ -22,6 +24,7 @@ export default function LandingPage() {
   const lang = langParam === "pt" ? "pt" : "en"
 
   const t = landingContent[lang]
+  const products = getLandingProducts(lang)
 
   return (
     <div style={styles.page}>
@@ -53,27 +56,29 @@ export default function LandingPage() {
 
       <Hero t={t} lang={lang} />
 
-    <TrustStrip lang={lang} />
+      <TrustStrip lang={lang} />
 
-    <ProblemSection t={t} lang={lang} />
+      <ProblemSection t={t} lang={lang} />
 
-    <HowItWorks t={t} lang={lang} />
+      <HowItWorks t={t} lang={lang} />
 
-    <CertificateSection t={t} lang={lang} />
+      <CertificateSection t={t} lang={lang} />
 
-    <UseCasesSection t={t} lang={lang} />
+      <UseCasesSection t={t} lang={lang} />
 
-    <SecuritySection t={t} lang={lang} />
+      <SecuritySection t={t} lang={lang} />
 
-    <FounderSection t={t} lang={lang} />
+      <FounderSection t={t} lang={lang} />
 
-    <AboutSection t={t} lang={lang} />
+      <AboutSection t={t} lang={lang} />
 
-    <ProfessionalSection t={t} lang={lang} />
+      <ProfessionalSection t={t} lang={lang} />
 
-    <IntegritySection t={t} lang={lang} />
+      <PricingSection lang={lang} products={products} />
 
-    <Footer />
+      <IntegritySection t={t} lang={lang} />
+
+      <Footer />
     </div>
   )
 }

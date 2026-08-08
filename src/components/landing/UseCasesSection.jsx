@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom"
-
-export default function UseCasesSection({ t, lang }) {
+export default function UseCasesSection({ t }) {
   return (
     <section style={styles.section}>
       <h2 style={styles.title}>{t.useCasesTitle}</h2>
@@ -15,10 +13,6 @@ export default function UseCasesSection({ t, lang }) {
           </div>
         ))}
       </div>
-
-      <Link to={`/register?lang=${lang}`} style={styles.link}>
-        <button style={styles.button}>{t.register}</button>
-      </Link>
     </section>
   )
 }
@@ -50,7 +44,6 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "12px",
-    marginBottom: "28px",
   },
 
   card: {
@@ -77,21 +70,5 @@ const styles = {
     color: "#4b4fbf",
     fontWeight: "800",
     flexShrink: 0,
-  },
-
-  link: {
-    display: "inline-block",
-    textDecoration: "none",
-  },
-
-  button: {
-    padding: "15px 24px",
-    background: "#ffffff",
-    color: "#4338ca",
-    border: "none",
-    borderRadius: "12px",
-    cursor: "pointer",
-    fontWeight: "800",
-    fontSize: "15px",
   },
 }

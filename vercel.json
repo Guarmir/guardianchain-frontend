@@ -1,15 +1,45 @@
 {
-  "routes": [
+  "framework": "vite",
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/register",
+      "destination": "/index.html"
     },
     {
-      "handle": "filesystem"
+      "source": "/success",
+      "destination": "/index.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/"
+      "source": "/verify",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/certificate-demo",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/support",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/refund",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin/login",
+      "destination": "/index.html"
     }
   ]
 }

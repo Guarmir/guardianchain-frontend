@@ -1,6 +1,17 @@
-import { useState, useEffect } from "react"
-import { ethers } from "ethers"
-import { Link, useSearchParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import {
+  Link,
+  useSearchParams,
+} from "react-router-dom"
+
+import {
+  DEFAULT_PRODUCT_ID,
+  getProductById,
+} from "../data/productCatalog.js"
+
+import {
+  generateFileHash,
+} from "../utils/generateFileHash.js"
 
 export default function Register() {
   const [params] = useSearchParams()
@@ -11,115 +22,236 @@ export default function Register() {
     if (langParam === "pt") return "pt"
     if (langParam === "en") return "en"
 
-    const savedLang = localStorage.getItem("guardianchain_lang")
-    if (savedLang === "pt" || savedLang === "en") return savedLang
+    const savedLang =
+      localStorage.getItem(
+        "guardianchain_lang",
+      )
 
-    const browserLang = navigator.language || navigator.userLanguage || ""
-    if (browserLang.toLowerCase().startsWith("pt")) return "pt"
+    if (
+      savedLang === "pt" ||
+      savedLang === "en"
+    ) {
+      return savedLang
+    }
+
+    const browserLang =
+      navigator.language ||
+      navigator.userLanguage ||
+      ""
+
+    if (
+      browserLang
+        .toLowerCase()
+        .startsWith("pt")
+    ) {
+      return "pt"
+    }
 
     return "en"
   }
 
   const lang = getInitialLang()
 
-  const [fileHash, setFileHash] = useState("")
-  const [fileName, setFileName] = useState("")
-  const [ownerName, setOwnerName] = useState("")
-  const [ownerEmail, setOwnerEmail] = useState("")
-  const [ownerType, setOwnerType] = useState("individual")
-  const [acceptedDeclaration, setAcceptedDeclaration] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const requestedProductId =
+    params.get("product") ||
+    DEFAULT_PRODUCT_ID
+
+  const selectedProduct =
+    getProductById(
+      requestedProductId,
+      lang,
+    ) ||
+    getProductById(
+      DEFAULT_PRODUCT_ID,
+      lang,
+    )
+
+  const [fileHash, setFileHash] =
+    useState("")
+
+  const [fileName, setFileName] =
+    useState("")
+
+  const [ownerName, setOwnerName] =
+    useState("")
+
+  const [ownerEmail, setOwnerEmail] =
+    useState("")
+
+  const [ownerType, setOwnerType] =
+    useState("individual")
+
+  const [
+    acceptedDeclaration,
+    setAcceptedDeclaration,
+  ] = useState(false)
+
+  const [hashingFile, setHashingFile] =
+    useState(false)
+
+  const [loading, setLoading] =
+    useState(false)
 
   useEffect(() => {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "register_page_view")
+    if (
+      typeof window.gtag === "function"
+    ) {
+      window.gtag(
+        "event",
+        "register_page_view",
+        {
+          product_id:
+            selectedProduct?.id ||
+            DEFAULT_PRODUCT_ID,
+        },
+      )
     }
-  }, [])
+  }, [selectedProduct?.id])
 
   const text = {
     pt: {
       home: "Início",
-      badge: "Registro verificável permanente",
+      badge:
+        "Registro verificável permanente",
       title: "Registrar prova digital",
       subtitle:
         "Gere uma prova permanente do seu arquivo, vinculada ao titular declarado e entregue em certificado PDF.",
       privacy:
-        "Seu arquivo nunca é enviado. Apenas a impressão digital criptográfica é gerada no seu navegador.",
+        "Seu arquivo nunca é enviado. Apenas a impressão digital SHA-256 é gerada no seu navegador.",
+      selectedProduct:
+        "Produto selecionado",
       choose: "Escolher arquivo",
-      selected: "Arquivo selecionado",
-      noFile: "Nenhum arquivo escolhido",
-      hashGenerated: "Prova gerada com segurança",
-      holder: "Titular do certificado",
-      name: "Nome completo ou razão social",
-      email: "E-mail do titular",
-      type: "Tipo de titular",
-      individual: "Pessoa física",
+      hashing:
+        "Gerando impressão digital...",
+      selected:
+        "Arquivo selecionado",
+      noFile:
+        "Nenhum arquivo escolhido",
+      hashGenerated:
+        "Impressão digital SHA-256 gerada com segurança",
+      hashError:
+        "Não foi possível gerar a impressão digital do arquivo. Tente novamente.",
+      holder:
+        "Titular do certificado",
+      name:
+        "Nome completo ou razão social",
+      email:
+        "E-mail do titular",
+      individual:
+        "Pessoa física",
       company: "Empresa",
       declaration:
         "Declaro, sob minha responsabilidade, que sou o autor, titular ou possuo direito legítimo sobre o conteúdo representado por esta prova.",
-      pay: "Gerar certificado e pagar",
-      loading: "Redirecionando para pagamento...",
+      pay:
+        "Gerar certificado e pagar",
+      loading:
+        "Redirecionando para pagamento...",
       required:
         "Preencha todos os dados, escolha um arquivo e aceite a declaração.",
       checkoutError:
         "Erro ao iniciar pagamento. Se estiver testando localmente, faça o teste final no site publicado ou usando vercel dev.",
-      trustTitle: "O que você recebe",
-      trust1: "Certificado PDF com titular declarado",
-      trust2: "QR Code para verificação pública",
-      trust3: "Impressão digital criptográfica do arquivo",
-      trust4: "Registro verificável e permanente",
-      price: "R$ 19,90",
-      priceNote: "pagamento único",
-      securePayment: "Pagamento seguro via Stripe",
+      trustTitle:
+        "O que você recebe",
+      trust1:
+        "Certificado PDF com titular declarado",
+      trust2:
+        "QR Code para verificação pública",
+      trust3:
+        "Impressão digital SHA-256 do arquivo",
+      trust4:
+        "Evidence Key™ exclusiva",
+      securePayment:
+        "Pagamento seguro via Stripe",
     },
+
     en: {
       home: "Home",
-      badge: "Permanent verifiable record",
-      title: "Register digital proof",
+      badge:
+        "Permanent verifiable record",
+      title:
+        "Register digital proof",
       subtitle:
         "Generate permanent proof for your file, linked to the declared holder and delivered as a PDF certificate.",
       privacy:
-        "Your file is never uploaded. Only the cryptographic fingerprint is generated in your browser.",
+        "Your file is never uploaded. Only the SHA-256 fingerprint is generated in your browser.",
+      selectedProduct:
+        "Selected product",
       choose: "Choose file",
-      selected: "Selected file",
-      noFile: "No file selected",
-      hashGenerated: "Proof securely generated",
-      holder: "Certificate holder",
-      name: "Full name or company name",
-      email: "Holder email",
-      type: "Holder type",
+      hashing:
+        "Generating file fingerprint...",
+      selected:
+        "Selected file",
+      noFile:
+        "No file selected",
+      hashGenerated:
+        "SHA-256 fingerprint securely generated",
+      hashError:
+        "The file fingerprint could not be generated. Please try again.",
+      holder:
+        "Certificate holder",
+      name:
+        "Full name or company name",
+      email:
+        "Holder email",
       individual: "Individual",
       company: "Company",
       declaration:
         "I declare, under my own responsibility, that I am the author, owner, or have legitimate rights over the content represented by this proof.",
-      pay: "Generate certificate and pay",
-      loading: "Redirecting to payment...",
-      required: "Fill in all details, choose a file, and accept the declaration.",
+      pay:
+        "Generate certificate and pay",
+      loading:
+        "Redirecting to payment...",
+      required:
+        "Fill in all details, choose a file, and accept the declaration.",
       checkoutError:
         "Error starting payment. If you are testing locally, run the final checkout test on the published site or using vercel dev.",
-      trustTitle: "What you receive",
-      trust1: "PDF certificate with declared holder",
-      trust2: "QR Code for public verification",
-      trust3: "Cryptographic file fingerprint",
-      trust4: "Verifiable permanent record",
-      price: "US$ 8",
-      priceNote: "one-time payment",
-      securePayment: "Secure payment powered by Stripe",
+      trustTitle:
+        "What you receive",
+      trust1:
+        "PDF certificate with declared holder",
+      trust2:
+        "QR Code for public verification",
+      trust3:
+        "SHA-256 file fingerprint",
+      trust4:
+        "Exclusive Evidence Key™",
+      securePayment:
+        "Secure payment powered by Stripe",
     },
   }
 
   const t = text[lang]
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  const handleFileChange =
+    async (event) => {
+      const file =
+        event.target.files?.[0]
 
-    setFileName(file.name)
+      if (!file) return
 
-    const buffer = await file.arrayBuffer()
-    const hash = ethers.keccak256(new Uint8Array(buffer))
-    setFileHash(hash)
-  }
+      setFileName(file.name)
+      setFileHash("")
+      setHashingFile(true)
+
+      try {
+        const hash =
+          await generateFileHash(file)
+
+        setFileHash(hash)
+      } catch (error) {
+        console.error(
+          "File hash error:",
+          error,
+        )
+
+        setFileName("")
+        setFileHash("")
+
+        alert(t.hashError)
+      } finally {
+        setHashingFile(false)
+      }
+    }
 
   const handleCheckout = async () => {
     if (
@@ -127,69 +259,143 @@ export default function Register() {
       !fileName ||
       !ownerName ||
       !ownerEmail ||
-      !acceptedDeclaration
+      !acceptedDeclaration ||
+      !selectedProduct
     ) {
       alert(t.required)
       return
     }
 
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "create_proof_click")
-      window.gtag("event", "begin_checkout")
+    if (
+      typeof window.gtag === "function"
+    ) {
+      window.gtag(
+        "event",
+        "create_proof_click",
+        {
+          product_id:
+            selectedProduct.id,
+        },
+      )
+
+      window.gtag(
+        "event",
+        "begin_checkout",
+        {
+          currency:
+            selectedProduct.currency,
+          value:
+            selectedProduct.priceInCents /
+            100,
+          product_id:
+            selectedProduct.id,
+        },
+      )
     }
 
     setLoading(true)
 
     try {
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          hash: fileHash,
-          fileName,
-          language: lang,
-          ownerName,
-          ownerEmail,
-          ownerType,
-          ownershipDeclaration: acceptedDeclaration,
-        }),
-      })
+      const response = await fetch(
+        "/api/create-checkout-session",
+        {
+          method: "POST",
 
-      const rawText = await response.text()
-      const data = rawText ? JSON.parse(rawText) : {}
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            hash: fileHash,
+            fileName,
+            language: lang,
+            ownerName,
+            ownerEmail,
+            ownerType,
+
+            ownershipDeclaration:
+              acceptedDeclaration,
+
+            productId:
+              selectedProduct.id,
+          }),
+        },
+      )
+
+      const rawText =
+        await response.text()
+
+      const data = rawText
+        ? JSON.parse(rawText)
+        : {}
 
       if (!response.ok) {
-        throw new Error(data.error || "Checkout error")
+        throw new Error(
+          data.error ||
+            "Checkout error",
+        )
       }
 
       if (!data.url) {
-        throw new Error("Stripe checkout URL not returned")
+        throw new Error(
+          "Stripe checkout URL not returned",
+        )
       }
 
-      window.location.href = data.url
+      window.location.href =
+        data.url
     } catch (error) {
-      console.error("Checkout error:", error)
+      console.error(
+        "Checkout error:",
+        error,
+      )
+
       alert(t.checkoutError)
       setLoading(false)
     }
   }
 
+  const actionDisabled =
+    loading ||
+    hashingFile ||
+    !selectedProduct?.checkoutEnabled
+
   return (
     <main style={styles.page}>
       <section style={styles.wrapper}>
         <div style={styles.topBar}>
-          <Link to={`/?lang=${lang}`} style={styles.homeLink}>
+          <Link
+            to={`/?lang=${lang}`}
+            style={styles.homeLink}
+          >
             ← {t.home}
           </Link>
 
           <div style={styles.langPill}>
-            <Link to="/register?lang=pt" style={styles.langLink}>
+            <Link
+              to={`/register?lang=pt&product=${encodeURIComponent(
+                selectedProduct?.id ||
+                  DEFAULT_PRODUCT_ID,
+              )}`}
+              style={styles.langLink}
+            >
               PT
             </Link>
-            <span style={styles.langDivider}>|</span>
-            <Link to="/register?lang=en" style={styles.langLink}>
+
+            <span
+              style={styles.langDivider}
+            >
+              |
+            </span>
+
+            <Link
+              to={`/register?lang=en&product=${encodeURIComponent(
+                selectedProduct?.id ||
+                  DEFAULT_PRODUCT_ID,
+              )}`}
+              style={styles.langLink}
+            >
               EN
             </Link>
           </div>
@@ -197,63 +403,136 @@ export default function Register() {
 
         <div style={styles.grid}>
           <div style={styles.left}>
-            <div style={styles.badge}>🛡️ {t.badge}</div>
+            <div style={styles.badge}>
+              🛡️ {t.badge}
+            </div>
 
-            <h1 style={styles.title}>{t.title}</h1>
+            <h1 style={styles.title}>
+              {t.title}
+            </h1>
 
-            <p style={styles.subtitle}>{t.subtitle}</p>
+            <p style={styles.subtitle}>
+              {t.subtitle}
+            </p>
 
             <div style={styles.privacyBox}>
-              <span style={styles.privacyIcon}>🔒</span>
+              <span
+                style={
+                  styles.privacyIcon
+                }
+              >
+                🔒
+              </span>
+
               <span>{t.privacy}</span>
             </div>
 
             <div style={styles.trustBox}>
-              <h2 style={styles.trustTitle}>{t.trustTitle}</h2>
+              <h2 style={styles.trustTitle}>
+                {t.trustTitle}
+              </h2>
 
-              <div style={styles.trustItem}>✓ {t.trust1}</div>
-              <div style={styles.trustItem}>✓ {t.trust2}</div>
-              <div style={styles.trustItem}>✓ {t.trust3}</div>
-              <div style={styles.trustItem}>✓ {t.trust4}</div>
+              <div style={styles.trustItem}>
+                ✓ {t.trust1}
+              </div>
+
+              <div style={styles.trustItem}>
+                ✓ {t.trust2}
+              </div>
+
+              <div style={styles.trustItem}>
+                ✓ {t.trust3}
+              </div>
+
+              <div style={styles.trustItem}>
+                ✓ {t.trust4}
+              </div>
             </div>
           </div>
 
           <section style={styles.card}>
+            <p style={styles.productLabel}>
+              {t.selectedProduct}
+            </p>
+
+            <h2 style={styles.productName}>
+              {selectedProduct?.name}
+            </h2>
+
             <div style={styles.priceBox}>
-              <span style={styles.price}>{t.price}</span>
-              <span style={styles.priceNote}>{t.priceNote}</span>
+              <span style={styles.price}>
+                {
+                  selectedProduct
+                    ?.priceLabel
+                }
+              </span>
+
+              <span style={styles.priceNote}>
+                {
+                  selectedProduct
+                    ?.creditsLabel
+                }
+              </span>
             </div>
 
-            <p style={styles.securePayment}>🔐 {t.securePayment}</p>
+            <p style={styles.productDescription}>
+              {
+                selectedProduct
+                  ?.description
+              }
+            </p>
+
+            <p style={styles.securePayment}>
+              🔐 {t.securePayment}
+            </p>
 
             <label style={styles.fileLabel}>
-              {t.choose}
+              {hashingFile
+                ? t.hashing
+                : t.choose}
+
               <input
                 type="file"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
+                onChange={
+                  handleFileChange
+                }
+                disabled={hashingFile}
+                style={{
+                  display: "none",
+                }}
               />
             </label>
 
             <p style={styles.fileText}>
-              {fileName ? `${t.selected}: ${fileName}` : t.noFile}
+              {fileName
+                ? `${t.selected}: ${fileName}`
+                : t.noFile}
             </p>
 
             {fileHash && (
               <div style={styles.hashBox}>
-                <strong>{t.hashGenerated}</strong>
+                <strong>
+                  {t.hashGenerated}
+                </strong>
+
                 <span>{fileHash}</span>
               </div>
             )}
 
-            <h2 style={styles.sectionTitle}>{t.holder}</h2>
+            <h2 style={styles.sectionTitle}>
+              {t.holder}
+            </h2>
 
             <input
               style={styles.input}
               type="text"
               placeholder={t.name}
               value={ownerName}
-              onChange={(e) => setOwnerName(e.target.value)}
+              onChange={(event) =>
+                setOwnerName(
+                  event.target.value,
+                )
+              }
             />
 
             <input
@@ -261,37 +540,70 @@ export default function Register() {
               type="email"
               placeholder={t.email}
               value={ownerEmail}
-              onChange={(e) => setOwnerEmail(e.target.value)}
+              onChange={(event) =>
+                setOwnerEmail(
+                  event.target.value,
+                )
+              }
             />
 
             <select
               style={styles.input}
               value={ownerType}
-              onChange={(e) => setOwnerType(e.target.value)}
+              onChange={(event) =>
+                setOwnerType(
+                  event.target.value,
+                )
+              }
             >
-              <option value="individual">{t.individual}</option>
-              <option value="company">{t.company}</option>
+              <option value="individual">
+                {t.individual}
+              </option>
+
+              <option value="company">
+                {t.company}
+              </option>
             </select>
 
             <label style={styles.checkboxRow}>
               <input
                 type="checkbox"
-                checked={acceptedDeclaration}
-                onChange={(e) => setAcceptedDeclaration(e.target.checked)}
+                checked={
+                  acceptedDeclaration
+                }
+                onChange={(event) =>
+                  setAcceptedDeclaration(
+                    event.target.checked,
+                  )
+                }
               />
-              <span>{t.declaration}</span>
+
+              <span>
+                {t.declaration}
+              </span>
             </label>
 
             <button
               style={{
                 ...styles.button,
-                opacity: loading ? 0.75 : 1,
-                cursor: loading ? "not-allowed" : "pointer",
+
+                opacity:
+                  actionDisabled
+                    ? 0.75
+                    : 1,
+
+                cursor:
+                  actionDisabled
+                    ? "not-allowed"
+                    : "pointer",
               }}
               onClick={handleCheckout}
-              disabled={loading}
+              disabled={actionDisabled}
+              type="button"
             >
-              {loading ? t.loading : t.pay}
+              {loading
+                ? t.loading
+                : t.pay}
             </button>
           </section>
         </div>
@@ -332,8 +644,10 @@ const styles = {
     alignItems: "center",
     gap: "10px",
     padding: "8px 14px",
-    background: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.18)",
+    background:
+      "rgba(255,255,255,0.12)",
+    border:
+      "1px solid rgba(255,255,255,0.18)",
     borderRadius: "999px",
   },
 
@@ -350,7 +664,8 @@ const styles = {
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "1fr 460px",
+    gridTemplateColumns:
+      "1fr 460px",
     gap: "44px",
     alignItems: "start",
   },
@@ -362,8 +677,10 @@ const styles = {
   badge: {
     display: "inline-block",
     padding: "8px 14px",
-    background: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.18)",
+    background:
+      "rgba(255,255,255,0.12)",
+    border:
+      "1px solid rgba(255,255,255,0.18)",
     borderRadius: "999px",
     fontSize: "14px",
     fontWeight: "700",
@@ -391,8 +708,10 @@ const styles = {
     gap: "10px",
     maxWidth: "620px",
     padding: "16px 18px",
-    background: "rgba(255,255,255,0.1)",
-    border: "1px solid rgba(255,255,255,0.16)",
+    background:
+      "rgba(255,255,255,0.1)",
+    border:
+      "1px solid rgba(255,255,255,0.16)",
     borderRadius: "16px",
     lineHeight: "1.5",
   },
@@ -405,8 +724,10 @@ const styles = {
     marginTop: "28px",
     maxWidth: "620px",
     padding: "24px",
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.14)",
+    background:
+      "rgba(255,255,255,0.08)",
+    border:
+      "1px solid rgba(255,255,255,0.14)",
     borderRadius: "20px",
   },
 
@@ -426,7 +747,25 @@ const styles = {
     color: "#111827",
     borderRadius: "24px",
     padding: "30px",
-    boxShadow: "0 28px 70px rgba(0,0,0,0.35)",
+    boxShadow:
+      "0 28px 70px rgba(0,0,0,0.35)",
+  },
+
+  productLabel: {
+    margin: "0 0 6px",
+    textAlign: "center",
+    color: "#6366f1",
+    fontSize: "13px",
+    fontWeight: "900",
+    letterSpacing: "0.7px",
+    textTransform: "uppercase",
+  },
+
+  productName: {
+    margin: "0 0 8px",
+    textAlign: "center",
+    color: "#111827",
+    fontSize: "23px",
   },
 
   priceBox: {
@@ -434,7 +773,7 @@ const styles = {
     alignItems: "baseline",
     gap: "10px",
     justifyContent: "center",
-    marginBottom: "8px",
+    marginBottom: "10px",
   },
 
   price: {
@@ -446,6 +785,14 @@ const styles = {
   priceNote: {
     fontSize: "14px",
     color: "#6b7280",
+  },
+
+  productDescription: {
+    margin: "0 auto 12px",
+    textAlign: "center",
+    color: "#4b5563",
+    fontSize: "14px",
+    lineHeight: "1.55",
   },
 
   securePayment: {
@@ -480,7 +827,8 @@ const styles = {
   hashBox: {
     padding: "14px",
     background: "#f3f4f6",
-    border: "1px solid #e5e7eb",
+    border:
+      "1px solid #e5e7eb",
     borderRadius: "14px",
     marginBottom: "22px",
     fontSize: "13px",
@@ -501,7 +849,8 @@ const styles = {
     boxSizing: "border-box",
     padding: "14px 15px",
     borderRadius: "12px",
-    border: "1px solid #d1d5db",
+    border:
+      "1px solid #d1d5db",
     marginBottom: "12px",
     fontSize: "15px",
     outline: "none",

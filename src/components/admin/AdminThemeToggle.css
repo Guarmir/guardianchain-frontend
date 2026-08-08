@@ -1,0 +1,270 @@
+.admin-theme-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  min-height: 46px;
+  padding: 10px 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  background: rgba(18, 40, 65, 0.96);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+
+  color: #ffffff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-theme-toggle:hover {
+  transform: translateY(-2px);
+  background: #1b395b;
+}
+
+.admin-theme-toggle:focus-visible {
+  outline: 3px solid rgba(79, 156, 255, 0.42);
+  outline-offset: 3px;
+}
+
+.admin-theme-toggle__icon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.admin-theme-toggle__label {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   TEMA CLARO — LOGIN E PAINEL ADMINISTRATIVO
+   ========================================================= */
+
+html[data-admin-theme="light"]
+  .admin-login-page,
+html[data-admin-theme="light"]
+  .admin-dashboard-page {
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(51, 126, 255, 0.13),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(26, 188, 156, 0.1),
+      transparent 32%
+    ),
+    #f4f7fb;
+
+  color: #17243a;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-card,
+html[data-admin-theme="light"]
+  .admin-dashboard-header,
+html[data-admin-theme="light"]
+  .admin-dashboard-loading,
+html[data-admin-theme="light"]
+  .admin-metric-card,
+html[data-admin-theme="light"]
+  .admin-dashboard-section {
+  border-color: #d8e2ee;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 16px 42px rgba(37, 58, 84, 0.1);
+}
+
+html[data-admin-theme="light"]
+  .admin-login-brand strong,
+html[data-admin-theme="light"]
+  .admin-login-header h1,
+html[data-admin-theme="light"]
+  .admin-login-success h1,
+html[data-admin-theme="light"]
+  .admin-dashboard-title h1,
+html[data-admin-theme="light"]
+  .admin-dashboard-account strong,
+html[data-admin-theme="light"]
+  .admin-metric-card__value,
+html[data-admin-theme="light"]
+  .admin-dashboard-section__header h2,
+html[data-admin-theme="light"]
+  .admin-products-table td strong,
+html[data-admin-theme="light"]
+  .admin-system-details dd {
+  color: #132238;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-brand div span,
+html[data-admin-theme="light"]
+  .admin-login-header > p:last-child,
+html[data-admin-theme="light"]
+  .admin-login-success p,
+html[data-admin-theme="light"]
+  .admin-dashboard-title span,
+html[data-admin-theme="light"]
+  .admin-dashboard-section__header p,
+html[data-admin-theme="light"]
+  .admin-dashboard-loading p,
+html[data-admin-theme="light"]
+  .admin-dashboard-footer {
+  color: #586b82;
+}
+
+html[data-admin-theme="light"]
+  .admin-dashboard-account span,
+html[data-admin-theme="light"]
+  .admin-metric-card__label,
+html[data-admin-theme="light"]
+  .admin-metric-card p,
+html[data-admin-theme="light"]
+  .admin-system-details dt {
+  color: #60748c;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-form label {
+  color: #263a53;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-form input {
+  border-color: #cbd7e5;
+  background: #ffffff;
+  color: #14243a;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-form input::placeholder {
+  color: #8494a8;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-security,
+html[data-admin-theme="light"]
+  .admin-login-details div,
+html[data-admin-theme="light"]
+  .admin-system-details div {
+  background: #f1f5fa;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-security p,
+html[data-admin-theme="light"]
+  .admin-login-details dt {
+  color: #60738a;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-details dd {
+  color: #16273d;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-notice {
+  border-color: #bcd7ff;
+  background: #edf5ff;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-notice strong {
+  color: #163456;
+}
+
+html[data-admin-theme="light"]
+  .admin-login-notice p {
+  color: #56708d;
+}
+
+html[data-admin-theme="light"]
+  .admin-dashboard-account button,
+html[data-admin-theme="light"]
+  .admin-dashboard-refresh {
+  border-color: #cbd8e7;
+  background: #eef3f9;
+  color: #17314f;
+}
+
+html[data-admin-theme="light"]
+  .admin-dashboard-account button:hover:not(
+    :disabled
+  ),
+html[data-admin-theme="light"]
+  .admin-dashboard-refresh:hover:not(
+    :disabled
+  ) {
+  background: #e1eaf4;
+}
+
+html[data-admin-theme="light"]
+  .admin-products-table th {
+  background: #f1f5fa;
+  color: #5b7088;
+}
+
+html[data-admin-theme="light"]
+  .admin-products-table td {
+  border-bottom-color: #e2e9f1;
+  color: #293d55;
+}
+
+html[data-admin-theme="light"]
+  .admin-products-table td span:not(
+    .admin-status
+  ) {
+  color: #73859a;
+}
+
+html[data-admin-theme="light"]
+  .admin-dashboard-footer a,
+html[data-admin-theme="light"]
+  .admin-login-home-link {
+  color: #216ac2;
+}
+
+html[data-admin-theme="light"]
+  .admin-theme-toggle {
+  border-color: #c6d3e2;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 10px 30px rgba(45, 65, 90, 0.16);
+  color: #18314d;
+}
+
+html[data-admin-theme="light"]
+  .admin-theme-toggle:hover {
+  background: #edf3f9;
+}
+
+@media (max-width: 560px) {
+  .admin-theme-toggle {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .admin-theme-toggle__label {
+    display: none;
+  }
+
+  .admin-theme-toggle {
+    width: 46px;
+    padding: 10px;
+  }
+}

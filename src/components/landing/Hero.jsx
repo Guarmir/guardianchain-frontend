@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom"
-
 export default function Hero({ lang }) {
   const content = {
     pt: {
-      title: "Prove que o que você criou é seu — antes que alguém diga o contrário.",
+      title:
+        "Prove que o que você criou é seu — antes que alguém diga o contrário.",
       subtitle:
         "Crie uma prova digital simples, privada e verificável para proteger arquivos, ideias, documentos e trabalhos antes de compartilhar.",
       features: [
@@ -12,11 +11,12 @@ export default function Hero({ lang }) {
         "Verificação pública",
         "Simples e seguro",
       ],
-      cta: "Criar minha prova digital",
       time: "⚡ Leva menos de 1 minuto",
     },
+
     en: {
-      title: "Prove that what you created is yours — before someone says otherwise.",
+      title:
+        "Prove that what you created is yours — before someone says otherwise.",
       subtitle:
         "Create a simple, private and verifiable digital proof to protect files, ideas, documents and work before sharing them.",
       features: [
@@ -25,7 +25,6 @@ export default function Hero({ lang }) {
         "Public verification",
         "Simple and secure",
       ],
-      cta: "Create my digital proof",
       time: "⚡ Takes less than 1 minute",
     },
   }
@@ -44,10 +43,6 @@ export default function Hero({ lang }) {
         <span>🌎 {t.features[2]}</span>
         <span>🛡️ {t.features[3]}</span>
       </div>
-
-      <Link to={`/register?lang=${lang}`} style={styles.ctaLink}>
-        <button style={styles.ctaButton}>{t.cta}</button>
-      </Link>
 
       <p style={styles.timeText}>{t.time}</p>
     </section>
@@ -84,30 +79,13 @@ const styles = {
     justifyContent: "center",
     gap: "14px",
     flexWrap: "wrap",
-    marginBottom: "30px",
+    marginBottom: "18px",
     fontSize: "15px",
     fontWeight: "700",
   },
 
-  ctaLink: {
-    display: "inline-block",
-    textDecoration: "none",
-  },
-
-  ctaButton: {
-    padding: "17px 30px",
-    background: "#ffffff",
-    color: "#4338ca",
-    border: "none",
-    borderRadius: "14px",
-    cursor: "pointer",
-    fontWeight: "900",
-    fontSize: "17px",
-    boxShadow: "0 16px 35px rgba(0,0,0,0.22)",
-  },
-
   timeText: {
-    marginTop: "14px",
+    margin: "0",
     fontSize: "15px",
     fontWeight: "800",
     opacity: 0.96,

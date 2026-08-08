@@ -1,15 +1,9 @@
-import { Link } from "react-router-dom"
-
-export default function DemoCTA({ t, lang }) {
+export default function DemoCTA({ t }) {
   return (
     <section style={styles.section}>
       <h2 style={styles.title}>{t.finalTitle}</h2>
 
       <p style={styles.text}>{t.finalText}</p>
-
-      <Link to={`/register?lang=${lang}`} style={styles.link}>
-        <button style={styles.button}>{t.cta}</button>
-      </Link>
     </section>
   )
 }
@@ -35,25 +29,9 @@ const styles = {
 
   text: {
     maxWidth: "660px",
-    margin: "0 auto 26px",
+    margin: "0 auto",
     lineHeight: "1.6",
     opacity: 0.94,
     fontSize: "16px",
-  },
-
-  link: {
-    textDecoration: "none",
-  },
-
-  button: {
-    padding: "16px 30px",
-    background: "#ffffff",
-    color: "#4338ca",
-    border: "none",
-    borderRadius: "14px",
-    cursor: "pointer",
-    fontWeight: "900",
-    fontSize: "16px",
-    boxShadow: "0 14px 34px rgba(0,0,0,0.22)",
   },
 }

@@ -20,7 +20,7 @@ export const landingContent = {
     ],
 
     priceTitle: "Certificado digital de prova permanente",
-    price: "R$ 19,90",
+    price: "US$ 8",
     pay: "pagamento único",
 
     register: "Criar minha prova digital",
@@ -54,7 +54,8 @@ export const landingContent = {
     ],
 
     howTitle: "Como funciona",
-    howText: "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
+    howText:
+      "Em poucos passos, você cria uma prova verificável sem enviar seu arquivo.",
     howSteps: [
       {
         icon: "📁",
@@ -210,7 +211,8 @@ export const landingContent = {
     ],
 
     howTitle: "How it works",
-    howText: "In a few steps, you create verifiable proof without uploading your file.",
+    howText:
+      "In a few steps, you create verifiable proof without uploading your file.",
     howSteps: [
       {
         icon: "📁",

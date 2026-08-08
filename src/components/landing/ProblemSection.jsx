@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom"
-
-export default function ProblemSection({ t, lang }) {
+export default function ProblemSection({ t }) {
   return (
     <section style={styles.section}>
       <h2 style={styles.title}>{t.problemTitle}</h2>
@@ -17,10 +15,6 @@ export default function ProblemSection({ t, lang }) {
       <h3 style={styles.createdFor}>{t.problemConclusion}</h3>
 
       <p style={styles.text}>{t.problemText}</p>
-
-      <Link to={`/register?lang=${lang}`} style={styles.link}>
-        <button style={styles.button}>{t.register}</button>
-      </Link>
     </section>
   )
 }
@@ -82,25 +76,9 @@ const styles = {
 
   text: {
     maxWidth: "720px",
-    margin: "0 auto 28px",
+    margin: "0 auto",
     opacity: 0.94,
     lineHeight: "1.7",
     fontSize: "16px",
-  },
-
-  link: {
-    display: "inline-block",
-    textDecoration: "none",
-  },
-
-  button: {
-    padding: "15px 26px",
-    background: "#ffffff",
-    color: "#4338ca",
-    border: "none",
-    borderRadius: "12px",
-    cursor: "pointer",
-    fontWeight: "900",
-    fontSize: "15px",
   },
 }
