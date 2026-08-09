@@ -1,4 +1,6 @@
-import { checkDatabaseConnection } from "../api/lib/db.js"
+import {
+  checkDatabaseConnection,
+} from "../api/lib/db.js"
 
 import {
   getAdminFoundationSnapshot,
@@ -20,7 +22,13 @@ const EXPECTED_TABLES = [
 const EXPECTED_MIGRATIONS = [
   "001_admin_foundation.sql",
   "002_admin_auth.sql",
+  "003_order_fulfillment_idempotency.sql",
+  "004_certificate_fulfillment.sql",
+  "005_activate_commercial_packages.sql",
 ]
+
+const EXPECTED_PRODUCT_CATALOG_VERSION =
+  "1.2"
 
 const EXPECTED_PRODUCTS = {
   "single-certificate": {
@@ -35,39 +43,50 @@ const EXPECTED_PRODUCTS = {
     credits: 5,
     currency: "USD",
     unitAmount: 3500,
-    active: false,
-    checkoutEnabled: false,
+    active: true,
+    checkoutEnabled: true,
   },
 
   "package-8-records": {
     credits: 8,
     currency: "USD",
     unitAmount: 5200,
-    active: false,
-    checkoutEnabled: false,
+    active: true,
+    checkoutEnabled: true,
   },
 
   "package-12-records": {
     credits: 12,
     currency: "USD",
     unitAmount: 7200,
-    active: false,
-    checkoutEnabled: false,
+    active: true,
+    checkoutEnabled: true,
   },
 }
 
-function formatMoney(unitAmount, currency) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(unitAmount / 100)
+function formatMoney(
+  unitAmount,
+  currency,
+) {
+  return new Intl.NumberFormat(
+    "en-US",
+    {
+      style: "currency",
+      currency,
+    },
+  ).format(
+    unitAmount / 100,
+  )
 }
 
 function validateTables(snapshot) {
-  const missingTables = EXPECTED_TABLES.filter(
-    (tableName) =>
-      !snapshot.tables.includes(tableName),
-  )
+  const missingTables =
+    EXPECTED_TABLES.filter(
+      (tableName) =>
+        !snapshot.tables.includes(
+          tableName,
+        ),
+    )
 
   if (missingTables.length > 0) {
     throw new Error(
@@ -79,7 +98,8 @@ function validateTables(snapshot) {
 function validateMigrations(snapshot) {
   const appliedMigrationNames =
     snapshot.migrations.map(
-      (migration) => migration.migrationName,
+      (migration) =>
+        migration.migrationName,
     )
 
   const missingMigrations =
@@ -98,12 +118,19 @@ function validateMigrations(snapshot) {
 }
 
 function validateProducts(snapshot) {
-  for (const [productId, expected] of Object.entries(
-    EXPECTED_PRODUCTS,
-  )) {
-    const product = snapshot.products.find(
-      (item) => item.id === productId,
+  for (
+    const [
+      productId,
+      expected,
+    ] of Object.entries(
+      EXPECTED_PRODUCTS,
     )
+  ) {
+    const product =
+      snapshot.products.find(
+        (item) =>
+          item.id === productId,
+      )
 
     if (!product) {
       throw new Error(
@@ -112,12 +139,18 @@ function validateProducts(snapshot) {
     }
 
     const matches =
-      product.credits === expected.credits &&
-      product.currency === expected.currency &&
-      product.unitAmount === expected.unitAmount &&
-      product.active === expected.active &&
+      product.credits ===
+        expected.credits &&
+      product.currency ===
+        expected.currency &&
+      product.unitAmount ===
+        expected.unitAmount &&
+      product.active ===
+        expected.active &&
       product.checkoutEnabled ===
-        expected.checkoutEnabled
+        expected.checkoutEnabled &&
+      product.catalogVersion ===
+        EXPECTED_PRODUCT_CATALOG_VERSION
 
     if (!matches) {
       throw new Error(
@@ -135,10 +168,16 @@ async function runCheck() {
   const connection =
     await checkDatabaseConnection()
 
-  console.log("[ADMIN CHECK] Connected:", {
-    databaseName: connection?.database_name,
-    serverTime: connection?.server_time,
-  })
+  console.log(
+    "[ADMIN CHECK] Connected:",
+    {
+      databaseName:
+        connection?.database_name,
+
+      serverTime:
+        connection?.server_time,
+    },
+  )
 
   const snapshot =
     await getAdminFoundationSnapshot()
@@ -155,25 +194,36 @@ async function runCheck() {
     `[ADMIN CHECK] Migrations confirmed: ${snapshot.migrations.length}`,
   )
 
-  for (const migration of snapshot.migrations) {
+  for (
+    const migration of
+    snapshot.migrations
+  ) {
     console.log(
       `- ${migration.migrationName} | applied=${migration.appliedAt}`,
     )
   }
 
-  console.log("[ADMIN CHECK] Products:")
+  console.log(
+    "[ADMIN CHECK] Products:",
+  )
 
-  for (const product of snapshot.products) {
+  for (
+    const product of
+    snapshot.products
+  ) {
     console.log(
       [
         `- ${product.id}`,
         `${product.credits} credit(s)`,
+
         formatMoney(
           product.unitAmount,
           product.currency,
         ),
+
         `active=${product.active}`,
         `checkout=${product.checkoutEnabled}`,
+        `catalog=${product.catalogVersion}`,
       ].join(" | "),
     )
   }
@@ -183,7 +233,10 @@ async function runCheck() {
     snapshot.totals,
   )
 
-  if (snapshot.salesByProduct.length === 0) {
+  if (
+    snapshot.salesByProduct
+      .length === 0
+  ) {
     console.log(
       "[ADMIN CHECK] No product sales recorded yet.",
     )
@@ -199,11 +252,13 @@ async function runCheck() {
   )
 }
 
-runCheck().catch((error) => {
-  console.error(
-    "[ADMIN CHECK] Validation failed:",
-    error,
-  )
+runCheck().catch(
+  (error) => {
+    console.error(
+      "[ADMIN CHECK] Validation failed:",
+      error,
+    )
 
-  process.exitCode = 1
-})
+    process.exitCode = 1
+  },
+)

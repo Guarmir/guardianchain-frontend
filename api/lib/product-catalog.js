@@ -2,7 +2,7 @@ export const DEFAULT_CHECKOUT_PRODUCT_ID =
   "single-certificate"
 
 export const SERVER_PRODUCT_CATALOG_VERSION =
-  "1.1"
+  "1.2"
 
 const checkoutProducts = {
   "single-certificate": {
@@ -15,13 +15,17 @@ const checkoutProducts = {
 
     content: {
       pt: {
-        name: "Certificado GuardianChain",
+        name:
+          "Certificado GuardianChain",
+
         description:
           "Registro de prova digital verificável com certificado, Evidence Key™ e QR Code",
       },
 
       en: {
-        name: "GuardianChain Certificate",
+        name:
+          "GuardianChain Certificate",
+
         description:
           "Verifiable digital proof registration with certificate, Evidence Key™, and QR Code",
       },
@@ -34,7 +38,7 @@ const checkoutProducts = {
     credits: 5,
     currency: "usd",
     unitAmount: 3500,
-    active: false,
+    active: true,
 
     content: {
       pt: {
@@ -61,7 +65,7 @@ const checkoutProducts = {
     credits: 8,
     currency: "usd",
     unitAmount: 5200,
-    active: false,
+    active: true,
 
     content: {
       pt: {
@@ -88,7 +92,7 @@ const checkoutProducts = {
     credits: 12,
     currency: "usd",
     unitAmount: 7200,
-    active: false,
+    active: true,
 
     content: {
       pt: {
