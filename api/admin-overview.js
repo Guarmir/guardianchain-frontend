@@ -24,6 +24,16 @@ function sanitizeProduct(product) {
   }
 }
 
+function getDatabaseLabel() {
+  const databaseLabel = String(
+    process.env
+      .GUARDIANCHAIN_DATABASE_LABEL ||
+      "",
+  ).trim()
+
+  return databaseLabel || "não informado"
+}
+
 export default async function handler(
   request,
   response,
@@ -85,6 +95,9 @@ export default async function handler(
 
           appliedMigrations:
             snapshot.migrations.length,
+
+          databaseLabel:
+            getDatabaseLabel(),
 
           generatedAt:
             new Date().toISOString(),

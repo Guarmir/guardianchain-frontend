@@ -94,6 +94,13 @@ function getProductLabel(productId) {
   )
 }
 
+function getDatabaseLabel(overview) {
+  return (
+    overview?.system?.databaseLabel ||
+    "não informado"
+  )
+}
+
 function MetricCard({
   label,
   value,
@@ -234,6 +241,9 @@ function OverviewSection({
   const totals =
     overview?.totals || {}
 
+  const databaseLabel =
+    getDatabaseLabel(overview)
+
   return (
     <>
       <section className="admin-dashboard-metrics">
@@ -333,7 +343,10 @@ function OverviewSection({
 
           <div>
             <dt>Ambiente</dt>
-            <dd>guardianchain-dev</dd>
+
+            <dd>
+              {databaseLabel}
+            </dd>
           </div>
 
           <div>
@@ -352,11 +365,14 @@ function ProductsSection({
   const products =
     overview?.products || []
 
+  const databaseLabel =
+    getDatabaseLabel(overview)
+
   return (
     <section className="admin-dashboard-section admin-dashboard-section--first">
       <SectionHeader
         title="Catálogo de produtos"
-        description="Configuração comercial registrada no banco de desenvolvimento."
+        description={`Configuração comercial registrada no ambiente ${databaseLabel}.`}
       />
 
       <ProductsTable
