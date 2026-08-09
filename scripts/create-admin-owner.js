@@ -26,6 +26,36 @@ function requireEnvironmentValue(name) {
   return value
 }
 
+function validateBootstrapEnvironment({
+  databaseLabel,
+  bootstrapConfirmation,
+}) {
+  const allowedLabels =
+    new Set([
+      "guardianchain-dev",
+      "guardianchain-prod",
+    ])
+
+  if (
+    !allowedLabels.has(
+      databaseLabel,
+    )
+  ) {
+    throw new Error(
+      `Administrative bootstrap is not allowed for database label: ${databaseLabel}`,
+    )
+  }
+
+  if (
+    bootstrapConfirmation !==
+    databaseLabel
+  ) {
+    throw new Error(
+      "ADMIN_BOOTSTRAP_CONFIRM must exactly match GUARDIANCHAIN_DATABASE_LABEL",
+    )
+  }
+}
+
 async function createOwner() {
   const databaseLabel =
     requireEnvironmentValue(
@@ -37,21 +67,17 @@ async function createOwner() {
       "ADMIN_BOOTSTRAP_CONFIRM",
     )
 
-  if (
-    databaseLabel !== "guardianchain-dev" ||
-    bootstrapConfirmation !==
-      "guardianchain-dev"
-  ) {
-    throw new Error(
-      "Administrative bootstrap is allowed only for guardianchain-dev",
-    )
-  }
+  validateBootstrapEnvironment({
+    databaseLabel,
+    bootstrapConfirmation,
+  })
 
-  const email = normalizeAdminEmail(
-    requireEnvironmentValue(
-      "ADMIN_OWNER_EMAIL",
-    ),
-  )
+  const email =
+    normalizeAdminEmail(
+      requireEnvironmentValue(
+        "ADMIN_OWNER_EMAIL",
+      ),
+    )
 
   if (!validateAdminEmail(email)) {
     throw new Error(
@@ -71,34 +97,43 @@ async function createOwner() {
   const connection =
     await checkDatabaseConnection()
 
-  console.log("[ADMIN OWNER] Connected:", {
-    databaseName:
-      connection?.database_name,
+  console.log(
+    "[ADMIN OWNER] Connected:",
+    {
+      databaseName:
+        connection?.database_name,
 
-    databaseLabel,
-    serverTime:
-      connection?.server_time,
-  })
+      databaseLabel,
+
+      serverTime:
+        connection?.server_time,
+    },
+  )
 
   console.log(
     "[ADMIN OWNER] Protecting administrative password...",
   )
 
   const protectedPassword =
-    await hashAdminPassword(password)
+    await hashAdminPassword(
+      password,
+    )
 
   const result =
     await createOrReplaceOwnerAdmin({
       email,
 
       passwordHash:
-        protectedPassword.passwordHash,
+        protectedPassword
+          .passwordHash,
 
       passwordSalt:
-        protectedPassword.passwordSalt,
+        protectedPassword
+          .passwordSalt,
 
       passwordAlgorithm:
-        protectedPassword.passwordAlgorithm,
+        protectedPassword
+          .passwordAlgorithm,
 
       databaseLabel,
     })
@@ -109,29 +144,43 @@ async function createOwner() {
       : "[ADMIN OWNER] Owner credentials updated successfully.",
   )
 
-  console.log("[ADMIN OWNER] Account:", {
-    id: result.adminUser.id,
-    email: result.adminUser.email,
-    role: result.adminUser.role,
-    status: result.adminUser.status,
+  console.log(
+    "[ADMIN OWNER] Account:",
+    {
+      id:
+        result.adminUser.id,
 
-    mustChangePassword:
-      result.adminUser.mustChangePassword,
+      email:
+        result.adminUser.email,
 
-    sessionVersion:
-      result.adminUser.sessionVersion,
-  })
+      role:
+        result.adminUser.role,
+
+      status:
+        result.adminUser.status,
+
+      mustChangePassword:
+        result.adminUser
+          .mustChangePassword,
+
+      sessionVersion:
+        result.adminUser
+          .sessionVersion,
+    },
+  )
 
   console.log(
-    "[ADMIN OWNER] Remove ADMIN_OWNER_PASSWORD and ADMIN_BOOTSTRAP_CONFIRM from .env.local now.",
+    "[ADMIN OWNER] Remove ADMIN_OWNER_PASSWORD and ADMIN_BOOTSTRAP_CONFIRM from the environment file now.",
   )
 }
 
-createOwner().catch((error) => {
-  console.error(
-    "[ADMIN OWNER] Creation failed:",
-    error,
-  )
+createOwner().catch(
+  (error) => {
+    console.error(
+      "[ADMIN OWNER] Creation failed:",
+      error,
+    )
 
-  process.exitCode = 1
-})
+    process.exitCode = 1
+  },
+)
