@@ -218,7 +218,7 @@ export default function CertificateDemo() {
 
       <main style={styles.main}>
         <DemoHero t={t} lang={lang} />
-        <DemoPreview />
+        <DemoPreview lang={lang} />
         <DemoAnatomy t={t} />
         <DemoUseCases t={t} />
         <DemoVerification t={t} />

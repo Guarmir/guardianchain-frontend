@@ -1,42 +1,94 @@
-import { Link } from "react-router-dom"
-import certificatePreview from "../../assets/certificate-preview.png"
+import {
+  Link,
+} from "react-router-dom"
 
-export default function CertificateSection({ t, lang }) {
+import CertificateSamplePreview from "../certificate-demo/CertificateSamplePreview.jsx"
+
+export default function CertificateSection({
+  t,
+  lang,
+}) {
+  const labels =
+    lang === "pt"
+      ? {
+          ribbon: "EXEMPLO",
+          pdf: "PDF profissional",
+          qr: "QR Code verificável",
+          hash: "Hash criptográfico",
+          link: "Link permanente",
+          button:
+            "Ver certificado de exemplo",
+        }
+      : {
+          ribbon: "SAMPLE",
+          pdf: "Professional PDF",
+          qr: "Verifiable QR Code",
+          hash: "Cryptographic hash",
+          link: "Permanent link",
+          button:
+            "View sample certificate",
+        }
+
   return (
     <section style={styles.section}>
-      <h2 style={styles.title}>{t.certificateTitle}</h2>
+      <h2 style={styles.title}>
+        {t.certificateTitle}
+      </h2>
 
-      <p style={styles.text}>{t.certificateText}</p>
+      <p style={styles.text}>
+        {t.certificateText}
+      </p>
 
       <div style={styles.previewWrapper}>
-        <div style={styles.ribbon}>SAMPLE</div>
+        <div style={styles.ribbon}>
+          {labels.ribbon}
+        </div>
 
-        <img
-          src={certificatePreview}
-          alt="GuardianChain Certificate Preview"
-          style={styles.image}
+        <CertificateSamplePreview
+          lang={lang}
+          compact
         />
       </div>
 
       <div style={styles.infoBox}>
         <div style={styles.item}>
-          <span style={styles.icon}>✓</span>
-          <span>PDF profissional</span>
+          <span style={styles.icon}>
+            ✓
+          </span>
+
+          <span>
+            {labels.pdf}
+          </span>
         </div>
 
         <div style={styles.item}>
-          <span style={styles.icon}>✓</span>
-          <span>QR Code verificável</span>
+          <span style={styles.icon}>
+            ✓
+          </span>
+
+          <span>
+            {labels.qr}
+          </span>
         </div>
 
         <div style={styles.item}>
-          <span style={styles.icon}>✓</span>
-          <span>Hash criptográfico</span>
+          <span style={styles.icon}>
+            ✓
+          </span>
+
+          <span>
+            {labels.hash}
+          </span>
         </div>
 
         <div style={styles.item}>
-          <span style={styles.icon}>✓</span>
-          <span>Link permanente</span>
+          <span style={styles.icon}>
+            ✓
+          </span>
+
+          <span>
+            {labels.link}
+          </span>
         </div>
       </div>
 
@@ -45,9 +97,7 @@ export default function CertificateSection({ t, lang }) {
         style={styles.buttonLink}
       >
         <button style={styles.button}>
-          {lang === "pt"
-            ? "Ver certificado de exemplo"
-            : "View sample certificate"}
+          {labels.button}
         </button>
       </Link>
     </section>
@@ -76,43 +126,36 @@ const styles = {
   },
 
   previewWrapper: {
-    position: "relative",
-    display: "inline-block",
-    marginBottom: "30px",
+    width: "100%",
+    maxWidth: "620px",
+    maxHeight: "600px",
+    overflow: "hidden",
+    margin: "0 auto 30px",
+    borderRadius: "18px",
   },
 
   ribbon: {
-    position: "absolute",
-    top: "22px",
-    left: "50%",
-    transform: "translateX(-50%) rotate(-12deg)",
-    background: "rgba(220,38,38,0.88)",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto 14px",
+    padding: "9px 24px",
+    background:
+      "rgba(220,38,38,0.94)",
     color: "#ffffff",
-    padding: "10px 34px",
     borderRadius: "10px",
     fontWeight: "900",
     letterSpacing: "2px",
-    fontSize: "22px",
-    zIndex: 2,
-    pointerEvents: "none",
-    boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
-  },
-
-  image: {
-    width: "100%",
-    maxWidth: "620px",
-    maxHeight: "520px",
-    objectFit: "cover",
-    objectPosition: "top",
-    borderRadius: "18px",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
-    border: "1px solid rgba(255,255,255,0.15)",
-    background: "#ffffff",
+    fontSize: "16px",
+    transform: "rotate(-3deg)",
+    boxShadow:
+      "0 10px 24px rgba(0,0,0,0.22)",
   },
 
   infoBox: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit,minmax(220px,1fr))",
     gap: "14px",
     margin: "0 auto 32px",
     maxWidth: "820px",
@@ -124,8 +167,10 @@ const styles = {
     gap: "10px",
     justifyContent: "center",
     padding: "14px",
-    background: "rgba(255,255,255,0.10)",
-    border: "1px solid rgba(255,255,255,0.15)",
+    background:
+      "rgba(255,255,255,0.10)",
+    border:
+      "1px solid rgba(255,255,255,0.15)",
     borderRadius: "14px",
     fontWeight: "700",
   },
@@ -156,6 +201,7 @@ const styles = {
     cursor: "pointer",
     fontWeight: "900",
     fontSize: "16px",
-    boxShadow: "0 14px 34px rgba(0,0,0,0.22)",
+    boxShadow:
+      "0 14px 34px rgba(0,0,0,0.22)",
   },
 }

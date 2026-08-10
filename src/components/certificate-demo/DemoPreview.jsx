@@ -1,15 +1,22 @@
-import certificatePreview from "../../assets/certificate-preview.png"
+import CertificateSamplePreview from "./CertificateSamplePreview.jsx"
 
-export default function DemoPreview() {
+export default function DemoPreview({
+  lang,
+}) {
+  const ribbon =
+    lang === "pt"
+      ? "EXEMPLO"
+      : "SAMPLE"
+
   return (
     <section style={styles.section}>
-      <div style={styles.imageWrapper}>
-        <div style={styles.ribbon}>SAMPLE</div>
+      <div style={styles.previewWrapper}>
+        <div style={styles.ribbon}>
+          {ribbon}
+        </div>
 
-        <img
-          src={certificatePreview}
-          alt="GuardianChain Certificate Preview"
-          style={styles.image}
+        <CertificateSamplePreview
+          lang={lang}
         />
       </div>
     </section>
@@ -21,43 +28,36 @@ const styles = {
     marginTop: "34px",
     textAlign: "center",
     padding: "34px",
-    background: "rgba(255,255,255,0.10)",
-    border: "1px solid rgba(255,255,255,0.16)",
+    background:
+      "rgba(255,255,255,0.10)",
+    border:
+      "1px solid rgba(255,255,255,0.16)",
     borderRadius: "26px",
-    boxShadow: "0 22px 55px rgba(0,0,0,0.20)",
+    boxShadow:
+      "0 22px 55px rgba(0,0,0,0.20)",
   },
 
-  imageWrapper: {
-    position: "relative",
-    display: "inline-block",
+  previewWrapper: {
+    width: "100%",
+    maxWidth: "620px",
+    margin: "0 auto",
   },
 
   ribbon: {
-    position: "absolute",
-    top: "22px",
-    left: "50%",
-    transform: "translateX(-50%) rotate(-10deg)",
-    zIndex: 2,
-    padding: "12px 34px",
-    borderRadius: "12px",
-    background: "rgba(220,38,38,0.88)",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto 14px",
+    padding: "9px 24px",
+    borderRadius: "10px",
+    background:
+      "rgba(220,38,38,0.94)",
     color: "#ffffff",
-    fontSize: "26px",
+    fontSize: "16px",
     fontWeight: "900",
-    letterSpacing: "3px",
-    boxShadow: "0 14px 34px rgba(0,0,0,0.25)",
-    pointerEvents: "none",
-  },
-
-  image: {
-    width: "100%",
-    maxWidth: "520px",
-    maxHeight: "680px",
-    objectFit: "cover",
-    objectPosition: "top",
-    borderRadius: "18px",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.36)",
-    border: "1px solid rgba(255,255,255,0.16)",
-    background: "#ffffff",
+    letterSpacing: "2px",
+    transform: "rotate(-3deg)",
+    boxShadow:
+      "0 10px 24px rgba(0,0,0,0.22)",
   },
 }

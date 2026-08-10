@@ -1,74 +1,189 @@
-import { Link } from "react-router-dom"
+import {
+  Link,
+} from "react-router-dom"
 
-export default function PricingSection({ lang, products = [] }) {
+export default function PricingSection({
+  lang,
+  products = [],
+}) {
   const content = {
     pt: {
-      eyebrow: "Escolha como começar",
-      title: "Crie sua prova digital",
+      eyebrow:
+        "Escolha como começar",
+
+      title:
+        "Escolha sua opção de registro",
+
       subtitle:
-        "Comece com um registro avulso. Em breve, você também poderá escolher pacotes com vários registros.",
-      oneTime: "Pagamento único",
-      package: "Pacote de registros",
-      cta: "Criar minha prova digital",
-      securePayment: "Pagamento seguro processado pelo Stripe",
-      noSubscription: "Sem assinatura mensal",
+        "Faça um registro avulso ou escolha um pacote para reduzir o valor por prova digital.",
+
+      oneTime:
+        "Registro avulso",
+
+      package:
+        "Pacote de registros",
+
+      ctaSingle:
+        "Criar minha prova digital",
+
+      ctaPackage:
+        "Escolher este pacote",
+
+      securePayment:
+        "Pagamento seguro processado pelo Stripe",
+
+      noSubscription:
+        "Sem assinatura mensal",
+
+      credits:
+        "Os créditos podem ser utilizados conforme sua necessidade.",
     },
 
     en: {
-      eyebrow: "Choose how to start",
-      title: "Create your digital proof",
+      eyebrow:
+        "Choose how to start",
+
+      title:
+        "Choose your registration option",
+
       subtitle:
-        "Start with a single record. Soon, you will also be able to choose packages containing multiple records.",
-      oneTime: "One-time payment",
-      package: "Record package",
-      cta: "Create my digital proof",
-      securePayment: "Secure payment processed by Stripe",
-      noSubscription: "No monthly subscription",
+        "Create a single record or choose a package to reduce the cost per digital proof.",
+
+      oneTime:
+        "Single record",
+
+      package:
+        "Record package",
+
+      ctaSingle:
+        "Create my digital proof",
+
+      ctaPackage:
+        "Choose this package",
+
+      securePayment:
+        "Secure payment processed by Stripe",
+
+      noSubscription:
+        "No monthly subscription",
+
+      credits:
+        "Credits can be used whenever you need them.",
     },
   }
 
-  const t = content[lang] || content.en
+  const t =
+    content[lang] ||
+    content.en
 
-  if (!Array.isArray(products) || products.length === 0) {
+  if (
+    !Array.isArray(products) ||
+    products.length === 0
+  ) {
     return null
   }
 
   return (
     <section style={styles.section}>
-      <p style={styles.eyebrow}>{t.eyebrow}</p>
+      <p style={styles.eyebrow}>
+        {t.eyebrow}
+      </p>
 
-      <h2 style={styles.title}>{t.title}</h2>
+      <h2 style={styles.title}>
+        {t.title}
+      </h2>
 
-      <p style={styles.subtitle}>{t.subtitle}</p>
+      <p style={styles.subtitle}>
+        {t.subtitle}
+      </p>
 
       <div style={styles.grid}>
-        {products.map((product) => (
-          <article key={product.id} style={styles.card}>
-            <p style={styles.paymentType}>
-              {product.type === "single" ? t.oneTime : t.package}
-            </p>
+        {products.map(
+          (product) => (
+            <article
+              key={product.id}
+              style={{
+                ...styles.card,
 
-            <h3 style={styles.productName}>{product.name}</h3>
-
-            <p style={styles.price}>{product.priceLabel}</p>
-
-            <p style={styles.credits}>{product.creditsLabel}</p>
-
-            <p style={styles.description}>{product.description}</p>
-
-            <Link
-              to={`/register?lang=${lang}&product=${product.id}`}
-              style={styles.ctaLink}
+                ...(product.highlighted
+                  ? styles
+                      .highlightedCard
+                  : {}),
+              }}
             >
-              {t.cta}
-            </Link>
-          </article>
-        ))}
+              <p
+                style={
+                  styles.paymentType
+                }
+              >
+                {product.type ===
+                "single"
+                  ? t.oneTime
+                  : t.package}
+              </p>
+
+              <h3
+                style={
+                  styles.productName
+                }
+              >
+                {product.name}
+              </h3>
+
+              <p style={styles.price}>
+                {product.priceLabel}
+              </p>
+
+              <p style={styles.credits}>
+                {
+                  product.creditsLabel
+                }
+              </p>
+
+              <p
+                style={
+                  styles.unitPrice
+                }
+              >
+                {
+                  product.unitPriceLabel
+                }
+              </p>
+
+              <p
+                style={
+                  styles.description
+                }
+              >
+                {product.description}
+              </p>
+
+              <Link
+                to={`/register?lang=${lang}&product=${product.id}`}
+                style={styles.ctaLink}
+              >
+                {product.type ===
+                "single"
+                  ? t.ctaSingle
+                  : t.ctaPackage}
+              </Link>
+            </article>
+          ),
+        )}
       </div>
 
+      <p style={styles.creditNote}>
+        {t.credits}
+      </p>
+
       <div style={styles.trustRow}>
-        <span>🔒 {t.securePayment}</span>
-        <span>✓ {t.noSubscription}</span>
+        <span>
+          🔒 {t.securePayment}
+        </span>
+
+        <span>
+          ✓ {t.noSubscription}
+        </span>
       </div>
     </section>
   )
@@ -76,13 +191,16 @@ export default function PricingSection({ lang, products = [] }) {
 
 const styles = {
   section: {
-    maxWidth: "1040px",
+    maxWidth: "1180px",
     margin: "80px auto 0",
     padding: "42px 22px",
-    background: "rgba(255,255,255,0.08)",
-    border: "1px solid rgba(255,255,255,0.16)",
+    background:
+      "rgba(255,255,255,0.08)",
+    border:
+      "1px solid rgba(255,255,255,0.16)",
     borderRadius: "24px",
-    boxShadow: "0 22px 55px rgba(0,0,0,0.2)",
+    boxShadow:
+      "0 22px 55px rgba(0,0,0,0.2)",
   },
 
   eyebrow: {
@@ -101,8 +219,8 @@ const styles = {
   },
 
   subtitle: {
-    maxWidth: "720px",
-    margin: "0 auto 32px",
+    maxWidth: "760px",
+    margin: "0 auto 34px",
     fontSize: "17px",
     lineHeight: "1.7",
     opacity: 0.94,
@@ -110,21 +228,34 @@ const styles = {
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(220px, 1fr))",
     gap: "18px",
-    maxWidth: "920px",
+    maxWidth: "1100px",
     margin: "0 auto",
+    alignItems: "stretch",
   },
 
   card: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "30px 24px",
+    padding: "30px 22px",
     background: "#ffffff",
     color: "#1f2937",
+    border:
+      "2px solid transparent",
     borderRadius: "20px",
-    boxShadow: "0 18px 42px rgba(0,0,0,0.2)",
+    boxShadow:
+      "0 18px 42px rgba(0,0,0,0.2)",
+    boxSizing: "border-box",
+  },
+
+  highlightedCard: {
+    border:
+      "2px solid #c7d2fe",
+    boxShadow:
+      "0 22px 52px rgba(0,0,0,0.28)",
   },
 
   paymentType: {
@@ -138,22 +269,29 @@ const styles = {
 
   productName: {
     margin: "0 0 14px",
-    fontSize: "24px",
+    fontSize: "22px",
     lineHeight: "1.3",
   },
 
   price: {
-    margin: "0",
+    margin: 0,
     color: "#312e81",
-    fontSize: "44px",
+    fontSize: "42px",
     fontWeight: "900",
     letterSpacing: "-1.5px",
   },
 
   credits: {
-    margin: "6px 0 18px",
-    color: "#4b5563",
+    margin: "6px 0 4px",
+    color: "#374151",
     fontSize: "15px",
+    fontWeight: "800",
+  },
+
+  unitPrice: {
+    margin: "0 0 18px",
+    color: "#6366f1",
+    fontSize: "14px",
     fontWeight: "800",
   },
 
@@ -169,15 +307,24 @@ const styles = {
     display: "inline-block",
     width: "100%",
     marginTop: "auto",
-    padding: "15px 22px",
+    padding: "15px 18px",
     background: "#4f46e5",
     color: "#ffffff",
     borderRadius: "12px",
     textDecoration: "none",
-    fontSize: "16px",
+    fontSize: "15px",
     fontWeight: "900",
     boxSizing: "border-box",
-    boxShadow: "0 12px 28px rgba(79,70,229,0.28)",
+    boxShadow:
+      "0 12px 28px rgba(79,70,229,0.28)",
+  },
+
+  creditNote: {
+    maxWidth: "720px",
+    margin: "26px auto 0",
+    fontSize: "14px",
+    lineHeight: "1.6",
+    opacity: 0.92,
   },
 
   trustRow: {
@@ -185,7 +332,7 @@ const styles = {
     justifyContent: "center",
     flexWrap: "wrap",
     gap: "18px",
-    marginTop: "24px",
+    marginTop: "18px",
     fontSize: "14px",
     fontWeight: "800",
     opacity: 0.94,

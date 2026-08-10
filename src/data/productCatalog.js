@@ -1,126 +1,241 @@
 const DEFAULT_LANGUAGE = "en"
-const SUPPORTED_LANGUAGES = ["pt", "en"]
+const SUPPORTED_LANGUAGES = [
+  "pt",
+  "en",
+]
 
-export const PRODUCT_CURRENCY = "USD"
-export const DEFAULT_PRODUCT_ID = "single-certificate"
-export const PRODUCT_CATALOG_VERSION = "1.1"
+export const PRODUCT_CURRENCY =
+  "USD"
+
+export const DEFAULT_PRODUCT_ID =
+  "single-certificate"
+
+export const PRODUCT_CATALOG_VERSION =
+  "1.2"
 
 export const productCatalog = {
-  version: PRODUCT_CATALOG_VERSION,
-  currency: PRODUCT_CURRENCY,
+  version:
+    PRODUCT_CATALOG_VERSION,
+
+  currency:
+    PRODUCT_CURRENCY,
 
   single: {
-    id: DEFAULT_PRODUCT_ID,
-    type: "single",
+    id:
+      DEFAULT_PRODUCT_ID,
+
+    type:
+      "single",
+
     credits: 1,
+
     priceInCents: 800,
+
     active: true,
+
     checkoutEnabled: true,
+
     highlighted: false,
 
     content: {
       pt: {
-        name: "Certificado avulso",
+        name:
+          "Certificado avulso",
+
         description:
           "Um registro digital verificável com certificado, impressão digital SHA-256, Evidence Key™ e QR Code.",
-        priceLabel: "US$ 8",
-        creditsLabel: "1 registro",
+
+        priceLabel:
+          "US$ 8",
+
+        creditsLabel:
+          "1 registro",
+
+        unitPriceLabel:
+          "US$ 8 por registro",
       },
 
       en: {
-        name: "Single certificate",
+        name:
+          "Single certificate",
+
         description:
           "One verifiable digital record with certificate, SHA-256 fingerprint, Evidence Key™, and QR Code.",
-        priceLabel: "US$ 8",
-        creditsLabel: "1 record",
+
+        priceLabel:
+          "US$ 8",
+
+        creditsLabel:
+          "1 record",
+
+        unitPriceLabel:
+          "US$ 8 per record",
       },
     },
   },
 
   packages: {
-    enabled: false,
+    enabled: true,
 
     items: [
       {
-        id: "package-5-records",
-        type: "package",
+        id:
+          "package-5-records",
+
+        type:
+          "package",
+
         credits: 5,
+
         priceInCents: 3500,
-        active: false,
-        checkoutEnabled: false,
+
+        active: true,
+
+        checkoutEnabled: true,
+
         highlighted: false,
 
         content: {
           pt: {
-            name: "Pacote com 5 registros",
+            name:
+              "Pacote com 5 registros",
+
             description:
               "Créditos para criar cinco provas digitais verificáveis quando você precisar.",
-            priceLabel: "US$ 35",
-            creditsLabel: "5 registros",
+
+            priceLabel:
+              "US$ 35",
+
+            creditsLabel:
+              "5 registros",
+
+            unitPriceLabel:
+              "US$ 7 por registro",
           },
 
           en: {
-            name: "5-record package",
+            name:
+              "5-record package",
+
             description:
               "Credits to create five verifiable digital proofs whenever you need them.",
-            priceLabel: "US$ 35",
-            creditsLabel: "5 records",
+
+            priceLabel:
+              "US$ 35",
+
+            creditsLabel:
+              "5 records",
+
+            unitPriceLabel:
+              "US$ 7 per record",
           },
         },
       },
 
       {
-        id: "package-8-records",
-        type: "package",
+        id:
+          "package-8-records",
+
+        type:
+          "package",
+
         credits: 8,
+
         priceInCents: 5200,
-        active: false,
-        checkoutEnabled: false,
+
+        active: true,
+
+        checkoutEnabled: true,
+
         highlighted: true,
 
         content: {
           pt: {
-            name: "Pacote com 8 registros",
+            name:
+              "Pacote com 8 registros",
+
             description:
               "Uma opção equilibrada para profissionais que registram arquivos com frequência.",
-            priceLabel: "US$ 52",
-            creditsLabel: "8 registros",
+
+            priceLabel:
+              "US$ 52",
+
+            creditsLabel:
+              "8 registros",
+
+            unitPriceLabel:
+              "US$ 6,50 por registro",
           },
 
           en: {
-            name: "8-record package",
+            name:
+              "8-record package",
+
             description:
               "A balanced option for professionals who register files regularly.",
-            priceLabel: "US$ 52",
-            creditsLabel: "8 records",
+
+            priceLabel:
+              "US$ 52",
+
+            creditsLabel:
+              "8 records",
+
+            unitPriceLabel:
+              "US$ 6.50 per record",
           },
         },
       },
 
       {
-        id: "package-12-records",
-        type: "package",
+        id:
+          "package-12-records",
+
+        type:
+          "package",
+
         credits: 12,
+
         priceInCents: 7200,
-        active: false,
-        checkoutEnabled: false,
+
+        active: true,
+
+        checkoutEnabled: true,
+
         highlighted: false,
 
         content: {
           pt: {
-            name: "Pacote com 12 registros",
+            name:
+              "Pacote com 12 registros",
+
             description:
               "Mais registros e melhor valor por prova digital para uso recorrente.",
-            priceLabel: "US$ 72",
-            creditsLabel: "12 registros",
+
+            priceLabel:
+              "US$ 72",
+
+            creditsLabel:
+              "12 registros",
+
+            unitPriceLabel:
+              "US$ 6 por registro",
           },
 
           en: {
-            name: "12-record package",
+            name:
+              "12-record package",
+
             description:
               "More records and better value per digital proof for recurring use.",
-            priceLabel: "US$ 72",
-            creditsLabel: "12 records",
+
+            priceLabel:
+              "US$ 72",
+
+            creditsLabel:
+              "12 records",
+
+            unitPriceLabel:
+              "US$ 6 per record",
           },
         },
       },
@@ -129,43 +244,92 @@ export const productCatalog = {
 }
 
 function normalizeLanguage(lang) {
-  return SUPPORTED_LANGUAGES.includes(lang)
+  return SUPPORTED_LANGUAGES
+    .includes(lang)
     ? lang
     : DEFAULT_LANGUAGE
 }
 
-function localizeProduct(product, lang) {
-  const normalizedLanguage = normalizeLanguage(lang)
-  const localizedContent = product.content[normalizedLanguage]
+function localizeProduct(
+  product,
+  lang,
+) {
+  const normalizedLanguage =
+    normalizeLanguage(lang)
+
+  const localizedContent =
+    product.content[
+      normalizedLanguage
+    ]
 
   return {
-    id: product.id,
-    type: product.type,
-    credits: product.credits,
-    priceInCents: product.priceInCents,
-    active: product.active,
-    checkoutEnabled: product.checkoutEnabled,
-    highlighted: product.highlighted,
-    currency: PRODUCT_CURRENCY,
+    id:
+      product.id,
+
+    type:
+      product.type,
+
+    credits:
+      product.credits,
+
+    priceInCents:
+      product.priceInCents,
+
+    active:
+      product.active,
+
+    checkoutEnabled:
+      product.checkoutEnabled,
+
+    highlighted:
+      product.highlighted,
+
+    currency:
+      PRODUCT_CURRENCY,
+
     ...localizedContent,
   }
 }
 
-export function getLandingProducts(lang = DEFAULT_LANGUAGE) {
+export function getLandingProducts(
+  lang = DEFAULT_LANGUAGE,
+) {
   const products = []
 
-  if (productCatalog.single.active) {
+  if (
+    productCatalog.single.active
+  ) {
     products.push(
-      localizeProduct(productCatalog.single, lang),
+      localizeProduct(
+        productCatalog.single,
+        lang,
+      ),
     )
   }
 
-  if (productCatalog.packages.enabled) {
-    const activePackages = productCatalog.packages.items
-      .filter((product) => product.active)
-      .map((product) => localizeProduct(product, lang))
+  if (
+    productCatalog.packages
+      .enabled
+  ) {
+    const activePackages =
+      productCatalog.packages.items
+        .filter(
+          (product) =>
+            product.active &&
+            product
+              .checkoutEnabled,
+        )
+        .map(
+          (product) =>
+            localizeProduct(
+              product,
+              lang,
+            ),
+        )
 
-    products.push(...activePackages)
+    products.push(
+      ...activePackages,
+    )
   }
 
   return products
@@ -176,25 +340,42 @@ export function getProductById(
   lang = DEFAULT_LANGUAGE,
 ) {
   if (
-    productCatalog.single.id === productId &&
-    productCatalog.single.active
+    productCatalog.single.id ===
+      productId &&
+    productCatalog.single.active &&
+    productCatalog.single
+      .checkoutEnabled
   ) {
-    return localizeProduct(productCatalog.single, lang)
+    return localizeProduct(
+      productCatalog.single,
+      lang,
+    )
   }
 
-  if (!productCatalog.packages.enabled) {
+  if (
+    !productCatalog.packages
+      .enabled
+  ) {
     return null
   }
 
-  const packageProduct = productCatalog.packages.items.find(
-    (product) =>
-      product.id === productId &&
-      product.active,
-  )
+  const packageProduct =
+    productCatalog.packages.items
+      .find(
+        (product) =>
+          product.id ===
+            productId &&
+          product.active &&
+          product
+            .checkoutEnabled,
+      )
 
   if (!packageProduct) {
     return null
   }
 
-  return localizeProduct(packageProduct, lang)
+  return localizeProduct(
+    packageProduct,
+    lang,
+  )
 }
