@@ -18,6 +18,18 @@
       "destination": "/index.html"
     },
     {
+      "source": "/certificate-access",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/certificate-access/setup",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/certificate-access/recover",
+      "destination": "/index.html"
+    },
+    {
       "source": "/faq",
       "destination": "/index.html"
     },
