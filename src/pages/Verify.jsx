@@ -21,63 +21,54 @@ export default function Verify() {
       badge: "Verificação pública",
       title: "Verificação de prova digital",
       subtitle:
-        "Esta página permite verificar publicamente o hash registrado e baixar o certificado associado.",
+        "Esta página permite verificar publicamente o hash registrado e confirmar a integridade da prova digital.",
       validTitle: "Prova digital verificável",
       validText:
         "O hash abaixo representa uma impressão digital criptográfica do arquivo registrado. Se o arquivo original gerar o mesmo hash, sua integridade pode ser confirmada.",
       hashLabel: "Hash SHA-256",
       noHash: "Hash não informado na URL.",
-      download: "Baixar certificado",
       registerAnother: "Registrar outro arquivo",
       trustTitle: "O que esta verificação confirma",
       trust1: "O hash informado está presente na URL de verificação",
-      trust2: "O certificado pode ser baixado novamente",
+      trust2:
+        "O certificado permanece disponível ao titular mediante Chave de Acesso",
       trust3: "A prova pode ser conferida pelo QR Code",
-      trust4: "A integridade pode ser validada comparando o hash do arquivo",
+      trust4:
+        "A integridade pode ser validada comparando o hash do arquivo",
       noticeTitle: "Aviso importante",
       notice:
-        "O GuardianChain verifica o hash e o certificado associado. A plataforma não armazena o arquivo original e não valida o conteúdo interno do arquivo.",
+        "O GuardianChain permite a verificação pública do hash associado à prova digital. A plataforma não armazena o arquivo original e não valida o conteúdo interno do arquivo.",
       missing:
         "Para verificar uma prova, acesse esta página usando um link com hash válido.",
     },
+
     en: {
       home: "Home",
       badge: "Public verification",
       title: "Digital proof verification",
       subtitle:
-        "This page allows public verification of the registered hash and download of the associated certificate.",
+        "This page allows public verification of the registered hash and confirmation of the integrity of the digital evidence.",
       validTitle: "Verifiable digital proof",
       validText:
         "The hash below represents a cryptographic fingerprint of the registered file. If the original file generates the same hash, its integrity can be confirmed.",
       hashLabel: "SHA-256 hash",
       noHash: "Hash was not provided in the URL.",
-      download: "Download certificate",
       registerAnother: "Register another file",
       trustTitle: "What this verification confirms",
       trust1: "The provided hash is present in the verification URL",
-      trust2: "The certificate can be downloaded again",
+      trust2:
+        "The certificate remains available to the holder through protected access",
       trust3: "The proof can be checked through the QR Code",
       trust4: "Integrity can be validated by comparing the file hash",
       noticeTitle: "Important notice",
       notice:
-        "GuardianChain verifies the hash and associated certificate. The platform does not store the original file and does not validate the internal content of the file.",
+        "GuardianChain enables public verification of the hash associated with the digital evidence. The platform does not store the original file and does not validate the internal content of the file.",
       missing:
         "To verify a proof, access this page using a link with a valid hash.",
     },
   }
 
   const t = text[lang]
-
-  function download() {
-    if (!hash) {
-      alert(t.noHash)
-      return
-    }
-
-    window.location.href = `/api/download-certificate?hash=${encodeURIComponent(
-      hash
-    )}&lang=${lang}`
-  }
 
   function goToRegister() {
     window.location.href = `/register?lang=${lang}`
@@ -92,11 +83,27 @@ export default function Verify() {
           </Link>
 
           <div style={styles.langPill}>
-            <Link to={`/verify${hash ? `?hash=${encodeURIComponent(hash)}&lang=pt` : "?lang=pt"}`} style={styles.langLink}>
+            <Link
+              to={`/verify${
+                hash
+                  ? `?hash=${encodeURIComponent(hash)}&lang=pt`
+                  : "?lang=pt"
+              }`}
+              style={styles.langLink}
+            >
               PT
             </Link>
+
             <span style={styles.langDivider}>|</span>
-            <Link to={`/verify${hash ? `?hash=${encodeURIComponent(hash)}&lang=en` : "?lang=en"}`} style={styles.langLink}>
+
+            <Link
+              to={`/verify${
+                hash
+                  ? `?hash=${encodeURIComponent(hash)}&lang=en`
+                  : "?lang=en"
+              }`}
+              style={styles.langLink}
+            >
               EN
             </Link>
           </div>
@@ -113,14 +120,17 @@ export default function Verify() {
             <>
               <div style={styles.statusBox}>
                 <div style={styles.statusIcon}>✓</div>
+
                 <div>
                   <h2 style={styles.statusTitle}>{t.validTitle}</h2>
+
                   <p style={styles.statusText}>{t.validText}</p>
                 </div>
               </div>
 
               <div style={styles.hashBox}>
                 <p style={styles.hashLabel}>{t.hashLabel}</p>
+
                 <p style={styles.hash}>{hash}</p>
               </div>
 
@@ -129,31 +139,34 @@ export default function Verify() {
 
                 <div style={styles.trustGrid}>
                   <div style={styles.trustItem}>✓ {t.trust1}</div>
+
                   <div style={styles.trustItem}>✓ {t.trust2}</div>
+
                   <div style={styles.trustItem}>✓ {t.trust3}</div>
+
                   <div style={styles.trustItem}>✓ {t.trust4}</div>
                 </div>
               </div>
 
               <div style={styles.noticeBox}>
                 <strong>{t.noticeTitle}</strong>
+
                 <p>{t.notice}</p>
               </div>
-
-              <button onClick={download} style={styles.primary} type="button">
-                {t.download}
-              </button>
             </>
           ) : (
-            <>
-              <div style={styles.warningBox}>
-                <strong>{t.noHash}</strong>
-                <p>{t.missing}</p>
-              </div>
-            </>
+            <div style={styles.warningBox}>
+              <strong>{t.noHash}</strong>
+
+              <p>{t.missing}</p>
+            </div>
           )}
 
-          <button onClick={goToRegister} style={styles.secondary} type="button">
+          <button
+            onClick={goToRegister}
+            style={styles.secondary}
+            type="button"
+          >
             {t.registerAnother}
           </button>
         </div>
@@ -349,18 +362,6 @@ const styles = {
     borderRadius: "18px",
     color: "#991b1b",
     marginBottom: "22px",
-  },
-
-  primary: {
-    background: "#4338ca",
-    color: "#ffffff",
-    border: "none",
-    padding: "16px",
-    borderRadius: "14px",
-    width: "100%",
-    fontWeight: "900",
-    fontSize: "16px",
-    cursor: "pointer",
   },
 
   secondary: {

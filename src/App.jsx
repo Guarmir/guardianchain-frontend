@@ -1,4 +1,6 @@
-import { useEffect } from "react"
+import {
+  useEffect,
+} from "react"
 
 import {
   BrowserRouter,
@@ -18,6 +20,9 @@ import Privacy from "./pages/Privacy.jsx"
 import Support from "./pages/Support.jsx"
 import RefundPolicy from "./pages/RefundPolicy.jsx"
 import CertificateDemo from "./pages/CertificateDemo.jsx"
+import CertificateAccessSetup from "./pages/CertificateAccessSetup.jsx"
+import CertificateAccess from "./pages/CertificateAccess.jsx"
+import CertificateAccessRecover from "./pages/CertificateAccessRecover.jsx"
 import AdminLoginPage from "./pages/AdminLoginPage.jsx"
 
 import AdminThemeToggle from "./components/admin/AdminThemeToggle.jsx"
@@ -26,10 +31,14 @@ function ScrollToTop() {
   const {
     pathname,
     search,
-  } = useLocation()
+  } =
+    useLocation()
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(
+      0,
+      0,
+    )
   }, [
     pathname,
     search,
@@ -42,6 +51,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+
       <AdminThemeToggle />
 
       <Routes>
@@ -68,6 +78,21 @@ function App() {
         <Route
           path="/certificate-demo"
           element={<CertificateDemo />}
+        />
+
+        <Route
+          path="/certificate-access"
+          element={<CertificateAccess />}
+        />
+
+        <Route
+          path="/certificate-access/setup"
+          element={<CertificateAccessSetup />}
+        />
+
+        <Route
+          path="/certificate-access/recover"
+          element={<CertificateAccessRecover />}
         />
 
         <Route
