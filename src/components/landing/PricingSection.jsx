@@ -17,6 +17,26 @@ export default function PricingSection({
       subtitle:
         "Faça um registro avulso ou escolha um pacote para reduzir o valor por prova digital.",
 
+      protectionEyebrow:
+        "Proteção de acesso",
+
+      protectionTitle:
+        "Seu certificado é entregue com acesso protegido",
+
+      protectionDescription:
+        "Após o pagamento, você recebe por e-mail um link seguro para criar sua Chave de Acesso. O certificado não é enviado como PDF aberto.",
+
+      protectionFlow: [
+        "Pagamento",
+        "Evidence Key™",
+        "Chave de Acesso",
+        "Código de Recuperação",
+        "Acesso ao certificado",
+      ],
+
+      protectionPrivacy:
+        "Sua Chave de Acesso é privada. A GuardianChain não consegue consultá-la ou revelá-la. Se você esquecer a chave, poderá criar uma nova usando o e-mail cadastrado e seu Código de Recuperação.",
+
       oneTime:
         "Registro avulso",
 
@@ -48,6 +68,26 @@ export default function PricingSection({
 
       subtitle:
         "Create a single record or choose a package to reduce the cost per digital proof.",
+
+      protectionEyebrow:
+        "Protected access",
+
+      protectionTitle:
+        "Your certificate is delivered with protected access",
+
+      protectionDescription:
+        "After payment, you receive a secure email link to create your Access Key. The certificate is not sent as an open PDF.",
+
+      protectionFlow: [
+        "Payment",
+        "Evidence Key™",
+        "Access Key",
+        "Recovery Code",
+        "Certificate access",
+      ],
+
+      protectionPrivacy:
+        "Your Access Key is private. GuardianChain cannot retrieve or reveal it. If you forget your key, you can create a new one using your registered email and Recovery Code.",
 
       oneTime:
         "Single record",
@@ -96,6 +136,61 @@ export default function PricingSection({
       <p style={styles.subtitle}>
         {t.subtitle}
       </p>
+
+      <div style={styles.protectionBox}>
+        <div style={styles.protectionHeader}>
+          <div style={styles.protectionIcon}>
+            🔐
+          </div>
+
+          <div style={styles.protectionHeaderText}>
+            <p style={styles.protectionEyebrow}>
+              {t.protectionEyebrow}
+            </p>
+
+            <h3 style={styles.protectionTitle}>
+              {t.protectionTitle}
+            </h3>
+
+            <p style={styles.protectionDescription}>
+              {t.protectionDescription}
+            </p>
+          </div>
+        </div>
+
+        <div style={styles.flow}>
+          {t.protectionFlow.map(
+            (step, index) => (
+              <div
+                key={step}
+                style={styles.flowGroup}
+              >
+                <span style={styles.flowStep}>
+                  {step}
+                </span>
+
+                {index <
+                  t.protectionFlow.length -
+                    1 && (
+                  <span style={styles.flowArrow}>
+                    →
+                  </span>
+                )}
+              </div>
+            ),
+          )}
+        </div>
+
+        <div style={styles.privacyNote}>
+          <span style={styles.privacyIcon}>
+            ✓
+          </span>
+
+          <p style={styles.privacyText}>
+            {t.protectionPrivacy}
+          </p>
+        </div>
+      </div>
 
       <div style={styles.grid}>
         {products.map(
@@ -220,10 +315,141 @@ const styles = {
 
   subtitle: {
     maxWidth: "760px",
-    margin: "0 auto 34px",
+    margin: "0 auto 30px",
     fontSize: "17px",
     lineHeight: "1.7",
     opacity: 0.94,
+  },
+
+  protectionBox: {
+    maxWidth: "1040px",
+    margin: "0 auto 34px",
+    padding: "24px",
+    background:
+      "rgba(255,255,255,0.96)",
+    color: "#1f2937",
+    border:
+      "1px solid rgba(199,210,254,0.95)",
+    borderRadius: "20px",
+    boxShadow:
+      "0 16px 36px rgba(0,0,0,0.16)",
+    boxSizing: "border-box",
+  },
+
+  protectionHeader: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "16px",
+    textAlign: "left",
+  },
+
+  protectionIcon: {
+    width: "50px",
+    height: "50px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+    background: "#eef2ff",
+    borderRadius: "14px",
+    fontSize: "24px",
+  },
+
+  protectionHeaderText: {
+    flex: 1,
+    minWidth: 0,
+  },
+
+  protectionEyebrow: {
+    margin: "0 0 5px",
+    color: "#4f46e5",
+    fontSize: "12px",
+    fontWeight: "900",
+    letterSpacing: "0.9px",
+    textTransform: "uppercase",
+  },
+
+  protectionTitle: {
+    margin: "0 0 8px",
+    color: "#111827",
+    fontSize: "21px",
+    lineHeight: "1.35",
+  },
+
+  protectionDescription: {
+    margin: 0,
+    color: "#4b5563",
+    fontSize: "15px",
+    lineHeight: "1.65",
+  },
+
+  flow: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: "8px",
+    margin: "22px 0",
+    padding: "16px",
+    background: "#f5f7ff",
+    borderRadius: "14px",
+  },
+
+  flowGroup: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+
+  flowStep: {
+    padding: "8px 11px",
+    background: "#ffffff",
+    color: "#312e81",
+    border:
+      "1px solid #c7d2fe",
+    borderRadius: "10px",
+    fontSize: "13px",
+    fontWeight: "900",
+    whiteSpace: "nowrap",
+  },
+
+  flowArrow: {
+    color: "#6366f1",
+    fontSize: "17px",
+    fontWeight: "900",
+  },
+
+  privacyNote: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "10px",
+    padding: "14px 16px",
+    background: "#ecfdf5",
+    border:
+      "1px solid #bbf7d0",
+    borderRadius: "14px",
+    textAlign: "left",
+  },
+
+  privacyIcon: {
+    width: "22px",
+    height: "22px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+    background: "#16a34a",
+    color: "#ffffff",
+    borderRadius: "50%",
+    fontSize: "13px",
+    fontWeight: "900",
+  },
+
+  privacyText: {
+    margin: 0,
+    color: "#166534",
+    fontSize: "13px",
+    lineHeight: "1.65",
   },
 
   grid: {
